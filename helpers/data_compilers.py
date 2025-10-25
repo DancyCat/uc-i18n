@@ -261,6 +261,7 @@ def compile_skins_list(source: str = None) -> List[SkinItem]:
             hash = repo.add_file(f"files/skins/{skin}/{file}")
             compiled_data[key] = repo.get_srl(hash)
         compiled_data_list.append(compiled_data)
+    compiled_data_list = sorted(compiled_data_list, key=lambda d: d["title"])
     cached["skins"] = compiled_data_list
     return compiled_data_list
 
