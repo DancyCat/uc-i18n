@@ -38,7 +38,7 @@ async def main(request: Request):
     button_list = ["authentication", "post", "level", "configuration"]
     if logged_in:
         button_list.append("playlist")
-    if request.state.showresourcebuttons:
+    if request.state.showresourcebuttons == "1":
         button_list.extend(
             [
                 "skin",
@@ -167,11 +167,7 @@ async def main(request: Request):
             query="showresourcebuttons",
             name=locale.show_resource_buttons,
             required=False,
-            default="off",
-            values=[
-                {"name": "off", "title": locale.off},
-                {"name": "on", "title": locale.on},
-            ],
+            default=False,
         )
     )
     desc = locale.server_description or request.app.config["description"]

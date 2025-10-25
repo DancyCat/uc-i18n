@@ -105,7 +105,7 @@ class SonolusMiddleware(BaseHTTPMiddleware):
             "defaultparticle", "engine_default"
         ).lower()
         request.state.showresourcebuttons = request.query_params.get(
-            "showresourcebuttons", "off"
+            "showresourcebuttons", "0"
         )
         request.state.skin = request.query_params.get("defaultskin", "engine_default")
         skins = await request.app.run_blocking(compile_skins_list, request.app.base_url)
@@ -119,8 +119,8 @@ class SonolusMiddleware(BaseHTTPMiddleware):
         request.state.loc, request.state.localization = Locale.get_messages(
             request.state.localization
         )
-        if not request.state.showresourcebuttons in ["on", "off"]:
-            request.state.showresourcebuttons = "off"
+        if not request.state.showresourcebuttons in ["0", "1"]:
+            request.state.showresourcebuttons = "0"
         if not request.state.levelbg in [
             "default_or_v3",
             "default_or_v1",
