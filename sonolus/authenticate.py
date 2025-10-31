@@ -40,7 +40,7 @@ def load_public_key(jwk_dict):
     return pub_key
 
 
-@router.post("/")
+@router.post("")
 async def main(request: Request, data: ServerAuthenticateRequest):
     """
     We support a maximum of 6 sessions:
