@@ -1,4 +1,5 @@
-import json, os
+import gzip, json, os
+from io import BytesIO
 
 from helpers.models.sonolus.item import (
     EngineItem, 
@@ -21,6 +22,7 @@ cached = {
     "particles": None,
     "banner": None,
     "static_posts": None,
+    "BACKGROUND_NO_SCOPE_SRL": None,
 }
 
 
@@ -189,6 +191,21 @@ def compile_backgrounds_list(
         if not background_data.get("enabled", True):
             continue
 
+        if background == "PLEASE-SELECT" and not cached["BACKGROUND_NO_SCOPE_SRL"]:
+            with gzip.open(f"files/backgrounds/{background}/configuration.json.gz") as f:
+                data = json.load(f)
+            
+            if "scope" in data:
+                del data["scope"]
+
+            output_buffer = BytesIO()
+            with gzip.GzipFile(fileobj=output_buffer, mode="wb") as gz_out:
+                gz_out.write(json.dumps(data).encode("utf-8"))
+
+            gzipped_bytes = output_buffer.getvalue()
+            no_scope_hash = repo.add_bytes(gzipped_bytes)
+            cached["BACKGROUND_NO_SCOPE_SRL"] = repo.get_srl(no_scope_hash)
+
         compiled_data = BackgroundItem(
             name=background,
             source=source,
@@ -248,7 +265,7 @@ def compile_particles_list(source: str = None) -> list[ExtendedParticleItem]:
 
 class ExtendedSkinItem(SkinItem):
     engines: list[str]
-    theme: str
+    themes: list[str] | None
     locale: str | None
 
     def to_skin_item(self) -> SkinItem:
@@ -281,10 +298,11 @@ def compile_skins_list(source: str = None) -> list[ExtendedSkinItem]:
             data=repo.get_srl(repo.add_file(f"files/skins/{skin}/data")),
             texture=repo.get_srl(repo.add_file(f"files/skins/{skin}/texture")),
             engines=skin_data.get("engines", []),
-            theme=skin_data["theme"],
+            themes=skin_data.get(["themes"], []),
             locale=skin_data.get("locale")
         )
         compiled_data_list.append(compiled_data)
+    compiled_data_list = sorted(compiled_data_list, key=lambda d: d["title"])
     cached["skins"] = compiled_data_list
     return compiled_data_list
 

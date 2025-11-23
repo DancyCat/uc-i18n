@@ -8,7 +8,6 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 import uvicorn
 
 debug = config["server"]["debug"]
-de = config["server"]["debug"].as_integer_ratio
 
 VERSION_REGEX = r"^\d+\.\d+\.\d+$"
 

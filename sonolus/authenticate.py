@@ -41,7 +41,7 @@ def load_public_key(jwk_dict):
     return pub_key
 
 
-@router.post("/", response_model=ServerAuthenticateResponse)
+@router.post("", response_model=ServerAuthenticateResponse)
 async def main(request: SonolusRequest, data: ServerAuthenticateRequest):
     """
     We support a maximum of 6 sessions:

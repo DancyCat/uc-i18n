@@ -1,4 +1,5 @@
 {
+  "use_website_to_upload": "Faça login em nosso site para enviar um novo nível.\nNão oferecemos suporte para envio de níveis dentro do jogo.\n\n{url}",
   "server_description": "https://discord.gg/UntitledCharts\n\nO servidor customizado oficial de UntitledCharts!",
   "item_not_found": "{item} item \"{name}\" não encontrado.",
   "item_type_not_found": "Item \"{item}\" não encontrado.",
@@ -54,6 +55,10 @@
   "slightly": "Um pouco",
   "a_lot": "Muito",
   "extreme": "Extremo",
+  "invalid_constant": "Constante inválida! Deve ter no máximo 4 decimais entre -999 e 999. ",
+  "rerate": "Reavaliar",
+  "rerate_desc": "Reavaliar o nível, opcionalmente adicionando constantes.",
+  "rerate_desc_not_mod": "Reavaliar o nível.",
   "search": {
     "FILTERS": "Filtros (Página {page}/{pageCount})",
     "ADVANCED_SEARCH": "Pesquisa Avançada ",

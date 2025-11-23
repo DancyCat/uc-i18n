@@ -847,6 +847,10 @@ class Loc:
         """
         return self._get("rerate_desc")
 
+    @property
+    def show_resource_buttons(self) -> str:
+        return self._get("show_resource_buttons")
+
     def time_ago(self, time_str: str) -> str:
         """
         {time_ago} ago

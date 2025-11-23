@@ -38,6 +38,12 @@ async def main(request: SonolusRequest, item_type: ItemType, item_name: str):
                     request.state.localization,
                 )
             )[0]
+
+            if item_data.name != item_name:
+                item_data = item_data.model_copy()
+                item_data.name = item_name
+                item_data.title = item_name.title()
+                item_data.subtitle = item_name.title()
         case "effects":
             data = await request.app.run_blocking(
                 compile_effects_list, request.app.base_url

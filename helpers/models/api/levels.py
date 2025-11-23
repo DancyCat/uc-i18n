@@ -59,7 +59,7 @@ class Chart(BaseModel):
         candidates = [
             skin
             for skin in skins
-            if skin.theme == skin_name and engine_name in skin.engines
+            if skin.name in skin.themes and (not skin.engines or engine_name in skin.engines)
         ]
 
         if not candidates:
@@ -171,6 +171,7 @@ class Chart(BaseModel):
             title = loc.background.V3
         else:
             title = loc.background.UPLOADED
+            bg_item.configuration = cached["BACKGROUND_NO_SCOPE_SRL"]
         
         bg_item.title = handle_uwu(title, request.state.localization, request.state.uwu)
 

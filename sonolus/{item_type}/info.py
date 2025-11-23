@@ -75,7 +75,7 @@ async def main(request: SonolusRequest, item_type: ItemType):
                 uwu_level,
             ),
             itemType=item_type,
-            items=data
+            items=data[:5]
         ),
         banner=banner_srl if banner_srl else None
     )

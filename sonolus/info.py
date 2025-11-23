@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from itertools import chain
 
 from core import SonolusRequest
 from helpers.data_compilers import (
@@ -8,7 +9,7 @@ from helpers.data_compilers import (
     compile_skins_list,
 )
 from helpers.models.sonolus.misc import ServerInfoButton
-from helpers.models.sonolus.options import ServerSelectOption, ServerOption_Value
+from helpers.models.sonolus.options import ServerSelectOption, ServerOption_Value, ServerToggleOption
 from helpers.models.sonolus.response import ServerInfo, ServerConfiguration
 
 from helpers.owoify import handle_uwu
@@ -30,20 +31,19 @@ async def main(request: SonolusRequest):
     uwu_supported = ["en", "tr"]
 
     banner_srl = await request.app.run_blocking(compile_banner)
-    button_list = [
-        "authentication",
-        "post",
-        "level",
-        "configuration",
-        # "playlist",
-        # "skin",
-        # "background",
-        # "effect",
-        # "particle",
-        # "engine",
-    ]
+    button_list = ["authentication", "post", "level", "configuration"]
     if logged_in:
         button_list.append("playlist")
+    if request.state.showresourcebuttons == "1":
+        button_list.extend(
+            [
+                "skin",
+                "background",
+                "effect",
+                "particle",
+                "engine",
+            ]
+        )
     options = []
     if request.state.localization in uwu_supported:
         options.append(ServerSelectOption(
@@ -98,29 +98,25 @@ async def main(request: SonolusRequest):
     )
 
     skins = await request.app.run_blocking(compile_skins_list, request.app.base_url)
-    unique_themes = []
 
-    for item in skins:
-        if item.theme not in unique_themes:
-            unique_themes.append(item.theme)
-
-    # TODO (sonoserv): upstream repo replaced "theme" with "themes"
-    # maybe there are some better approaches using itertools.chain
-
-    unique_themes.sort()
+    unique_themes = sorted(
+        set(chain.from_iterable(
+            [item.themes for item in skins]
+        ))
+    )
 
     options.append(
         ServerSelectOption(
             query="defaultskin",
             name=locale.default_skin,
             descriptiion=handle_uwu(
-                locale.default_skin_desc, request.state.localization
+                locale.default_skin_desc, request.state.localization, uwu_level
             ),
             required=False,
             default="engine_default",
             values=[ServerOption_Value(name="engine_default", title="#DEFAULT")]
             + [
-                ServerOption_Value(name=theme, title=theme.upper())
+                ServerOption_Value(name=theme, title=theme)
                 for theme in unique_themes
             ]
         )
@@ -164,6 +160,14 @@ async def main(request: SonolusRequest):
                 ServerOption_Value(name="true", title=locale.search.STAFF_PICK_TRUE),
                 ServerOption_Value(name="false", title=locale.search.STAFF_PICK_FALSE),
             ],        
+        )
+    )
+    options.append(
+        ServerToggleOption(
+            query="showresourcebuttons",
+            name=locale.show_resource_buttons,
+            required=False,
+            default=False,
         )
     )
     desc = locale.server_description or request.app.config["description"]
