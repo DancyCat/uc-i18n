@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from fastapi import HTTPException, status
 
 from core import SonolusRequest
+from helpers.models.sonolus.item import ReplayItem
 
 class ServerSubmitItemActionRequest(BaseModel):
     values: str
@@ -314,3 +315,7 @@ class ServerSubmitPlaylistActionRequest(ServerSubmitItemActionRequest):
             )
         
         return _ParsedServerSubmitPlaylistActionRequest.parse(self.values, request)
+    
+class ServerSubmitLevelResultRequest(BaseModel):
+    replay: ReplayItem
+    values: str

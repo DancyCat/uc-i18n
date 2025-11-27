@@ -1,20 +1,11 @@
-from fastapi import APIRouter
-from fastapi import HTTPException
+from fastapi import APIRouter, HTTPException, status
 from core import SonolusRequest
-import aiohttp
-import json
+
+from helpers.models.sonolus.response import ServerSubmitLevelResultResponse
+from helpers.models.sonolus.submit import ServerSubmitLevelResultRequest
+import helpers.replay as replay
 
 router = APIRouter()
-
-# class ServerSubmitLevelResultRequest(BaseModel):
-#     replay: ReplayItem
-#     values: str # "type=replay"
-
-# class ServerSubmitLevelResultResponse(BaseModel):
-#     key: str
-#     hashes: list[str]
-
-# TODO (sonoserv)
 
 @router.post("/")
 async def main(request: SonolusRequest, data: ServerSubmitLevelResultRequest):
@@ -22,22 +13,26 @@ async def main(request: SonolusRequest, data: ServerSubmitLevelResultRequest):
     
     auth = request.headers.get("Sonolus-Session")
 
-    async with aiohttp.ClientSession(headers=({"authorization": auth} if auth else None)) as session:
-        async with session.get(
-            request.app.api_config["url"]
-            + f"/api/accounts/generate_upload_token/", # this needs to go
-            params={"hashes": json.dumps({
-                "data": data.replay
-            })}
-        ) as req:
-            if req.status != 200:
-                raise HTTPException(
-                    status_code=req.status, detail=locale.unknown_error
-                )
+    if not auth:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=locale.not_logged_in,
+        )
 
-            return ServerSubmitLevelResultResponse(
-                key=await req.text(),
-                hashes=[
+    response = await request.app.api.get_account().send(auth)
 
-                ]
-            )
+    response.data.sonolus_handle
+
+    return ServerSubmitLevelResultResponse(
+        key=replay.generate_upload_key(
+            response.data.sonolus_id,
+            data.replay.level.name,
+            data.replay.data.hash,
+            data.replay.configuration.hash,
+            request.state.engine,
+            request
+        ),
+        hashes=[
+            data.replay.data.hash, data.replay.configuration.hash
+        ]
+    )

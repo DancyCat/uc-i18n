@@ -1,8 +1,9 @@
-from aiohttp import ClientSession, ClientResponse
+from aiohttp import ClientSession, ClientResponse, FormData
 from fastapi import HTTPException
 from pydantic import BaseModel
 from typing import Any, Callable, TypeVar, Generic, Awaitable, overload
 import decimal
+from io import BytesIO
 
 from helpers.models.api.comments import *
 from helpers.models.api.levels import *
@@ -24,6 +25,7 @@ class Request(Generic[T]):
         cast_to: type[T] | None, 
         json: Any = None,
         params: dict[str, Any] | None = None,
+        content: FormData | None = None,
         use_app_auth: tuple[str, str] | None = None,
         not_ok_callback: Awaitable[Callable[[ClientResponse], None]] | None = None
     ):
@@ -33,6 +35,7 @@ class Request(Generic[T]):
         self.cast_to = cast_to
         self.json = json
         self.params = params
+        self.content = content
         self.use_app_auth = use_app_auth
         self.not_ok_callback = not_ok_callback
 
@@ -51,7 +54,8 @@ class Request(Generic[T]):
             self.url, 
             params=self.params,
             json=self.json,
-            headers=headers
+            headers=headers,
+            content=self.content
         ) as resp:
             resp: Response[T]
 
@@ -388,4 +392,33 @@ class API:
             "GET",
             "/api/accounts/session/account/",
             Account
+        )
+    
+    def upload_replay(
+        self,
+        replay_data: bytes,
+        replay_configuration: bytes,
+        level_name: str, 
+        user_id: str,
+        engine_name: str,
+        speed: float | None
+    ) -> Request[None]:
+        content = FormData()
+
+        content.add_field("replay_data", replay_data, content_type="data/gzip", filename="replay_data")
+        content.add_field("replay_configuration", replay_configuration, content_type="data/gzip", filename="replay_configuration")
+        content.add_field("item_name", level_name)
+        content.add_field("user_id", user_id)
+        content.add_field("engine_name", engine_name)
+
+        if speed:
+            content.add_field("speed", speed)
+
+        return Request(
+            self._client_session,
+            "POST",
+            f"/api/charts/{...}/replay",
+            None,
+            content=content,
+            use_app_auth=self._use_app_auth
         )

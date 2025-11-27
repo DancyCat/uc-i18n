@@ -25,7 +25,8 @@ ConfigTypeSonolus = TypedDict(
         "required-client-version": str,
         "items-per-page": ItemsPerPage,
         "name": str,
-        "description": str
+        "description": str,
+        "upload-token-sig-key": str
     }
 )
 

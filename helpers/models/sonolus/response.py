@@ -64,3 +64,8 @@ class ServerInfo(BaseModel):
 class ServerAuthenticateResponse(BaseModel):
     session: str
     expiration: int | float
+
+class ServerSubmitLevelResultResponse(BaseModel):
+    key: str
+    hashes: list[str]
+    
