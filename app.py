@@ -43,7 +43,6 @@ class SonolusFastAPI(FastAPI):
 
         self.remove_config_queries = [
             "localization",
-            "page",
             "uwu",
             "levelbg",
             "stpickconfig",

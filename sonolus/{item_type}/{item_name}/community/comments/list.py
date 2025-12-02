@@ -18,6 +18,12 @@ import aiohttp
 async def main(request: Request, item_type: ItemType, item_name: str):
     locale: Loc = request.state.loc
     page = request.state.query_params.get("page", 0)
+    try:
+        page = int(page)
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="page must be an integer"
+        )
     uwu_level = request.state.uwu
     auth = request.headers.get("Sonolus-Session")
     if item_type == "levels":
@@ -28,7 +34,7 @@ async def main(request: Request, item_type: ItemType, item_name: str):
             async with cs.get(
                 request.app.api_config["url"]
                 + f"/api/charts/{item_name.removeprefix('UnCh-')}/comment/",
-                params={"page": page},
+                params={"page": str(page)},
             ) as req:
                 response = await req.json()
         page_count = response["pageCount"]
