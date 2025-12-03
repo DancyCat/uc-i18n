@@ -106,13 +106,13 @@ class API:
             }
         )
     
-    def get_comments(self, item_name: str, page: int | str | None = None) -> Request[CommentList]:
+    def get_comments(self, item_name: str, page: int | None = None) -> Request[CommentList]:
         return Request(
             self._client_session,
             "GET",
             f"/api/charts/{item_name.removeprefix('UnCh-')}/comment/",
             CommentList,
-            params={"page": page} if page else None
+            params={"page": str(page)} if page else None
         )
     
     def send_comment(self, item_name: str, content: str) -> Request[None]:
