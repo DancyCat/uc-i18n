@@ -447,3 +447,11 @@ class API:
                 "limit": 10
             }
         )
+    
+    def get_record(self, item_name: str, id: int) -> Request[RecordInfo]:
+        return Request(
+            self._client_session,
+            "GET",
+            f"/api/charts/{item_name.removeprefix("UnCh-")}",
+            RecordInfo
+        )

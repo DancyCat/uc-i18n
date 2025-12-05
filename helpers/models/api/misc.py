@@ -39,3 +39,7 @@ class LeaderboardDBResponse(Leaderboard):
 class LeaderboardInfo(BaseModel):
     pageCount: int
     data: list[LeaderboardDBResponse]
+
+class RecordInfo(BaseModel):
+    data: LeaderboardDBResponse
+    asset_base_url: str

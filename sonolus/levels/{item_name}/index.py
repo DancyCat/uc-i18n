@@ -22,7 +22,7 @@ async def main(request: SonolusRequest, item_name: str):
     
     response = await request.app.api.get_chart(item_name).send(auth)
 
-    asset_base_url = response.asset_base_url.removesuffix("/")
+    asset_base_url = response.data.asset_base_url.removesuffix("/")
     liked = response.data.data.liked
     like_count = response.data.data.like_count
     item_data, desc = await request.app.run_blocking(
