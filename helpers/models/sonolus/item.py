@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Literal, TypeAlias
+from typing import Generic, Literal, TypeAlias, TypeVar
 from helpers.models.sonolus.misc import Tag, SRL
 from helpers.models.sonolus.options import ServerForm
 
@@ -90,10 +90,11 @@ class PostItem(BaseModel):
     tags: list[Tag]
     thumbnail: SRL | None = None
 
+T = TypeVar("T", SkinItem, BackgroundItem, EffectItem, ParticleItem, None)
 
-class UseItem(BaseModel):
+class UseItem(BaseModel, Generic[T]):
     useDefault: bool
-    item: SkinItem | BackgroundItem | EffectItem | ParticleItem | None = None
+    item: T = None
 
 
 class LevelItem(BaseModel):
