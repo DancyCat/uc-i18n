@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 from helpers.models.sonolus.item import ReplayItem, ServerItem, ServerItemCommunityComment
 from helpers.models.sonolus.item_section import ServerItemSection
-from helpers.models.sonolus.misc import SRL, ServerItemLeaderboard, ServerInfoButton, ServerConfiguration, ServerItemLeaderboardRecord
+from helpers.models.sonolus.misc import SRL, ServerItemLeaderboard, ServerInfoButton, ServerItemLeaderboardRecord
 from helpers.models.sonolus.options import ServerForm, ServerOption
 
 
