@@ -25,6 +25,8 @@ def get_validator(option: dict, engine_data: dict) -> validator:
     if option["name"] in engine_data.get("unrankable_options", []):
         return lambda value: value == option["def"]
 
+    print(option["name"], option["name"] in ["slider", "toggle", "select"], option["name"].strip() in ["slider", "toggle", "select"])
+
     match option["name"]:
         case "slider":
             return lambda value: value >= option['min'] and value <= option['max']
