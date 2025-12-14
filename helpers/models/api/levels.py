@@ -1,14 +1,16 @@
 from datetime import datetime, timedelta
 from decimal import Decimal
 from functools import lru_cache
-from typing import Literal, TypeVar, overload
+from typing import Literal, TypeVar, overload, TYPE_CHECKING
 from pydantic import BaseModel, Field
 
 from helpers.data_compilers import *
 from helpers.models.sonolus.item import LevelItem, UseItem
 from helpers.models.sonolus.misc import Tag
 from helpers.owoify import handle_uwu
-from core import SonolusRequest
+
+if TYPE_CHECKING:
+    from core import SonolusRequest
 
 
 M = TypeVar("M", bound=BaseModel)
@@ -112,7 +114,7 @@ class Chart(BaseModel):
     @overload
     def to_level_item(
         self, 
-        request: SonolusRequest, 
+        request: "SonolusRequest", 
         asset_base_url: str, 
         bgtype: str, 
         include_description: Literal[False] = False, 
@@ -123,7 +125,7 @@ class Chart(BaseModel):
     @overload
     def to_level_item(
         self, 
-        request: SonolusRequest, 
+        request: "SonolusRequest", 
         asset_base_url: str, 
         bgtype: str, 
         include_description: Literal[True], 
@@ -133,7 +135,7 @@ class Chart(BaseModel):
 
     def to_level_item(
         self, 
-        request: SonolusRequest, 
+        request: "SonolusRequest", 
         asset_base_url: str, 
         bgtype: str, 
         include_description=False, 
