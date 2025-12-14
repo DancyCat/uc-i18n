@@ -18,14 +18,13 @@ class ServerTextOption(BaseModel):
     description: str | None = None
     required: bool
     type: Literal["text"] = "text"
-    default: str = Field(validation_alias="def", serialization_alias="def")
+    default: str = Field(serialization_alias="def")
     placeholder: Text | str
     limit: int
     shortcuts: list[str]
 
     model_config = ConfigDict(
         by_alias=True, 
-        alias_priority=2, 
     )
 
 class ServerTextAreaOption(BaseModel):
@@ -34,14 +33,13 @@ class ServerTextAreaOption(BaseModel):
     description: str | None = None
     required: bool
     type: Literal["textArea"] = "textArea"
-    default: str = Field(validation_alias="def", serialization_alias="def")
+    default: str = Field(serialization_alias="def")
     placeholder: Text | str
     limit: int
     shortcuts: list[str]
 
     model_config = ConfigDict(
         by_alias=True, 
-        alias_priority=2, 
     )
 
 class ServerSliderOption(BaseModel):
@@ -50,7 +48,7 @@ class ServerSliderOption(BaseModel):
     description: str | None = None
     required: bool
     type: Literal["slider"] = "slider"
-    default: int | float = Field(validation_alias="def", serialization_alias="def")
+    default: int | float = Field(serialization_alias="def")
     min: int | float
     max: int | float
     step: int | float
@@ -58,7 +56,6 @@ class ServerSliderOption(BaseModel):
 
     model_config = ConfigDict(
         by_alias=True, 
-        alias_priority=2, 
     )
 
 class ServerToggleOption(BaseModel):
@@ -67,11 +64,10 @@ class ServerToggleOption(BaseModel):
     description: str | None = None
     required: bool
     type: Literal["toggle"] = "toggle"
-    default: bool = Field(validation_alias="def", serialization_alias="def")
+    default: bool = Field(serialization_alias="def")
 
     model_config = ConfigDict(
         by_alias=True, 
-        alias_priority=2, 
     )
 
 class ServerOption_Value(BaseModel):
@@ -84,12 +80,11 @@ class ServerSelectOption(BaseModel):
     description: str | None = None
     required: bool
     type: Literal["select"] = "select"
-    default: str = Field(validation_alias="def", serialization_alias="def")
+    default: str = Field(serialization_alias="def")
     values: list[ServerOption_Value]
 
     model_config = ConfigDict(
-        by_alias=True, 
-        alias_priority=2, 
+        by_alias=True,  
     )
 
 class ServerMultiOption(BaseModel):
@@ -98,12 +93,11 @@ class ServerMultiOption(BaseModel):
     description: str | None = None
     required: bool
     type: Literal["multi"] = "multi"
-    default: list[bool] = Field(validation_alias="def", serialization_alias="def")
+    default: list[bool] = Field(serialization_alias="def")
     values: list[ServerOption_Value]
 
     model_config = ConfigDict(
         by_alias=True, 
-        alias_priority=2, 
     )
 
 class ServerServerItemOption(BaseModel):
@@ -113,12 +107,11 @@ class ServerServerItemOption(BaseModel):
     required: bool
     type: Literal["serverItem"] = "serverItem"
     itemType: ItemType
-    default: SIL | None = Field(None, validation_alias="def", serialization_alias="def")
+    default: SIL | None = Field(None, serialization_alias="def")
     allowOtherServers: bool
 
     model_config = ConfigDict(
         by_alias=True, 
-        alias_priority=2, 
     )
 
 class ServerServerItemsOption(BaseModel):
@@ -128,13 +121,12 @@ class ServerServerItemsOption(BaseModel):
     required: bool
     type: Literal["serverItems"] = "serverItems"
     itemType: ItemType
-    default: list[SIL] = Field(validation_alias="def", serialization_alias="def")
+    default: list[SIL] = Field(serialization_alias="def")
     allowOtherServers: bool
     limit: int
 
     model_config = ConfigDict(
         by_alias=True, 
-        alias_priority=2, 
     )
 
 class ServerCollectionItemOption(BaseModel):
@@ -151,11 +143,10 @@ class ServerFileOption(BaseModel):
     description: str | None = None
     required: bool
     type: Literal["file"] = "file"
-    default: str = Field(validation_alias="def", serialization_alias="def")
+    default: str = Field(serialization_alias="def")
 
     model_config = ConfigDict(
-        by_alias=True, 
-        alias_priority=2, 
+        by_alias=True,  
     )
 
 ServerOption = (
