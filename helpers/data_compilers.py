@@ -278,7 +278,7 @@ def compile_skins_list(source: str = None) -> list[ExtendedSkinItem]:
     for skin in os.listdir("files/skins"):
         if not os.path.isdir(os.path.join("files", "skins", skin)):
             continue
-        
+
         with open(f"files/skins/{skin}/skin.json", "r", encoding="utf8") as f:
             skin_data: dict = json.load(f)
         if not skin_data.get("enabled", True):
@@ -296,7 +296,7 @@ def compile_skins_list(source: str = None) -> list[ExtendedSkinItem]:
             data=repo.get_srl(repo.add_file(f"files/skins/{skin}/data")),
             texture=repo.get_srl(repo.add_file(f"files/skins/{skin}/texture")),
             engines=skin_data.get("engines", []),
-            themes=skin_data.get(["themes"], []),
+            themes=skin_data.get("themes", []),
             locale=skin_data.get("locale")
         )
         compiled_data_list.append(compiled_data)
