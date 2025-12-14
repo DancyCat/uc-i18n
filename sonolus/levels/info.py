@@ -44,7 +44,8 @@ async def main(request: SonolusRequest):
         request,
         asset_base_url,
         request.state.levelbg
-    )
+    ) if staffpick_req.data.data else None
+
     random = await asyncio.gather(
         *[
             request.app.run_blocking(
@@ -97,7 +98,7 @@ async def main(request: SonolusRequest):
                 uwu_level
             ),
             items=handle_item_uwu(
-                [random_staff_pick], request.state.localization, uwu_level
+                [random_staff_pick] if random_staff_pick else [], request.state.localization, uwu_level
             )
         ),
         LevelItemSection(
