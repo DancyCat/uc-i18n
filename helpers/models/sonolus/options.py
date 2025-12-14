@@ -1,5 +1,5 @@
 from typing import Literal, Annotated
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from helpers.models.sonolus.misc import SIL
 from helpers.sonolus_typings import Icon, ItemType, Text
 
@@ -12,12 +12,7 @@ class ServerCollectionItemOption(BaseModel):
     type: Literal["collectionItem"] = "collectionItem"
     itemType: ItemType
 
-class DumpDefAliasMixin(BaseModel):
-    def model_dump(self, **kwargs):
-        kwargs.setdefault("by_alias", True)
-        return super().model_dump(**kwargs)
-
-class ServerTextOption(DumpDefAliasMixin):
+class ServerTextOption(BaseModel):
     query: str
     name: Text | str
     description: str | None = None
@@ -28,7 +23,12 @@ class ServerTextOption(DumpDefAliasMixin):
     limit: int
     shortcuts: list[str]
 
-class ServerTextAreaOption(DumpDefAliasMixin):
+    model_config = ConfigDict(
+        by_alias=True, 
+        alias_priority=2, 
+    )
+
+class ServerTextAreaOption(BaseModel):
     query: str
     name: Text | str
     description: str | None = None
@@ -39,7 +39,12 @@ class ServerTextAreaOption(DumpDefAliasMixin):
     limit: int
     shortcuts: list[str]
 
-class ServerSliderOption(DumpDefAliasMixin):
+    model_config = ConfigDict(
+        by_alias=True, 
+        alias_priority=2, 
+    )
+
+class ServerSliderOption(BaseModel):
     query: str
     name: Text | str
     description: str | None = None
@@ -51,7 +56,12 @@ class ServerSliderOption(DumpDefAliasMixin):
     step: int | float
     unit: Text | str | None = None
 
-class ServerToggleOption(DumpDefAliasMixin):
+    model_config = ConfigDict(
+        by_alias=True, 
+        alias_priority=2, 
+    )
+
+class ServerToggleOption(BaseModel):
     query: str
     name: Text | str
     description: str | None = None
@@ -59,11 +69,16 @@ class ServerToggleOption(DumpDefAliasMixin):
     type: Literal["toggle"] = "toggle"
     default: bool = Field(validation_alias="def", serialization_alias="def")
 
+    model_config = ConfigDict(
+        by_alias=True, 
+        alias_priority=2, 
+    )
+
 class ServerOption_Value(BaseModel):
     name: str
     title: Text | str
 
-class ServerSelectOption(DumpDefAliasMixin):
+class ServerSelectOption(BaseModel):
     query: str
     name: Text | str
     description: str | None = None
@@ -72,7 +87,12 @@ class ServerSelectOption(DumpDefAliasMixin):
     default: str = Field(validation_alias="def", serialization_alias="def")
     values: list[ServerOption_Value]
 
-class ServerMultiOption(DumpDefAliasMixin):
+    model_config = ConfigDict(
+        by_alias=True, 
+        alias_priority=2, 
+    )
+
+class ServerMultiOption(BaseModel):
     query: str
     name: Text | str
     description: str | None = None
@@ -81,7 +101,12 @@ class ServerMultiOption(DumpDefAliasMixin):
     default: list[bool] = Field(validation_alias="def", serialization_alias="def")
     values: list[ServerOption_Value]
 
-class ServerServerItemOption(DumpDefAliasMixin):
+    model_config = ConfigDict(
+        by_alias=True, 
+        alias_priority=2, 
+    )
+
+class ServerServerItemOption(BaseModel):
     query: str
     name: Text | str
     description: str | None = None
@@ -91,7 +116,12 @@ class ServerServerItemOption(DumpDefAliasMixin):
     default: SIL | None = Field(None, validation_alias="def", serialization_alias="def")
     allowOtherServers: bool
 
-class ServerServerItemsOption(DumpDefAliasMixin):
+    model_config = ConfigDict(
+        by_alias=True, 
+        alias_priority=2, 
+    )
+
+class ServerServerItemsOption(BaseModel):
     query: str
     name: Text | str
     description: str | None = None
@@ -102,6 +132,11 @@ class ServerServerItemsOption(DumpDefAliasMixin):
     allowOtherServers: bool
     limit: int
 
+    model_config = ConfigDict(
+        by_alias=True, 
+        alias_priority=2, 
+    )
+
 class ServerCollectionItemOption(BaseModel):
     query: str
     name: Text | str
@@ -110,13 +145,18 @@ class ServerCollectionItemOption(BaseModel):
     type: Literal["collectionItem"] = "collectionItem"
     itemType: ItemType
 
-class ServerFileOption(DumpDefAliasMixin):
+class ServerFileOption(BaseModel):
     query: str
     name: Text | str
     description: str | None = None
     required: bool
     type: Literal["file"] = "file"
     default: str = Field(validation_alias="def", serialization_alias="def")
+
+    model_config = ConfigDict(
+        by_alias=True, 
+        alias_priority=2, 
+    )
 
 ServerOption = (
     ServerTextOption
