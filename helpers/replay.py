@@ -56,8 +56,6 @@ for engine in listdir("files/engines"):
 
     engine_settings[engine_data["title"]] = settings
 
-print("WARNING WARNING TODO (release) there are no unrankable options for nextrush and nextsekai yet")
-
 def validate_replay_config(compressed_replay_config: bytes, engine_name: str) -> AdditionalReplayInfo:
     replay_config = json.load(gzip.GzipFile(fileobj=BytesIO(compressed_replay_config)))
     additional_info = AdditionalReplayInfo()

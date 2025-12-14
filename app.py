@@ -70,6 +70,8 @@ def load_routes(folder, cleanup: bool = True):
     global app
     """Load Routes from the specified directory."""
 
+    print("WARNING WARNING TODO (release) there are no unrankable options for nextrush and nextsekai yet")
+
     routes = []
 
     def traverse_directory(directory):
