@@ -383,7 +383,6 @@ def compile_engines_list(source: str = None, locale: str = "en") -> list[Extende
         
         compiled_data = ExtendedEngineItem(
             name=engine,
-            version=engine_data.get("key"),
             title=engine_data.get("title"),
             subtitle=engine_data.get("subtitle"),
             source=source,
