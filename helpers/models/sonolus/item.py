@@ -90,11 +90,11 @@ class PostItem(BaseModel):
     tags: list[Tag]
     thumbnail: SRL | None = None
 
-T = TypeVar("T", SkinItem, BackgroundItem, EffectItem, ParticleItem, None)
+T = TypeVar("T", SkinItem, BackgroundItem, EffectItem, ParticleItem)
 
 class UseItem(BaseModel, Generic[T]):
     useDefault: bool
-    item: T = None
+    item: T | None = None
 
 
 class LevelItem(BaseModel):
