@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from functools import lru_cache
 from typing import Literal, TypeVar, overload, TYPE_CHECKING
@@ -98,7 +98,7 @@ class Chart(BaseModel):
         return "/".join([asset_base_url, self.author, self.id, file_hash])
 
     def _datetime_to_str(self, datetime_: datetime) -> str:
-        delta = datetime.now() - datetime_
+        delta = datetime.now(timezone.utc) - datetime_
 
         if delta >= timedelta(days=1):
             return f"{delta.days}d"
