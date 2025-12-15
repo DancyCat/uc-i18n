@@ -2,7 +2,7 @@
 Steals staff-picked levels from unch and uploads to the local fork
 
 Requires requests and tqdm: pip install requests, tqdm
-run from the uc-sonoserver directory
+run from the uc-sonoserver directory, python3 -m scripts.steal http://127.0.0.1:8001
 
 ..please use for tests only..
 """
@@ -12,8 +12,7 @@ import json
 from io import BytesIO
 from helpers.models.api.levels import LevelList
 from tqdm import tqdm
-
-YOUR_BACKEND_ADDR = "http://127.0.0.1:8001"
+from sys import argv
 
 request = requests.get("https://sono_api.untitledcharts.com/api/charts?staff_pick=1&type=advanced&sort_by=published_at", verify=False)
 levels = LevelList.model_validate_json(request.text)
@@ -31,7 +30,7 @@ def download(link: str) -> BytesIO:
 
 for level in tqdm(levels.data):
     requests.post(
-        YOUR_BACKEND_ADDR + "/api/charts/upload/",
+        f"{argv[1]}/api/charts/upload/",
         data={
             "data": json.dumps({
                 "rating": level.rating,
