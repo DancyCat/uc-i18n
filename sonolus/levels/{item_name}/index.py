@@ -55,8 +55,8 @@ async def main(request: SonolusRequest, item_name: str):
                     options=[]
                 ),
             )
-    if response.mod or response.owner:
-        if response.owner or response.admin:
+    if response.data.mod or response.data.owner:
+        if response.data.owner or response.data.admin:
             actions.append(
                 ServerForm(
                     type="delete",

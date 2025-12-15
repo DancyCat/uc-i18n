@@ -48,7 +48,7 @@ async def main(request: SonolusRequest, item_name: str):
         options=[]
     )
 
-    formatted_comments = [process_comment(comment, response.mod, request.state.localization, uwu_level, comment_delete_action) for comment in comments]
+    formatted_comments = [process_comment(comment, response.data.mod, request.state.localization, uwu_level, comment_delete_action) for comment in comments]
 
     return ServerItemCommunityInfo(
         actions=(
