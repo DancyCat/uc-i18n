@@ -96,7 +96,7 @@ async def main(
             meta_includes=keywords
         ).send(auth)
 
-    pageCount = response.pageCount
+    pageCount = response.data.pageCount
     if sort_by == "random" and pageCount != 0 and len(response.data.data) == 10:
         pageCount = (
             page + 2
