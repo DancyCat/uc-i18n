@@ -68,6 +68,9 @@ class Request(Generic[T]):
 
             if not resp.ok and self.not_ok_callback:
                 await self.not_ok_callback(resp)
+                
+            if resp.status == 422:
+                print(await resp.text())
 
             resp.data = None
             return resp
