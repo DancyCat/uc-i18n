@@ -460,6 +460,6 @@ class API:
         return Request(
             self._client_session,
             "GET",
-            f"/api/charts/{item_name.removeprefix('UnCh-')}/leaderboards/",
+            f"/api/charts/{item_name.removeprefix('UnCh-')}/leaderboards/{id}",
             RecordInfo
         )
