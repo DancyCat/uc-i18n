@@ -28,7 +28,7 @@ async def info(item_name: str, request: SonolusRequest):
     for i, replay in enumerate(response.data.data):
         top_records.append(
             ServerItemLeaderboardRecord(
-                name=replay.id,
+                name=str(replay.id),
                 rank=f"#{i + 1}",
                 player=replay.display_name,
                 value=generate_string(replay)
@@ -51,7 +51,7 @@ async def list(item_name: str, request: SonolusRequest, page: int = Query(0, ge=
     for i, replay in enumerate(response.data.data):
         records.append(
             ServerItemLeaderboardRecord(
-                name=replay.id,
+                name=str(replay.id),
                 rank=f"#{i + ((page - 1) * 10) + 1}",
                 player=replay.display_name,
                 value=generate_string(replay)
@@ -91,7 +91,7 @@ async def replay_info(item_name: str, name: str, request: SonolusRequest):
 
     return ServerItemLeaderboardRecordDetails(
         replays=[ReplayItem(
-            name=replay_response.data.data.id,
+            name=str(replay_response.data.data.id),
             source=request.app.base_url,
             title=generate_string(replay_response.data.data),
             subtitle="",
