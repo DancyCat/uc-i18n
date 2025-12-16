@@ -28,7 +28,7 @@ async def main(request: SonolusRequest, data: ServerSubmitLevelResultRequest):
             data.replay.data.hash,
             data.replay.configuration.hash,
             request.state.engine,
-            f"{response.data.sonolus_id}#{response.data.sonolus_handle}",
+            f"{response.data.sonolus_username}#{response.data.sonolus_handle}",
             request
         ),
         hashes=[
