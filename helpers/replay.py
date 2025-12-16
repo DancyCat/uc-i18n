@@ -54,7 +54,7 @@ for engine in listdir("files/engines"):
         for option in engine_config["options"]:
             settings[option["name"]] = get_validator(option, engine_data)
 
-    engine_settings[engine_data["title"]] = settings
+    engine_settings[engine] = settings
 
 def validate_replay_config(compressed_replay_config: bytes, engine_name: str) -> AdditionalReplayInfo:
     replay_config = json.load(gzip.GzipFile(fileobj=BytesIO(compressed_replay_config)))
