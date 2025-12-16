@@ -68,7 +68,7 @@ class Request(Generic[T]):
 
             if not resp.ok and self.not_ok_callback:
                 await self.not_ok_callback(resp)
-                
+
             if resp.status == 422:
                 print(await resp.text())
 
@@ -415,7 +415,7 @@ class API:
         content = FormData()
 
         content.add_field("replay_data", replay_data, content_type="data/gzip", filename="replay_data")
-        content.add_field("replay_configuration", replay_configuration, content_type="data/gzip", filename="replay_configuration")
+        content.add_field("replay_config", replay_configuration, content_type="data/gzip", filename="replay_configuration")
         content.add_field("user_id", user_id)
         content.add_field("engine_name", engine_name)
         content.add_field("display_name", display_name)
