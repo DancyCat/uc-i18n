@@ -10,6 +10,7 @@ from helpers.models.sonolus.item import ReplayItem
 class ServerSubmitItemActionRequest(BaseModel):
     values: str
 
+# TODO: replace requests that have only type with something like GenericActionRequest or ServerSubmitItemActionRequest
 
 class _ParsedServerSubmitCommentActionRequest(BaseModel):
     type: str
@@ -20,7 +21,6 @@ class ServerSubmitCommentActionRequest(ServerSubmitItemActionRequest):
         return _ParsedServerSubmitCommentActionRequest.model_validate({k: v[0] for k, v in parse_qs(self.values).items()})
     
 
-
 class _ParsedServerSubmitCommentIDActionRequest(BaseModel):
     type: str
 
@@ -28,6 +28,14 @@ class ServerSubmitCommentIDActionRequest(ServerSubmitItemActionRequest):
     def parse(self) -> _ParsedServerSubmitCommentIDActionRequest:
         return _ParsedServerSubmitCommentIDActionRequest.model_validate({k: v[0] for k, v in parse_qs(self.values).items()})
     
+
+class _ParsedServerSubmitReplayActionRequest(BaseModel):
+    type: str
+
+class ServerSubmitReplayActionRequest(ServerSubmitCommentActionRequest):
+    def parse(self) -> _ParsedServerSubmitReplayActionRequest:
+        return _ParsedServerSubmitReplayActionRequest.model_validate({k: v[0] for k, v in parse_qs(self.values).items()})
+
     
 class _ParsedServerSubmitLevelActionRequest(BaseModel):
     type: str

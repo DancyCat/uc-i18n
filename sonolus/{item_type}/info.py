@@ -55,8 +55,6 @@ async def main(request: SonolusRequest, item_type: ItemType):
             data = await request.app.run_blocking(
                 compile_playlists_list, request.app.base_url, request.state.localization
             )
-        # case "replays":
-        #     data = await request.app.run_blocking(compile_replays_list, request.app.base_url)
         # case "rooms":
         #     data = await request.app.run_blocking(compile_rooms_list, request.app.base_url)
         case _:

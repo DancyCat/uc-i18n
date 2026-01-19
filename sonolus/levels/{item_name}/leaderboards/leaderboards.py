@@ -8,14 +8,6 @@ from helpers.models.sonolus.response import ServerItemLeaderboardDetails, Server
 
 router = APIRouter()
 
-def generate_string(replay: LeaderboardDBResponse) -> str:
-    string = f"{replay.arcade_score} / {replay.accuracy_score} | {replay.nperfect} / {replay.ngreat} / {replay.ngood} / {replay.nmiss}"
-
-    if replay.speed != 1:
-        string += f" | {replay.speed}x"
-
-    return string
-
 @router.get("/", response_model=ServerItemLeaderboardDetails)
 async def info(item_name: str, request: SonolusRequest):
     response = await request.app.api.get_leaderboards_info(item_name).send(request.headers.get("Sonolus-Session"))
@@ -23,48 +15,28 @@ async def info(item_name: str, request: SonolusRequest):
     if response.status != 200:
         raise HTTPException(status_code=response.status)
 
-    top_records = []
-
-    for i, replay in enumerate(response.data.data):
-        top_records.append(
-            ServerItemLeaderboardRecord(
-                name=item_name + str(replay.id),
-                rank=f"#{i + 1}",
-                player=replay.display_name,
-                value=generate_string(replay)
-            )
-        )
-
     return ServerItemLeaderboardDetails(
-        topRecords=top_records
+        topRecords=await request.app.run_blocking(
+            response.data.to_leaderboards,
+            item_name
+        )
     )
 
 @router.get("/records/list", response_model=ServerItemLeaderboardRecordList)
-async def list(item_name: str, request: SonolusRequest, page: int = Query(0, ge=0)):
+async def list(item_name: str, request: SonolusRequest, page: int = Query(1, ge=1)):
     response = await request.app.api.get_leaderboards(item_name, page).send(request.headers.get("Sonolus-Session"))
 
     if response.status != 200:
         raise HTTPException(status_code=response.status)
-    
-    records = []
-
-    for i, replay in enumerate(response.data.data):
-        records.append(
-            ServerItemLeaderboardRecord(
-                name=str(replay.id),
-                rank=f"#{i + ((page - 1) * 10) + 1}",
-                player=replay.display_name,
-                value=generate_string(replay)
-            )
-        )
 
     return ServerItemLeaderboardRecordList(
         pageCount=response.data.pageCount,
-        records=records
+        records=await request.app.run_blocking(
+            response.data.to_leaderboards,
+            item_name,
+            page=page
+        )
     )
-
-def make_url(asset_base_url: str, chart_prefix: str, user_id: str, hash: str) -> str:
-    return f"{asset_base_url}/{chart_prefix}/replays/{user_id}/{hash}"
 
 @router.get("/records/{name}", response_model=ServerItemLeaderboardRecordDetails)
 async def replay_info(item_name: str, name: str, request: SonolusRequest):
@@ -82,37 +54,21 @@ async def replay_info(item_name: str, name: str, request: SonolusRequest):
     
     asset_base_url = level_response.data.asset_base_url.removesuffix("/")
 
-    level = await request.app.run_blocking(
-        level_response.data.data.to_level_item,
-        request,
-        asset_base_url,
-        request.state.levelbg, # TODO: remove
+    replay_item = replay_response.data.to_replay_item(
+        await request.app.run_blocking(
+            level_response.data.data.to_level_item,
+            request,
+            asset_base_url,
+            request.state.levelbg,
+        ),
+        request
     )
 
-    return ServerItemLeaderboardRecordDetails(
-        replays=[ReplayItem(
-            name=str(replay_response.data.data.id),
-            source=request.app.base_url,
-            title=generate_string(replay_response.data.data),
-            subtitle=level.title,
-            author=replay_response.data.data.display_name,
-            tags=[],
-            level=level,
-            data=SRL(
-                hash=replay_response.data.data.replay_data_hash,
-                url=make_url(asset_base_url, replay_response.data.data.chart_prefix, replay_response.data.data.submitter, replay_response.data.data.replay_data_hash)
-            ),
-            configuration=SRL(
-                hash=replay_response.data.data.replay_config_hash,
-                url=make_url(asset_base_url, replay_response.data.data.chart_prefix, replay_response.data.data.submitter, replay_response.data.data.replay_config_hash)
-            )
-        )]
-    )
+    return ServerItemLeaderboardRecordDetails(replays=[replay_item])
 
 # TODO: chart -> level ..?
-# TODO: replay_to_replayitem
 # TODO: message for non-200 responses / handle non-200 somewhere else
-# TODO: delete replays or private replays by mod or whatever
-# TODO (with backend): replace leaderboard/record/score with a single word
-# TODO: allow user to change stuff (name, description, asdasdasd)
+# TODO (with backend): replace leaderboard/record/score/replay with a single word
 # TODO: different leaderboard types
+# TODO: sonolus 1.1
+# TODO: uwuify | handle_item_uwu([item_data], request.state.localization, request.state.uwu)[0]

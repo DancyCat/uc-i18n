@@ -1,6 +1,4 @@
-from typing import TypeVar, Any
-
-# TODO (backend/sonoserv): test comments pagination
+from typing import TypeVar
 
 T = TypeVar("T")
 

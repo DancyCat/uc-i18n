@@ -15,6 +15,8 @@ from pydantic import BaseModel
 import gzip
 import json
 
+UPLOAD_KEY_EXPIRE_TIME = 180
+
 validator = Callable[[int | float], bool]
 engine_settings: dict[str, dict[str, validator]] = {}
 
@@ -47,11 +49,15 @@ for engine in listdir("files/engines"):
         continue
 
     settings: dict[str, validator] = {}
+    config_overrides = engine_data.get("config_overrides", {})
 
     with gzip.open(f"files/engines/{engine}/EngineConfiguration", "rb") as file:
         engine_config: dict = json.load(file)
 
         for option in engine_config["options"]:
+            if option["name"] in config_overrides:
+                option.update(config_overrides[option["name"]])
+
             settings[option["name"]] = get_validator(option, engine_data)
 
     engine_settings[engine] = settings
@@ -69,8 +75,6 @@ def validate_replay_config(compressed_replay_config: bytes, engine_name: str) ->
                 additional_info.speed = float(option_value)
 
     return additional_info
-
-UPLOAD_KEY_EXPIRE_TIME = 180
 
 class UploadKeyData(BaseModel):
     user_id: str
@@ -126,5 +130,3 @@ def verify_upload_key(upload_key: str, request: SonolusRequest) -> UploadKeyData
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid upload token.")
     
     return decoded_data
-
-# TODO: check config_overrides

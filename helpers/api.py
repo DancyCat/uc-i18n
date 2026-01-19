@@ -1,14 +1,14 @@
 from aiohttp import ClientSession, ClientResponse, FormData
 from fastapi import HTTPException
 from pydantic import BaseModel
-from typing import Any, Callable, TypeVar, Generic, Awaitable, overload
+from typing import Any, Callable, TypeVar, Generic, Awaitable
 import decimal
-from io import BytesIO
 
 from helpers.models.api.comments import *
 from helpers.models.api.levels import *
 from helpers.models.api.misc import *
 from helpers.models.api.notifications import *
+from helpers.models.api.leaderboards import *
 from helpers.models.sonolus.account import ServiceUserProfile
 
 T = TypeVar("T", bound=BaseModel)
@@ -462,4 +462,12 @@ class API:
             "GET",
             f"/api/charts/{item_name.removeprefix('UnCh-')}/leaderboards/{id}",
             RecordInfo
+        )
+    
+    def delete_record(self, item_name: str, id: int) -> Request[DeleteReplayResponse]:
+        return Request(
+            self._client_session,
+            "DELETE",
+            f"/api/charts/{item_name.removeprefix('UnCh-')}/leaderboards/{id}",
+            DeleteReplayResponse
         )

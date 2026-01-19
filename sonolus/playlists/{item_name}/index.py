@@ -21,8 +21,7 @@ async def main(request: SonolusRequest, item_name: str):
     auth = request.headers.get("Sonolus-Session")
     actions = []
 
-    session = request.headers.get("Sonolus-Session")
-    if not session:
+    if not auth:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=locale.not_logged_in
         )
@@ -31,8 +30,6 @@ async def main(request: SonolusRequest, item_name: str):
     parts = item_name.split("_", 1)
     if parts[0] != "uploaded" or len(parts) != 2 or len(item_name) > 500:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="huh")
-    headers = {request.app.auth_header: request.app.auth}
-    headers["authorization"] = auth
     params = ServerSubmitPlaylistActionRequest(parts[1]).parse(request)
 
     page = params.page or 1

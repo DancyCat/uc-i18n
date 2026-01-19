@@ -1,10 +1,11 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from decimal import Decimal
 from functools import lru_cache
 from typing import Literal, TypeVar, overload, TYPE_CHECKING
 from pydantic import BaseModel, Field
 
 from helpers.data_compilers import *
+from helpers.datetime_to_str import datetime_to_str
 from helpers.models.sonolus.item import LevelItem, UseItem
 from helpers.models.sonolus.misc import Tag
 from helpers.owoify import handle_uwu
@@ -96,20 +97,6 @@ class Chart(BaseModel):
 
     def _make_url(self, asset_base_url: str, file_hash: str) -> str:
         return "/".join([asset_base_url, self.author, self.id, file_hash])
-
-    def _datetime_to_str(self, datetime_: datetime) -> str:
-        delta = datetime.now(timezone.utc) - datetime_
-
-        if delta >= timedelta(days=1):
-            return f"{delta.days}d"
-        elif delta >= timedelta(hours=1):
-            return f"{delta.seconds // 3600}h"
-        elif delta >= timedelta(minutes=1):
-            return f"{delta.seconds // 60}m"
-        elif delta >= timedelta(seconds=1):
-            return f"{delta.seconds}s"
-        
-        return "0s"
 
     @overload
     def to_level_item(
@@ -204,7 +191,7 @@ class Chart(BaseModel):
             except KeyError:
                 particle_option = UseItem(useDefault=True)
 
-        time_str = self._datetime_to_str(self.published_at or self.created_at)
+        time_str = datetime_to_str(self.published_at or self.created_at)
         date_str = handle_uwu(
             loc.time_ago(time_str) if self.published_at else loc.time_ago_not_published(time_str),
             request.state.localization,

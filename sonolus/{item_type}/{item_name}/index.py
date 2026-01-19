@@ -8,7 +8,6 @@ from helpers.data_compilers import (
     compile_effects_list,
     compile_particles_list,
     compile_skins_list,
-    # compile_replays_list,
     # compile_rooms_list
 )
 from helpers.sonolus_typings import ItemType
@@ -52,8 +51,6 @@ async def main(request: SonolusRequest, item_type: ItemType, item_name: str):
             data = [item.to_particle_item() for item in await request.app.run_blocking(
                 compile_particles_list, request.app.base_url
             )]
-        # case "replays":
-        #     data = await request.app.run_blocking(compile_replays_list, request.app.base_url)
         # case "rooms":
         #     data = await request.app.run_blocking(compile_rooms_list, request.app.base_url)
         case _:

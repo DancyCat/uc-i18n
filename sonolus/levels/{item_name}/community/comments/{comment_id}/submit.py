@@ -19,10 +19,7 @@ async def main(
 
     parsed_data = data.parse()
 
-    headers = {request.app.auth_header: request.app.auth}
-    if auth:
-        headers["authorization"] = auth
-    else:
+    if not auth:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=locale.not_logged_in,
