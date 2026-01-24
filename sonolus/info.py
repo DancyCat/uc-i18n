@@ -40,6 +40,7 @@ async def main(request: SonolusRequest):
             infoType="announcements"
         ), 
         ServerInfoItemButton(type="level"), 
+        ServerInfoItemButton(type="replay"),
         ServerInfoItemButton(type="configuration")
     ]
     if logged_in:

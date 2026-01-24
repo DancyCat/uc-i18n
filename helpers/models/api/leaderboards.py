@@ -4,6 +4,7 @@ from datetime import datetime
 
 from core import SonolusRequest
 from helpers.datetime_to_str import datetime_to_str
+from helpers.models.api.charts import Chart
 from helpers.models.sonolus.item import LevelItem, ReplayItem, ServerItemLeaderboardRecord
 from helpers.models.sonolus.misc import SRL, Tag
 from helpers.owoify import handle_uwu
@@ -34,8 +35,9 @@ class LeaderboardRecord(ReplayUploadData):
     replay_data_hash: str
     replay_config_hash: str
     chart_id: str
+    public_chart: bool
 
-class LeaderboardRecordDBResponse(LeaderboardRecord): # TODO: remove optional fields
+class LeaderboardRecordDBResponse(LeaderboardRecord): # XXX: remove optional fields
     display_name: str
     id: int
     created_at: datetime
@@ -44,16 +46,16 @@ class LeaderboardRecordDBResponse(LeaderboardRecord): # TODO: remove optional fi
     mod: bool | None = None
 
 class LeaderboardInfo(BaseModel):
-    pageCount: int
+    pageCount: int | None = None
     data: list[LeaderboardRecordDBResponse]
 
-    def to_record_list(self, item_name: str, page: int = 1) -> list[ServerItemLeaderboardRecord]:
+    def to_record_list(self, page: int = 1) -> list[ServerItemLeaderboardRecord]:
         leaderboards = []
 
         for i, record in enumerate(self.data):
             leaderboards.append(
                 ServerItemLeaderboardRecord(
-                    name=f"UnCh-{item_name}-{record.id}",
+                    name=f"UnCh-{record.chart_id}-{record.id}",
                     rank=f"#{i + ((page - 1) * 10) + 1}",
                     player=record.display_name,
                     value=f"{record.shortened_grade} {record.arcade_score}" # TODO: different leaderboard types -> different.. these
@@ -62,6 +64,7 @@ class LeaderboardInfo(BaseModel):
 
 class LeaderboardRecordInfo(BaseModel):
     data: LeaderboardRecordDBResponse
+    chart: Chart
     asset_base_url: str
 
     @property
@@ -76,9 +79,15 @@ class LeaderboardRecordInfo(BaseModel):
     def _make_url(asset_base_url: str, chart_prefix: str, user_id: str, hash: str) -> str:
         return f"{asset_base_url}/{chart_prefix}/replays/{user_id}/{hash}"
 
-    def to_replay_item(self, level: LevelItem, request: SonolusRequest) -> ReplayItem:
+    def to_replay_item(self, request: SonolusRequest) -> ReplayItem:
         asset_base_url = self.asset_base_url.removesuffix("/")
         loc = request.state.loc
+
+        level = self.chart.to_level_item(
+            request,
+            self.asset_base_url,
+            request.state.levelbg,
+        )
 
         time_str = datetime_to_str(self.data.created_at)
         date_str = handle_uwu(
@@ -107,3 +116,10 @@ class LeaderboardRecordInfo(BaseModel):
     
 class DeleteLeaderboardRecord(LeaderboardRecordDBResponse):
     chart_title: str | None = None
+
+class PublicLeaderboardRecordList(BaseModel):
+    data: list[LeaderboardRecordInfo]
+    pageCount: int | None = None
+
+    def to_replay_items(self, request: SonolusRequest) -> list[ReplayItem]:
+        return [record.to_replay_item(request) for record in self.data]

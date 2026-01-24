@@ -15,6 +15,8 @@ from pydantic import BaseModel
 import gzip
 import json
 
+from helpers.models.sonolus.misc import ReplayConfiguration
+
 UPLOAD_KEY_EXPIRE_TIME = 180
 
 validator = Callable[[int | float], bool]
@@ -63,10 +65,18 @@ for engine in listdir("files/engines"):
     engine_settings[engine] = settings
 
 def validate_replay_config(compressed_replay_config: bytes, engine_name: str) -> AdditionalReplayInfo:
-    replay_config = json.load(gzip.GzipFile(fileobj=BytesIO(compressed_replay_config)))
+    if not engine_settings[engine_name]:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Replays with engine {engine_name} can't be uploaded") # TODO localize
+
+    replay_config = ReplayConfiguration.model_validate_json(
+        gzip.decompress(compressed_replay_config).decode()
+    )
+
     additional_info = AdditionalReplayInfo()
 
-    for option_value, (option_name, option_validator) in zip(replay_config["options"], engine_settings[engine_name].items()):
+    for option_name, option_value in zip(replay_config.optionNames, replay_config.options):
+        option_validator = engine_settings[engine_name][option_name]
+
         if not option_validator(option_value):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"invalid value for {option_name}: {option_value}")
         

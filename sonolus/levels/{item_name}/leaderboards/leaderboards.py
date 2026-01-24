@@ -15,7 +15,6 @@ async def info(item_name: str, request: SonolusRequest):
     return ServerItemLeaderboardDetails(
         topRecords=await request.app.run_blocking(
             response.data.to_record_list,
-            item_name
         )
     )
 
@@ -30,7 +29,6 @@ async def list(item_name: str, request: SonolusRequest, page: int = Query(1, ge=
         pageCount=response.data.pageCount,
         records=await request.app.run_blocking(
             response.data.to_record_list,
-            item_name,
             page=page
         )
     )
@@ -43,21 +41,9 @@ async def leaderboard_record_info(item_name: str, name: str, request: SonolusReq
 
     if replay_response.status != 200:
         raise HTTPException(status_code=replay_response.status)
-    
-    chart_response = await request.app.api.get_chart(item_name).send(auth)
 
-    if replay_response.status != 200:
-        raise HTTPException(status_code=chart_response.status)
-    
-    asset_base_url = chart_response.data.asset_base_url.removesuffix("/")
-
-    replay_item = replay_response.data.to_replay_item(
-        await request.app.run_blocking(
-            chart_response.data.data.to_level_item,
-            request,
-            asset_base_url,
-            request.state.levelbg,
-        ),
+    replay_item = await request.app.run_blocking(
+        replay_response.data.to_replay_item,
         request
     )
 
@@ -65,5 +51,4 @@ async def leaderboard_record_info(item_name: str, name: str, request: SonolusReq
 
 # TODO: different leaderboard types
 # TODO: uwuify | handle_item_uwu([item_data], request.state.localization, request.state.uwu)[0]
-# TODO: leaderboards page
-# TODO: user type implementation (putting here bc the pile of todos is here)
+# TODO: user type implementation

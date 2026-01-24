@@ -1,14 +1,19 @@
 from fastapi import APIRouter
 
+from helpers.models.sonolus.options import ServerForm
+from helpers.models.sonolus.response import ServerResultInfo
+
 router = APIRouter()
 
 @router.get("/")
 async def main():
-    submit_form = { # TODO: to model
-        "type": "replay",
-        "title": "#REPLAY",
-        "requireConfirmation": False,
-        "options": [],
-    }
-    data = {"submits": [submit_form]}
-    return data
+    return ServerResultInfo(
+        submits=[
+            ServerForm(
+                type="replay",
+                title="#REPLAY",
+                requireConfirmation=False,
+                options=[]
+            )
+        ]
+    )

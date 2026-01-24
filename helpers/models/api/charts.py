@@ -277,7 +277,7 @@ class GetChartResponse(BaseModel):
     data: Chart
     asset_base_url: str
     mod: bool | None = None
-    admin: bool | None = None # TODO (backend): Make optional fields non-optional
+    admin: bool | None = None # XXX (backend): Make optional fields non-optional
     owner: bool
 
 class DeleteChartResponse(Chart):

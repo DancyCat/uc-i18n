@@ -81,3 +81,6 @@ class ServerItemLeaderboardRecordList(BaseModel):
 
 class ServerItemLeaderboardRecordDetails(BaseModel):
     replays: list[ReplayItem]
+
+class ServerResultInfo(BaseModel):
+    submits: list[ServerForm] | None = None

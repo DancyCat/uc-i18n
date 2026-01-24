@@ -1,7 +1,10 @@
+from typing import Literal
 from fastapi import APIRouter, Query
 from fastapi import HTTPException, status
 
 from core import SonolusRequest
+from helpers.data_compilers import compile_static_posts_list, sort_posts_by_newest
+from helpers.models.sonolus.item_section import PostItemSection
 from helpers.paginate import list_to_pages
 from helpers.models.sonolus.response import ServerItemList
 
@@ -15,37 +18,47 @@ type_func = type
 @router.get("/")
 async def main(
     request: SonolusRequest,
+    type: Literal["announcements", "notifications"] | str,
     page: int = Query(0, ge=0),
 ):
     locale = request.state.loc
     uwu_level = request.state.uwu
     auth = request.headers.get("Sonolus-Session")
 
-    if auth:
-        response = await request.app.api.get_notifications(only_unread=False).send(auth)
-        notifs = response.data.to_posts(request)
-    if not (auth and notifs):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=locale.notification.none_past,
-        )
+    match type:
+        case "announcements":
+            data = await request.app.run_blocking(
+                compile_static_posts_list, request.app.base_url
+            )
 
-    pages = list_to_pages(notifs, request.app.get_items_per_page("posts"))
+            data = sort_posts_by_newest(data)
+
+        case "notifications":
+            if auth:
+                response = await request.app.api.get_notifications(only_unread=False).send(auth)
+                data = response.data.to_posts(request)
+            if not (auth and data):
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=locale.notification.none_past,
+                )
+
+    pages = list_to_pages(data, request.app.get_items_per_page("posts"))
     if len(pages) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=locale.items_not_found("notifications")
+            detail=locale.items_not_found(type)
         )
+    
     try:
-        page_data = pages[page]
+        items = pages[page]
     except KeyError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="hi stop hitting our api thanks",
         )
-    page_data = handle_item_uwu(page_data, request.state.localization, uwu_level)
 
     return ServerItemList(
         pageCount=len(pages),
-        items=page_data
+        items=handle_item_uwu(items, request.state.localization, uwu_level)
     )

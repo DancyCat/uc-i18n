@@ -471,3 +471,30 @@ class API:
             f"/api/charts/{item_name.removeprefix('UnCh-')}/leaderboards/{id}",
             DeleteLeaderboardRecord
         )
+    
+    def get_random_leaderboard_records(self, limit: Literal[3, 10]) -> Request[PublicLeaderboardRecordList]:
+        return Request(
+            self._client_session,
+            "GET",
+            "/api/charts/leaderboards/random/",
+            PublicLeaderboardRecordList,
+            params={"limit": limit}
+        )
+    
+    def get_recent_leaderboard_records(self) -> Request[PublicLeaderboardRecordList]:
+        return Request(
+            self._client_session,
+            "GET",
+            "/api/charts/leaderboards/",
+            PublicLeaderboardRecordList,
+            params={"limit": 3, "page": 0}
+        )
+    
+    def get_public_leaderboard_records(self, page: int) -> Request[PublicLeaderboardRecordList]:
+        return Request(
+            self._client_session,
+            "GET",
+            "/api/charts/leaderboards/",
+            PublicLeaderboardRecordList,
+            params={"limit": 10, "page": page}
+        )

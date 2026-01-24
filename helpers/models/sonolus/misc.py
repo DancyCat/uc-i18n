@@ -25,3 +25,7 @@ class ServerInfoItemButton(BaseModel):
 
 class ServerMessage(BaseModel):
     message: str
+
+class ReplayConfiguration(BaseModel):
+    options: list[int | float]
+    optionNames: list[Text | str] | None = None

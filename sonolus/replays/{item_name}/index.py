@@ -15,21 +15,9 @@ async def get(request: SonolusRequest, item_name: str):
 
     if leaderboard_record_response.status != 200:
         raise HTTPException(status_code=leaderboard_record_response.status)
-    
-    chart_response = await request.app.api.get_chart(item_name).send(auth)
 
-    if leaderboard_record_response.status != 200:
-        raise HTTPException(status_code=chart_response.status)
-    
-    asset_base_url = chart_response.data.asset_base_url.removesuffix("/")
-
-    replay_item = leaderboard_record_response.data.to_replay_item(
-        await request.app.run_blocking(
-            chart_response.data.data.to_level_item,
-            request,
-            asset_base_url,
-            request.state.levelbg,
-        ),
+    replay_item = await request.app.run_blocking(
+        leaderboard_record_response.data.to_replay_item,
         request
     )
 
