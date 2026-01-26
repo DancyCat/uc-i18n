@@ -51,4 +51,3 @@ async def leaderboard_record_info(item_name: str, name: str, request: SonolusReq
 
 # TODO: different leaderboard types
 # TODO: uwuify | handle_item_uwu([item_data], request.state.localization, request.state.uwu)[0]
-# TODO: user type implementation

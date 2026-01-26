@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 from helpers.data_compilers import *
 from helpers.datetime_to_str import datetime_to_str
-from helpers.models.sonolus.item import LevelItem, UseItem
+from helpers.models.sonolus.item import LevelItem, UseItem, UserItem
 from helpers.models.sonolus.misc import Tag
 from helpers.owoify import handle_uwu
 
@@ -62,7 +62,7 @@ class Chart(BaseModel):
         candidates = [
             skin
             for skin in skins
-            if skin.name in skin.themes and (not skin.engines or engine_name in skin.engines)
+            if skin.themes and skin.name in skin.themes and (not skin.engines or engine_name in skin.engines)
         ]
 
         if not candidates:
@@ -116,7 +116,7 @@ class Chart(BaseModel):
         asset_base_url: str, 
         bgtype: str, 
         include_description: Literal[True], 
-        disable_replace_missing_preview=False,
+        disable_replace_missing_preview: bool = False,
         context: Literal["list", "level"] = "list"
     ) -> tuple[LevelItem, str]: ...
 
@@ -125,8 +125,8 @@ class Chart(BaseModel):
         request: "SonolusRequest", 
         asset_base_url: str, 
         bgtype: str, 
-        include_description=False, 
-        disable_replace_missing_preview=False,
+        include_description: Literal[False] = False, 
+        disable_replace_missing_preview: bool = False,
         context: Literal["list", "level"] = "list"
     ):
         loc = request.state.loc
@@ -264,8 +264,16 @@ class Chart(BaseModel):
             data=SRL(
                 hash=self.chart_file_hash,
                 url=self._make_url(asset_base_url, self.chart_file_hash)
+            ),
+            authorUser=UserItem(
+                name=self.author,
+                title=self.author_full.rsplit("#", maxsplit=1)[0],
+                tags=[]
             )
         )
+
+# TODO: I forgor about it :skull: 
+# when chart gets updated, all replays should be deleted
 
         if include_description:
             return item, self.description

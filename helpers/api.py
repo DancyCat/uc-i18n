@@ -11,7 +11,7 @@ from helpers.models.api.notifications import *
 from helpers.models.api.leaderboards import *
 from helpers.models.sonolus.account import ServiceUserProfile
 
-T = TypeVar("T", bound=BaseModel)
+T = TypeVar("T", bound=BaseModel | None)
 
 class Response(ClientResponse, Generic[T]):
     data: T
@@ -27,7 +27,7 @@ class Request(Generic[T]):
         params: dict[str, Any] | None = None,
         content: FormData | None = None,
         use_app_auth: tuple[str, str] | None = None,
-        not_ok_callback: Awaitable[Callable[[ClientResponse], None]] | None = None
+        not_ok_callback: Callable[[ClientResponse], Awaitable[None]] | None = None
     ):
         self.client_session = client_session
         self.method = method
@@ -43,7 +43,7 @@ class Request(Generic[T]):
         self, 
         auth: str | None = None,  
     ) -> Response[T]:
-        headers = {}
+        headers: dict[str, str] = {}
         if auth:
             headers["authorization"] = auth
         if self.use_app_auth:
@@ -193,11 +193,11 @@ class API:
         )
 
     def get_random_charts(self, staff_pick: Literal["off", "true", "false"]) -> Request[RandomChartList]:
-        staff_pick_value = {"off": None, "true": 1, "false": 0}[staff_pick]
-        params = {"type": "random"}
+        params: dict[str, Any] = {"type": "random"}
 
-        if staff_pick_value:
-            params["staff_pick"] = staff_pick_value
+        match staff_pick:
+            case "true": params["staff_pick"] = 1
+            case "false": params["staff_pick"] = 0
 
         return Request(
             self._client_session,
@@ -208,11 +208,11 @@ class API:
         )
     
     def get_newest_charts(self, staff_pick: Literal["off", "true", "false"]) -> Request[ChartList]:
-        staff_pick_value = {"off": None, "true": 1, "false": 0}[staff_pick]
-        params = {"type": "advanced", "sort_by": "published_at"}
+        params: dict[str, Any] = {"type": "advanced", "sort_by": "published_at"}
 
-        if staff_pick_value:
-            params["staff_pick"] = staff_pick_value
+        match staff_pick:
+            case "true": params["staff_pick"] = 1
+            case "false": params["staff_pick"] = 0
 
         return Request(
             self._client_session,
@@ -238,14 +238,14 @@ class API:
         )
     
     def get_popular_charts(self, staff_pick: Literal["off", "true", "false"]) -> Request[ChartList]:
-        staff_pick_value = {"off": None, "true": 1, "false": 0}[staff_pick]
-        params = {
+        params: dict[str, Any] = {
             "type": "advanced",
             "sort_by": "decaying_likes",
         }
 
-        if staff_pick_value:
-            params["staff_pick"] = staff_pick_value
+        match staff_pick:
+            case "true": params["staff_pick"] = 1
+            case "false": params["staff_pick"] = 0
 
         return Request(
             self._client_session,
@@ -271,7 +271,7 @@ class API:
         ],
         staff_pick: bool | None,
     ) -> Request[ChartList]:
-        params = {
+        params: dict[str, Any] = {
             "type": "quick",
             "page": page,
             "sort_by": sort_by
@@ -498,3 +498,12 @@ class API:
             PublicLeaderboardRecordList,
             params={"limit": 10, "page": page}
         )
+    
+    def get_user_profile(self, id: str) -> Request[UserProfile]:
+        return Request(
+            self._client_session,
+            "GET",
+            f"/api/accounts/{id}/",
+            UserProfile
+        )
+    

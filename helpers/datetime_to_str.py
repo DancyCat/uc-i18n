@@ -1,6 +1,6 @@
 from datetime import datetime, timezone, timedelta
 
-def datetime_to_str(self, datetime_: datetime) -> str:
+def datetime_to_str(datetime_: datetime) -> str:
     delta = datetime.now(timezone.utc) - datetime_
 
     if delta >= timedelta(days=1):

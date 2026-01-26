@@ -17,7 +17,7 @@ from helpers.repository_map import repo
 
 from locales.locale import Locale
 
-cached = {
+cached: dict[str, Any] = {
     "skins": None,
     "effects": None,
     "particles": None,
@@ -27,12 +27,12 @@ cached = {
 }
 
 
-def clear_compile_cache(specific: str = None):
+def clear_compile_cache(specific: str | None = None):
     global cached
     if specific:
         cached[specific] = None
     else:
-        new_cached = {}
+        new_cached: dict[str, Any] = {}
         for k in cached.keys():
             new_cached[k] = None
         cached = new_cached.copy()

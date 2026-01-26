@@ -1,0 +1,52 @@
+from fastapi import APIRouter, HTTPException, status
+
+from core import SonolusRequest
+from helpers.models.sonolus.item import UserItem
+from helpers.models.sonolus.item_section import LevelItemSection
+from helpers.models.sonolus.misc import Tag
+from helpers.models.sonolus.response import ServerItemDetails
+
+router = APIRouter()
+
+
+@router.get("/")
+async def main(request: SonolusRequest, user_id: str):
+    profile = await request.app.api.get_user_profile(user_id).send()
+
+    tags = []
+
+    if profile.status == 404:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    if profile.data.account.admin:
+        tags.append(Tag(title="#ADMIN", icon="crown"))
+    elif profile.data.account.mod:
+        tags.append(Tag(title="#MODERATOR", icon="crown"))
+
+    if profile.data.account.banned:
+        tags.append(Tag(title="#BANNED", icon="lock"))
+
+    return ServerItemDetails(
+        item=UserItem(
+            name=profile.data.account.sonolus_id,
+            title=profile.data.account.sonolus_username,
+            handle=profile.data.account.sonolus_handle,
+            tags=tags
+        ),
+        hasCommunity=False,
+        leaderboards=False,
+        sections=[
+            LevelItemSection(
+                title="#NEWEST",
+                icon="level",
+                items=[
+                    await request.app.run_blocking(
+                        chart.to_level_item,
+                        request,
+                        profile.data.asset_base_url
+                    )
+                    for chart in profile.data.charts
+                ]
+            )
+        ]
+    )
