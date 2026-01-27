@@ -272,9 +272,6 @@ class Chart(BaseModel):
             )
         )
 
-# TODO: I forgor about it :skull: 
-# when chart gets updated, all replays should be deleted
-
         if include_description:
             return item, self.description
         

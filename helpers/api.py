@@ -432,7 +432,7 @@ class API:
             use_app_auth=self._use_app_auth
         )
     
-    def get_leaderboard_info(self, item_name: str) -> Request[LeaderboardInfo]:
+    def get_leaderboard_info(self, item_name: str, leaderboard_type: leaderboard_type) -> Request[LeaderboardInfo]:
         return Request(
             self._client_session,
             "GET",
@@ -440,11 +440,12 @@ class API:
             LeaderboardInfo,
             params={
                 "page": 0,
-                "limit": 3
+                "limit": 3,
+                "leaderboard_type": leaderboard_type
             }
         )
     
-    def get_leaderboards(self, item_name: str, page: int) -> Request[LeaderboardInfo]:
+    def get_leaderboards(self, item_name: str, leaderboard_type: leaderboard_type, page: int) -> Request[LeaderboardInfo]:
         return Request(
             self._client_session,
             "GET",
@@ -452,7 +453,8 @@ class API:
             LeaderboardInfo,
             params={
                 "page": page,
-                "limit": 10
+                "limit": 10,
+                "leaderboard_type": leaderboard_type
             }
         )
     

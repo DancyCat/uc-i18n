@@ -30,5 +30,8 @@ async def main(request: SonolusRequest, item_name: str):
 
     return ServerItemCommunityCommentList(
         pageCount=page_count,
-        comments=response.data.to_server_item_community_comments(request)
+        comments=await request.app.run_blocking(
+            response.data.to_server_item_community_comments,
+            request
+        )
     )

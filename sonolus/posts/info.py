@@ -18,7 +18,7 @@ from helpers.owoify import handle_item_uwu
 async def main(request: SonolusRequest, type: Literal["announcements", "notifications"] | str):
     locale = request.state.loc
     uwu_level = request.state.uwu
-    banner_srl = await request.app.run_blocking(compile_banner) # TODO: check banners everywhere
+    banner_srl = await request.app.run_blocking(compile_banner)
     auth = request.headers.get("Sonolus-Session")
 
     match type:

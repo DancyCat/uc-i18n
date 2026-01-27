@@ -36,10 +36,7 @@ class NotificationList(BaseModel):
     notifications: list[_BaseNotification]
 
     def to_posts(self, request) -> list[PostItem]:
-        posts = []
-
-        for notification in self.notifications:
-            posts.append(notification.to_post(request))
+        return [notification.to_post(request) for notification in self.notifications]
 
 class Notification(_BaseNotification):
     user_id: str

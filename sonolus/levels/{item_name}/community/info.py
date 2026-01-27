@@ -41,5 +41,8 @@ async def main(request: SonolusRequest, item_name: str):
                 )
             ] if auth else []
         ),
-        topComments=response.data.to_server_item_community_comments(request) # TODO: maybe run blocking or wrap in async/await
+        topComments=await request.app.run_blocking(
+            response.data.to_server_item_community_comments,
+            request
+        )
     )

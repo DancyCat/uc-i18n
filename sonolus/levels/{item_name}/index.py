@@ -163,10 +163,34 @@ async def main(request: SonolusRequest, item_name: str):
         description=desc,
         actions=actions,
         hasCommunity=True,
-        leaderboards=[
+        leaderboards=[ # TODO: localize
             ServerItemLeaderboard(
-                name="leaderboards",
-                title="Leaderboards" # TODO: Change and localize
+                name="arcade_score_speed",
+                title="Arcade Score"
+            ),
+            ServerItemLeaderboard(
+                name="accuracy_score",
+                title="Accuracy Score"
+            ),
+            ServerItemLeaderboard(
+                name="arcade_score_no_speed",
+                title="Arcade Score w/o speed bonus"
+            ),
+            ServerItemLeaderboard(
+                name="rank_match",
+                title="Rank Match"
+            ),
+            ServerItemLeaderboard(
+                name="least_combo_breaks",
+                title="Least combo breaks"
+            ),
+            ServerItemLeaderboard(
+                name="least_misses",
+                title="Least misses"
+            ),
+            ServerItemLeaderboard(
+                name="perfect",
+                title="Perfect count"
             )
         ],
         sections=[]

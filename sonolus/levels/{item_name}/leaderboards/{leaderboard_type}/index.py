@@ -1,13 +1,14 @@
 from fastapi import APIRouter, HTTPException, Query
 
 from core import SonolusRequest
+from helpers.models.api.leaderboards import leaderboard_type
 from helpers.models.sonolus.response import ServerItemLeaderboardDetails, ServerItemLeaderboardRecordDetails, ServerItemLeaderboardRecordList
 
 router = APIRouter()
 
 @router.get("/", response_model=ServerItemLeaderboardDetails)
-async def info(item_name: str, request: SonolusRequest):
-    response = await request.app.api.get_leaderboard_info(item_name).send(request.headers.get("Sonolus-Session"))
+async def info(item_name: str, leaderboard_type: leaderboard_type, request: SonolusRequest):
+    response = await request.app.api.get_leaderboard_info(item_name, leaderboard_type).send(request.headers.get("Sonolus-Session"))
 
     if response.status != 200:
         raise HTTPException(status_code=response.status)
@@ -15,12 +16,13 @@ async def info(item_name: str, request: SonolusRequest):
     return ServerItemLeaderboardDetails(
         topRecords=await request.app.run_blocking(
             response.data.to_record_list,
+            leaderboard_type
         )
     )
 
 @router.get("/records/list", response_model=ServerItemLeaderboardRecordList)
-async def list(item_name: str, request: SonolusRequest, page: int = Query(1, ge=1)):
-    response = await request.app.api.get_leaderboards(item_name, page).send(request.headers.get("Sonolus-Session"))
+async def list(item_name: str, leaderboard_type: leaderboard_type, request: SonolusRequest, page: int = Query(1, ge=1)):
+    response = await request.app.api.get_leaderboards(item_name, leaderboard_type, page).send(request.headers.get("Sonolus-Session"))
 
     if response.status != 200:
         raise HTTPException(status_code=response.status)
@@ -29,6 +31,7 @@ async def list(item_name: str, request: SonolusRequest, page: int = Query(1, ge=
         pageCount=response.data.pageCount,
         records=await request.app.run_blocking(
             response.data.to_record_list,
+            leaderboard_type,
             page=page
         )
     )
@@ -49,5 +52,4 @@ async def leaderboard_record_info(item_name: str, name: str, request: SonolusReq
 
     return ServerItemLeaderboardRecordDetails(replays=[replay_item])
 
-# TODO: different leaderboard types
 # TODO: uwuify | handle_item_uwu([item_data], request.state.localization, request.state.uwu)[0]

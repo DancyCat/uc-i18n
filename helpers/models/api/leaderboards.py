@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, TypeAlias
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -13,6 +13,16 @@ from helpers.sonolus_typings import Grade
 
 # XXX: plans for future - pretiffy all of this
 # and probably delete some models
+
+leaderboard_type: TypeAlias = Literal[
+    "arcade_score_speed",
+    "accuracy_score",
+    "arcade_score_no_speed",
+    "rank_match",
+    "least_combo_breaks",
+    "least_misses",
+    "perfect"
+]
 
 class ReplayUploadData(BaseModel):
     engine: str
@@ -56,16 +66,47 @@ class LeaderboardInfo(BaseModel):
     pageCount: int | None = None
     data: list[LeaderboardRecordWithAccount]
 
-    def to_record_list(self, page: int = 1) -> list[ServerItemLeaderboardRecord]:
+    def _speed_multiplier(self, speed: float | None) -> float:
+        if speed is None:
+            return 1.0
+
+        tier = int(speed * 10) / 10
+
+        if tier < 1:
+            return tier - 0.4
+        else:
+            return 1.0 + ((tier - 1.0) * 0.2)
+
+    def to_record_list(
+        self, 
+        context: leaderboard_type, 
+        page: int = 1
+    ) -> list[ServerItemLeaderboardRecord]:
         leaderboards = []
 
         for i, record in enumerate(self.data):
+            match context:
+                case "arcade_score_speed":
+                    value = int(record.arcade_score * self._speed_multiplier(record.speed))
+                case "accuracy_score":
+                    value = record.accuracy_score
+                case "arcade_score_no_speed":
+                    value = record.arcade_score
+                case "rank_match":
+                    value = (3 * record.nperfect) + (2 * record.ngreat) + (1 * record.ngood)
+                case "least_combo_breaks":
+                    value = record.ngood + record.nmiss
+                case "least_misses":
+                    value = record.nmiss
+                case "perfect":
+                    value = record.nperfect
+
             leaderboards.append(
                 ServerItemLeaderboardRecord(
                     name=f"UnCh-{record.chart_id}-{record.id}",
                     rank=f"#{i + ((page - 1) * 10) + 1}",
                     player=record.display_name,
-                    value=f"{record.shortened_grade} {record.arcade_score}", # TODO: different leaderboard types -> different.. these
+                    value=f"{record.shortened_grade} {value}",
                     playerUser=record.account.to_user_item()
                 )
             )
