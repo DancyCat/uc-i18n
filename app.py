@@ -1,7 +1,10 @@
 import os, importlib, traceback
+from typing import Any
 from urllib.parse import urlparse
 
 from fastapi import HTTPException, Request, status, Response
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 
 from core import config, SonolusFastAPI, SonolusMiddleware
 
@@ -15,8 +18,12 @@ debug = config["server"]["debug"]
 
 VERSION_REGEX = r"^\d+\.\d+\.\d+$"
 
+class CustomJSONResponse(JSONResponse):
+    def render(self, content: Any) -> bytes:
+        return super().render(jsonable_encoder(content, exclude_none=True))
 
-app = SonolusFastAPI(debug=debug, base_url=config["server"]["base-url"])
+
+app = SonolusFastAPI(debug=debug, base_url=config["server"]["base-url"], default_response_class=CustomJSONResponse)
 
 
 @app.middleware("http")
