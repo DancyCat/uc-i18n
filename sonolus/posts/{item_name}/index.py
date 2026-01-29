@@ -8,7 +8,7 @@ from helpers.models.sonolus.response import ServerItemDetails
 
 router = APIRouter()
 
-@router.get("/")
+@router.get("/", response_model=ServerItemDetails)
 async def main(request: SonolusRequest, item_name: str, type: Literal["announcements", "notifications"] | str):
     locale = request.state.loc
     item_data = None

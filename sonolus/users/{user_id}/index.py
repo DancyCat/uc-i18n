@@ -10,7 +10,7 @@ from helpers.owoify import handle_item_uwu
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("/", response_model=ServerItemDetails)
 async def main(request: SonolusRequest, user_id: str):
     profile = await request.app.api.get_user_profile(user_id).send()
 

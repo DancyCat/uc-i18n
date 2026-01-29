@@ -9,7 +9,7 @@ from helpers.owoify import handle_item_uwu
 
 router = APIRouter()
 
-@router.get("/")
+@router.get("/", response_model=ServerItemInfo)
 async def info(request: SonolusRequest):
     random = await request.app.api.get_random_leaderboard_records(limit=3).send()
     newest = await request.app.api.get_recent_leaderboard_records().send()

@@ -7,7 +7,7 @@ import helpers.replay as replay
 
 router = APIRouter()
 
-@router.post("/")
+@router.post("/", response_model=ServerSubmitLevelResultResponse)
 async def main(request: SonolusRequest, data: ServerSubmitLevelResultRequest):
     locale = request.state.loc
     

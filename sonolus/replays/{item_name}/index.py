@@ -7,7 +7,7 @@ from helpers.owoify import handle_item_uwu
 
 router = APIRouter()
 
-@router.get("/")
+@router.get("/", response_model=ServerItemDetails)
 async def get(request: SonolusRequest, item_name: str):
     chart_name, record_id = item_name.removesuffix("UnCh-").split("-")
     auth = request.headers.get("Sonolus-Session")

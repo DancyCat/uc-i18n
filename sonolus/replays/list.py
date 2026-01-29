@@ -6,7 +6,7 @@ from helpers.owoify import handle_item_uwu
 
 router = APIRouter()
 
-@router.get("/")
+@router.get("/", response_model=ServerItemList)
 async def list(
     request: SonolusRequest,
     page: int = Query(0, ge=0),

@@ -18,7 +18,7 @@ from helpers.models.sonolus.item import ServerItem
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("/", response_model=ServerItemDetails)
 async def main(request: SonolusRequest, item_type: ItemType, item_name: str):
     locale = request.state.loc
     item_data: ServerItem = None

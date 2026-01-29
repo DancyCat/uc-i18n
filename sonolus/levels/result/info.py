@@ -5,7 +5,7 @@ from helpers.models.sonolus.response import ServerResultInfo
 
 router = APIRouter()
 
-@router.get("/")
+@router.get("/", response_model=ServerResultInfo)
 async def main():
     return ServerResultInfo(
         submits=[

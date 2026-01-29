@@ -4,7 +4,6 @@ from fastapi import HTTPException, status
 
 from core import SonolusRequest
 from helpers.data_compilers import compile_static_posts_list, sort_posts_by_newest
-from helpers.models.sonolus.item_section import PostItemSection
 from helpers.paginate import list_to_pages
 from helpers.models.sonolus.response import ServerItemList
 
@@ -15,7 +14,7 @@ from helpers.owoify import handle_item_uwu
 type_func = type
 
 
-@router.get("/")
+@router.get("/", response_model=ServerItemList)
 async def main(
     request: SonolusRequest,
     type: Literal["announcements", "notifications"] | str,

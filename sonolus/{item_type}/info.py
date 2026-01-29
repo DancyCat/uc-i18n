@@ -18,7 +18,7 @@ router = APIRouter()
 
 from helpers.owoify import handle_item_uwu, handle_uwu
 
-@router.get("/")
+@router.get("/", response_model=ServerItemInfo)
 async def main(request: SonolusRequest, item_type: ItemType):
     locale = request.state.loc
     uwu_level = request.state.uwu

@@ -15,7 +15,7 @@ from helpers.owoify import handle_item_uwu
 type_func = type
 
 
-@router.get("/")
+@router.get("/", response_model=ServerItemList)
 async def main(
     request: SonolusRequest,
     type: Literal["quick", "advanced"] = Query("quick"),
