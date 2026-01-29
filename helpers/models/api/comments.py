@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 if TYPE_CHECKING:
     from core import SonolusRequest
-    
+
 from helpers.models.api.misc import PublicAccount
 from helpers.models.sonolus.item import ServerItemCommunityComment
 from helpers.models.sonolus.options import ServerForm
@@ -22,7 +22,7 @@ class Comment(BaseModel):
     chart_id: str
     owner: bool | None = None
 
-    def to_server_item_community_comment(self, request: SonolusRequest, is_mod: bool | None = None) -> ServerItemCommunityComment:
+    def to_server_item_community_comment(self, request: "SonolusRequest", is_mod: bool | None = None) -> ServerItemCommunityComment:
         return ServerItemCommunityComment(
             name=str(self.id),
             author=handle_uwu(
@@ -69,5 +69,5 @@ class CommentList(BaseModel):
     mod: bool | None = None
     admin: bool | None = None
 
-    def to_server_item_community_comments(self, request: SonolusRequest) -> list[ServerItemCommunityComment]:
+    def to_server_item_community_comments(self, request: "SonolusRequest") -> list[ServerItemCommunityComment]:
         return [comment.to_server_item_community_comment(request, self.mod) for comment in self.data]
