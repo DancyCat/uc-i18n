@@ -3,6 +3,7 @@ from ecdsa import VerifyingKey
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.datastructures import State
 from fastapi.responses import JSONResponse
+from fastapi.routing import APIRoute
 from starlette.middleware.base import BaseHTTPMiddleware
 from helpers.repository_map import repo
 from helpers.api import API
@@ -82,10 +83,12 @@ class SonolusFastAPI(FastAPI):
             )
             return JSONResponse(content={}, status_code=exc.status_code)
         
-    def add_api_route(self, path: str, endpoint, **kwargs):
-        kwargs["response_model_exclude_none"] = True
+    def include_router(self, router, *args, **kwargs):
+        for route in router.routes:
+            if isinstance(route, APIRoute):
+                route.response_model_exclude_none = True
         
-        return super().add_api_route(path, endpoint, **kwargs)
+        return super().include_router(router, *args, **kwargs)
         
 class _RequestState(State):
     localization: str
