@@ -11,7 +11,7 @@ class _BaseNotification(BaseModel):
     id: int
     title: str
     is_read: bool = False
-    created_at: datetime
+    created_at: datetime = None
     timestamp: int # XXX (backend): remove timestamp?
 
     def to_post(self, request: "SonolusRequest") -> PostItem:

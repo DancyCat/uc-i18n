@@ -30,8 +30,8 @@ class ServerSubmitCommentActionRequest(ServerSubmitItemActionRequest):
     
 class _ParsedServerSubmitLevelActionRequest(BaseModel):
     type: str
-    visibility: Literal["UNLISTED", "PRIVATE", "PUBLIC", None]
-    constant: str | None
+    visibility: Literal["UNLISTED", "PRIVATE", "PUBLIC", None] = None
+    constant: str | None = None
 
 class ServerSubmitLevelActionRequest(ServerSubmitItemActionRequest):
     def parse(self) -> _ParsedServerSubmitLevelActionRequest:

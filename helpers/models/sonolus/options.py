@@ -8,7 +8,7 @@ from helpers.sonolus_typings import Icon, ItemType, Text
 class ServerCollectionItemOption(BaseModel):
     query: str
     name: Text | str
-    description: str | None
+    description: str | None = None
     required: bool
     type: Literal["collectionItem"] = "collectionItem"
     itemType: ItemType
@@ -16,7 +16,7 @@ class ServerCollectionItemOption(BaseModel):
 class ServerTextOption(BaseModel):
     query: str
     name: Text | str
-    description: str | None
+    description: str | None = None
     required: bool
     type: Literal["text"] = "text"
     default: str = Field(serialization_alias="def")
@@ -31,7 +31,7 @@ class ServerTextOption(BaseModel):
 class ServerTextAreaOption(BaseModel):
     query: str
     name: Text | str
-    description: str | None
+    description: str | None = None
     required: bool
     type: Literal["textArea"] = "textArea"
     default: str = Field(serialization_alias="def")
@@ -46,14 +46,14 @@ class ServerTextAreaOption(BaseModel):
 class ServerSliderOption(BaseModel):
     query: str
     name: Text | str
-    description: str | None
+    description: str | None = None
     required: bool
     type: Literal["slider"] = "slider"
     default: int | float = Field(serialization_alias="def")
     min: int | float
     max: int | float
     step: int | float
-    unit: Text | str | None
+    unit: Text | str | None = None
 
     model_config = ConfigDict(
         by_alias=True, 
@@ -62,7 +62,7 @@ class ServerSliderOption(BaseModel):
 class ServerToggleOption(BaseModel):
     query: str
     name: Text | str
-    description: str | None
+    description: str | None = None
     required: bool
     type: Literal["toggle"] = "toggle"
     default: bool = Field(serialization_alias="def")
@@ -78,7 +78,7 @@ class ServerOption_Value(BaseModel):
 class ServerSelectOption(BaseModel):
     query: str
     name: Text | str
-    description: str | None
+    description: str | None = None
     required: bool
     type: Literal["select"] = "select"
     default: str = Field(serialization_alias="def")
@@ -91,7 +91,7 @@ class ServerSelectOption(BaseModel):
 class ServerMultiOption(BaseModel):
     query: str
     name: Text | str
-    description: str | None
+    description: str | None = None
     required: bool
     type: Literal["multi"] = "multi"
     default: list[bool] = Field(serialization_alias="def")
@@ -104,11 +104,11 @@ class ServerMultiOption(BaseModel):
 class ServerServerItemOption(BaseModel):
     query: str
     name: Text | str
-    description: str | None
+    description: str | None = None
     required: bool
     type: Literal["serverItem"] = "serverItem"
     itemType: ItemType
-    infoType: str | None
+    infoType: str | None = None
     default: SIL | None = Field(None, serialization_alias="def")
     allowOtherServers: bool
 
@@ -119,11 +119,11 @@ class ServerServerItemOption(BaseModel):
 class ServerServerItemsOption(BaseModel):
     query: str
     name: Text | str
-    description: str | None
+    description: str | None = None
     required: bool
     type: Literal["serverItems"] = "serverItems"
     itemType: ItemType
-    infoType: str | None
+    infoType: str | None = None
     default: list[SIL] = Field(serialization_alias="def")
     allowOtherServers: bool
     limit: int
@@ -135,7 +135,7 @@ class ServerServerItemsOption(BaseModel):
 class ServerCollectionItemOption(BaseModel):
     query: str
     name: Text | str
-    description: str | None
+    description: str | None = None
     required: bool
     type: Literal["collectionItem"] = "collectionItem"
     itemType: ItemType
@@ -143,7 +143,7 @@ class ServerCollectionItemOption(BaseModel):
 class ServerFileOption(BaseModel):
     query: str
     name: Text | str
-    description: str | None
+    description: str | None = None
     required: bool
     type: Literal["file"] = "file"
     default: str = Field(serialization_alias="def")
@@ -153,7 +153,7 @@ class ServerFileOption(BaseModel):
         | ServerFileOptionValidationAudio
         | ServerFileOptionValidationZip
         | ServerFileOptionValidationJson
-    ) | None
+    ) | None = None
 
     model_config = ConfigDict(
         by_alias=True,  
@@ -175,8 +175,8 @@ ServerOption = (
 class ServerForm(BaseModel):
     type: str
     title: Text | str
-    icon: Icon | str | None
-    description: str | None
-    help: str | None
+    icon: Icon | str | None = None
+    description: str | None = None
+    help: str | None = None
     requireConfirmation: bool
     options: list[Annotated[ServerOption, Field(discriminator="type")]]

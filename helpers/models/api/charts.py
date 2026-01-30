@@ -22,26 +22,26 @@ class Chart(BaseModel):
     author: str  # author sonolus id
     title: str
     staff_pick: bool
-    artists: str | None
+    artists: str | None = None
     jacket_file_hash: str
     music_file_hash: str
     chart_file_hash: str
     background_v1_file_hash: str
     background_v3_file_hash: str
     tags: list[str] | None = Field(default_factory=list)
-    description: str | None
-    preview_file_hash: str | None
-    background_file_hash: str | None
+    description: str | None = None
+    preview_file_hash: str | None = None
+    background_file_hash: str | None = None
     status: Literal["UNLISTED", "PRIVATE", "PUBLIC"]
     like_count: int
     comment_count: int
     created_at: datetime
-    published_at: datetime | None
+    published_at: datetime | None = None
     updated_at: datetime
-    author_full: str | None
+    author_full: str | None = None
     chart_design: str
-    is_first_publish: bool | None  # only returned on update_status
-    liked: bool | None
+    is_first_publish: bool | None = None  # only returned on update_status
+    liked: bool | None = None
 
     @staticmethod
     @lru_cache(maxsize=None)
@@ -281,17 +281,17 @@ class Chart(BaseModel):
 class GetChartResponse(BaseModel):
     data: Chart
     asset_base_url: str
-    mod: bool | None
-    admin: bool | None # XXX (backend): Make optional fields non-optional
+    mod: bool | None = None
+    admin: bool | None = None # XXX (backend): Make optional fields non-optional
     owner: bool
 
 class DeleteChartResponse(Chart):
-    admin: bool | None
-    owner: bool | None
+    admin: bool | None = None
+    owner: bool | None = None
 
 class VisibilityChangeResponse(Chart):
-    mod: bool | None
-    owner: bool | None
+    mod: bool | None = None
+    owner: bool | None = None
 
 class _BaseChartList(BaseModel):
     data: list[Chart]
