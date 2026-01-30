@@ -1,7 +1,10 @@
+import json
 import os, importlib, traceback
 from urllib.parse import urlparse
 
 from fastapi import Request, status, Response
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
 from core import config, SonolusFastAPI, SonolusMiddleware
 
@@ -27,6 +30,17 @@ async def no_unhandled_exceptions(request: Request, call_next):
         return Response(
             content="Unhandled error. Report to discord.gg/UntitledCharts", 
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+    
+if debug:
+    @app.exception_handler(RequestValidationError)
+    async def validation_exception_handler(request: Request, exc: RequestValidationError):
+        print("Validation Error:")
+        print(json.dumps(exc.errors(), indent=2))
+
+        return JSONResponse(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            content={"detail": exc.errors()}
         )
 
 app.add_middleware(
