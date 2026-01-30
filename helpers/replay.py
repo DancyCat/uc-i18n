@@ -23,7 +23,7 @@ validator = Callable[[int | float], bool]
 engine_settings: dict[str, dict[str, validator]] = {}
 
 class AdditionalReplayInfo(BaseModel):
-    speed: float | None = None
+    speed: float | None
 
 def get_validator(option: dict, engine_data: dict) -> validator:
     if option["name"] in engine_data.get("unrankable_options", []):

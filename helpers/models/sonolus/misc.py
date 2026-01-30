@@ -3,12 +3,12 @@ from helpers.sonolus_typings import Icon, ServerInfoButtonType, Text
 
 class Tag(BaseModel):
     title: Text | str
-    icon: Icon | str | None = None
+    icon: Icon | str | None
 
 
 class SRL(BaseModel):
-    hash: str | None = None
-    url: str | None = None
+    hash: str | None
+    url: str | None
 
 
 class SIL(BaseModel):
@@ -17,15 +17,15 @@ class SIL(BaseModel):
 
 class ServerInfoItemButton(BaseModel):
     type: ServerInfoButtonType
-    title: Text | str | None = None
-    icon: Icon | str | None = None
-    badgeCount: int | None = None
-    infoType: str | None = None
-    itemName: str | None = None
+    title: Text | str | None
+    icon: Icon | str | None
+    badgeCount: int | None
+    infoType: str | None
+    itemName: str | None
 
 class ServerMessage(BaseModel):
     message: str
 
 class ReplayConfiguration(BaseModel):
     options: list[int | float]
-    optionNames: list[Text | str] | None = None
+    optionNames: list[Text | str] | None

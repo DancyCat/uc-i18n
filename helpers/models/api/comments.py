@@ -14,13 +14,13 @@ from helpers.owoify import handle_uwu
 class Comment(BaseModel):
     id: int
     commenter: str
-    username: str | None = None
+    username: str | None
     content: str
     created_at: int
-    deleted_at: int | None = None
-    account: PublicAccount | None = None
+    deleted_at: int | None
+    account: PublicAccount | None
     chart_id: str
-    owner: bool | None = None
+    owner: bool | None
 
     def to_server_item_community_comment(self, request: "SonolusRequest", is_mod: bool | None = None) -> ServerItemCommunityComment:
         return ServerItemCommunityComment(
@@ -55,19 +55,19 @@ class Comment(BaseModel):
 class DeleteCommentResponse(BaseModel):
     id: int
     commenter: str
-    username: str | None = None
+    username: str | None
     content: str
     created_at: datetime
-    deleted_at: datetime | None = None
+    deleted_at: datetime | None
     chart_id: str
-    owner: bool | None = None
-    mod: bool | None = None
+    owner: bool | None
+    mod: bool | None
 
 class CommentList(BaseModel):
     data: list[Comment]
     pageCount: int
-    mod: bool | None = None
-    admin: bool | None = None
+    mod: bool | None
+    admin: bool | None
 
     def to_server_item_community_comments(self, request: "SonolusRequest") -> list[ServerItemCommunityComment]:
         return [comment.to_server_item_community_comment(request, self.mod) for comment in self.data]

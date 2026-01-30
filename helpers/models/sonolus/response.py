@@ -9,20 +9,20 @@ from helpers.models.sonolus.options import ServerForm, ServerOption
 
 class ServerItemCommunityCommentList(BaseModel):
     pageCount: int
-    cursor: str | None = None
+    cursor: str | None
     comments: list[ServerItemCommunityComment]
 
 class ServerItemInfo(BaseModel):
-    creates: list[ServerForm] | None = None
-    searches: list[ServerForm] | None = None
-    quickSearchValues: str | None = None
+    creates: list[ServerForm] | None
+    searches: list[ServerForm] | None
+    quickSearchValues: str | None
     sections: list[Annotated[ServerItemSection, Field(discriminator="itemType")]]
-    banner: SRL | None = None
+    banner: SRL | None
 
 
 class ServerItemDetails(BaseModel):
     item: ServerItem
-    description: str | None = None
+    description: str | None
     actions: list[ServerForm]
     hasCommunity: bool
     leaderboards: list[ServerItemLeaderboard]
@@ -31,9 +31,9 @@ class ServerItemDetails(BaseModel):
 class ServerSubmitItemCommunityCommentActionResponse(BaseModel):
     key: str
     hashes: list[str]
-    shouldUpdateCommunity: bool | None = None
-    shouldUpdateComments: bool | None = None
-    shouldNavigateCommentsToPage: int | None = None
+    shouldUpdateCommunity: bool | None
+    shouldUpdateComments: bool | None
+    shouldNavigateCommentsToPage: int | None
 
 class ServerItemCommunityInfo(BaseModel):
     actions: list[ServerForm]
@@ -42,23 +42,23 @@ class ServerItemCommunityInfo(BaseModel):
 class ServerSubmitItemActionResponse(BaseModel):
     key: str
     hashes: list[str]
-    shouldUpdateItem: bool | None = None
-    shouldRemoveItem: bool | None = None
-    shouldNavigateToItem: str | None = None
+    shouldUpdateItem: bool | None
+    shouldRemoveItem: bool | None
+    shouldNavigateToItem: str | None
 
 class ServerItemList(BaseModel):
     pageCount: int
-    cursor: str | None = None
+    cursor: str | None
     items: list[ServerItem]
-    searches: list[ServerForm] | None = None
-    quickSearchValues: str | None = None
+    searches: list[ServerForm] | None
+    quickSearchValues: str | None
 
 class ServerConfiguration(BaseModel):
     options: list[ServerOption]
 
 class ServerInfo(BaseModel):
     title: str
-    description: str | None = None
+    description: str | None
     buttons: list[ServerInfoItemButton]
     configuration: ServerConfiguration
     banner: SRL | None
@@ -76,11 +76,11 @@ class ServerItemLeaderboardDetails(BaseModel):
     
 class ServerItemLeaderboardRecordList(BaseModel):
     pageCount: int
-    cursor: str | None = None
+    cursor: str | None
     records: list[ServerItemLeaderboardRecord]
 
 class ServerItemLeaderboardRecordDetails(BaseModel):
     replays: list[ReplayItem]
 
 class ServerResultInfo(BaseModel):
-    submits: list[ServerForm] | None = None
+    submits: list[ServerForm] | None

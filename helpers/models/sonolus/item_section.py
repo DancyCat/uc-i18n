@@ -7,12 +7,12 @@ from helpers.sonolus_typings import Icon, ItemType, Text
 
 class ServerItemSectionTyped(BaseModel):
     title: str | Text
-    icon: Icon | str | None = None
-    description: str | None = None
-    help: str | None = None
+    icon: Icon | str | None
+    description: str | None
+    help: str | None
     itemType: ItemType
-    search: ServerForm | None = None
-    searchValues: str | None = None
+    search: ServerForm | None
+    searchValues: str | None
 
 class GenericItemSection(ServerItemSectionTyped):
     itemType: str

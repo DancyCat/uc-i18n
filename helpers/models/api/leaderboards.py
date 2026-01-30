@@ -59,13 +59,13 @@ class LeaderboardRecordDBResponse(LeaderboardRecord): # XXX: remove optional fie
     created_at: datetime
     chart_prefix: str
     owner: bool | None
-    mod: bool | None = None
+    mod: bool | None
 
 class LeaderboardRecordWithAccount(LeaderboardRecordDBResponse):
-    account: PublicAccount | None = None
+    account: PublicAccount | None
 
 class LeaderboardInfo(BaseModel):
-    pageCount: int | None = None
+    pageCount: int | None
     data: list[LeaderboardRecordWithAccount]
 
     def _speed_multiplier(self, speed: float | None) -> float:
@@ -119,7 +119,7 @@ class LeaderboardInfo(BaseModel):
 class LeaderboardRecordInfo(BaseModel):
     data: LeaderboardRecordDBResponse
     chart: Chart
-    submitter: PublicAccount | None = None
+    submitter: PublicAccount | None
     asset_base_url: str
 
     @property
@@ -171,11 +171,11 @@ class LeaderboardRecordInfo(BaseModel):
         )
     
 class DeleteLeaderboardRecord(LeaderboardRecordDBResponse):
-    chart_title: str | None = None
+    chart_title: str | None
 
 class PublicLeaderboardRecordList(BaseModel):
     data: list[LeaderboardRecordInfo]
-    pageCount: int | None = None
+    pageCount: int | None
 
     def to_replay_items(self, request: "SonolusRequest") -> list[ReplayItem]:
         return [record.to_replay_item(request) for record in self.data]

@@ -5,15 +5,15 @@ from helpers.models.sonolus.options import ServerForm
 
 class UserItem(BaseModel):
     name: str
-    source: str | None = None
+    source: str | None
     title: str
-    handle: str | None = None
+    handle: str | None
     tags: list[Tag]
 
 
 class BackgroundItem(BaseModel):
     name: str
-    source: str | None = None
+    source: str | None
     version: Literal[2] = 2
     title: str
     subtitle: str
@@ -23,12 +23,12 @@ class BackgroundItem(BaseModel):
     data: SRL
     image: SRL
     configuration: SRL
-    authorUser: UserItem | None = None
+    authorUser: UserItem | None
 
 
 class ParticleItem(BaseModel):
     name: str
-    source: str | None = None
+    source: str | None
     version: Literal[3] = 3
     title: str
     subtitle: str
@@ -37,12 +37,12 @@ class ParticleItem(BaseModel):
     thumbnail: SRL
     data: SRL
     texture: SRL
-    authorUser: UserItem | None = None
+    authorUser: UserItem | None
 
 
 class EffectItem(BaseModel):
     name: str
-    source: str | None = None
+    source: str | None
     version: Literal[5] = 5
     title: str
     subtitle: str
@@ -51,12 +51,12 @@ class EffectItem(BaseModel):
     thumbnail: SRL
     data: SRL
     audio: SRL
-    authorUser: UserItem | None = None
+    authorUser: UserItem | None
 
 
 class SkinItem(BaseModel):
     name: str
-    source: str | None = None
+    source: str | None
     version: Literal[4] = 4
     title: str
     subtitle: str
@@ -65,7 +65,7 @@ class SkinItem(BaseModel):
     thumbnail: SRL
     data: SRL
     texture: SRL
-    authorUser: UserItem | None = None
+    authorUser: UserItem | None
 
 
 class EngineItem(BaseModel):
@@ -73,10 +73,10 @@ class EngineItem(BaseModel):
     version: Literal[13] = 13
     title: str
     subtitle: str
-    source: str | None = None
+    source: str | None
     author: str
     tags: list[Tag]
-    description: str | None = None
+    description: str | None
 
     skin: SkinItem
     background: BackgroundItem
@@ -88,38 +88,38 @@ class EngineItem(BaseModel):
     watchData: SRL
     previewData: SRL
     tutorialData: SRL
-    rom: SRL | None = None
+    rom: SRL | None
     configuration: SRL
-    authorUser: UserItem | None = None
+    authorUser: UserItem | None
 
 
 class PostItem(BaseModel):
     name: str
-    source: str | None = None
+    source: str | None
     version: Literal[1] = 1
     title: str
     time: int
     author: str
     tags: list[Tag]
-    thumbnail: SRL | None = None
-    authorUser: UserItem | None = None
+    thumbnail: SRL | None
+    authorUser: UserItem | None
 
 T = TypeVar("T", SkinItem, BackgroundItem, EffectItem, ParticleItem)
 
 class UseItem(BaseModel, Generic[T]):
     useDefault: bool
-    item: T | None = None
+    item: T | None
 
 
 class LevelItem(BaseModel):
     name: str
-    source: str | None = None
+    source: str | None
     version: Literal[1] = 1
     rating: int
     title: str
     artists: str
     author: str
-    tags: list[Tag] = None
+    tags: list[Tag]
     engine: EngineItem
     useSkin: UseItem[SkinItem]
     useBackground: UseItem[BackgroundItem]
@@ -127,22 +127,22 @@ class LevelItem(BaseModel):
     useParticle: UseItem[ParticleItem]
     cover: SRL
     bgm: SRL
-    preview: SRL | None = None
+    preview: SRL | None
     data: SRL
-    authorUser: UserItem | None = None
+    authorUser: UserItem | None
 
 
 class PlaylistItem(BaseModel):
     name: str
-    source: str | None = None
+    source: str | None
     version: Literal[1] = 1
     title: str
     subtitle: str
     author: str
     tags: list[Tag]
     levels: list[LevelItem]
-    thumbnail: SRL | None = None
-    authorUser: UserItem | None = None
+    thumbnail: SRL | None
+    authorUser: UserItem | None
 
 
 class RoomItem(BaseModel):
@@ -151,15 +151,15 @@ class RoomItem(BaseModel):
     subtitle: str
     master: str
     tags: list[Tag]
-    cover: SRL | None = None
-    bgm: SRL | None = None
-    preview: SRL | None = None
-    authorUser: UserItem | None = None
+    cover: SRL | None
+    bgm: SRL | None
+    preview: SRL | None
+    authorUser: UserItem | None
 
 
 class ReplayItem(BaseModel):
     name: str
-    source: str | None = None
+    source: str | None
     version: Literal[1] = 1
     title: str
     subtitle: str
@@ -193,13 +193,13 @@ class ServerItemCommunityComment(BaseModel):
     time: int  # ms epoch
     content: str
     actions: list[ServerForm]
-    authorUser: UserItem | None = None
+    authorUser: UserItem | None
 
 
 class ServerItemLeaderboard(BaseModel):
     name: str
     title: str | Text
-    description: str | None = None
+    description: str | None
 
 
 class ServerItemLeaderboardRecord(BaseModel):
@@ -207,4 +207,4 @@ class ServerItemLeaderboardRecord(BaseModel):
     rank: Text | str
     player: str
     value: Text | str
-    playerUser: UserItem | None = None
+    playerUser: UserItem | None
