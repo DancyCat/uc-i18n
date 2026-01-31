@@ -34,8 +34,9 @@ async def main(request: SonolusRequest, user_id: str):
             handle=str(profile.data.account.sonolus_handle),
             tags=tags
         ),
+        actions=[],
         hasCommunity=False,
-        leaderboards=False,
+        leaderboards=[],
         sections=[
             LevelItemSection(
                 title="#NEWEST",
