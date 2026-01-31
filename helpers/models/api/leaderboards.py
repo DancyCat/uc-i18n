@@ -106,7 +106,7 @@ class LeaderboardInfo(BaseModel):
             if value == 727:
                 value = "727 WYSI"
 
-            speed_text = f"| x{record.speed}" if record.speed != 1 else ""
+            speed_text = f"| x{round(record.speed, 2)}" if record.speed != 1 else ""
 
             leaderboards.append(
                 ServerItemLeaderboardRecord(
