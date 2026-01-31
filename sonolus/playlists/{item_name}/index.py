@@ -30,7 +30,7 @@ async def main(request: SonolusRequest, item_name: str):
     parts = item_name.split("_", 1)
     if parts[0] != "uploaded" or len(parts) != 2 or len(item_name) > 500:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="huh")
-    params = ServerSubmitPlaylistActionRequest(parts[1]).parse(request)
+    params = ServerSubmitPlaylistActionRequest(values=parts[1]).parse(request)
 
     page = params.page or 1
 
