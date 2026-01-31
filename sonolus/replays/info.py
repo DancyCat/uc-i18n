@@ -24,6 +24,7 @@ async def info(request: SonolusRequest):
                     ServerToggleOption(
                         query="random",
                         name="#RANDOM",
+                        required=False,
                         default=False
                     )
                 ]
