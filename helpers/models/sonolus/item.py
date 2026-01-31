@@ -168,7 +168,7 @@ class ReplayItem(BaseModel):
     level: LevelItem
     data: SRL
     configuration: SRL
-    authorUser: UserItem | None
+    authorUser: UserItem | None = None
 
 
 ServerItem: TypeAlias = (
