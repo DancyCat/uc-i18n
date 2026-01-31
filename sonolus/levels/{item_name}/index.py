@@ -160,31 +160,31 @@ async def main(request: SonolusRequest, item_name: str):
         leaderboards=[ # TODO: localize
             ServerItemLeaderboard(
                 name="arcade_score_speed",
-                title=handle_uwu("Arcade Score", request.state.localization)
+                title=handle_uwu("Arcade Score", request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
                 name="accuracy_score",
-                title="Accuracy Score"
+                title=handle_uwu("Accuracy Score", request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
                 name="arcade_score_no_speed",
-                title="Arcade Score w/o speed bonus"
+                title=handle_uwu("Arcade Score w/o speed bonus", request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
                 name="rank_match",
-                title="Rank Match"
+                title=handle_uwu("Rank Match", request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
                 name="least_combo_breaks",
-                title="Least combo breaks"
+                title=handle_uwu("Least combo breaks", request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
                 name="least_misses",
-                title="Least misses"
+                title=handle_uwu("Least misses", request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
                 name="perfect",
-                title="Perfect count"
+                title=handle_uwu("Perfect count", request.state.localization, request.state.uwu)
             )
         ],
         sections=[]

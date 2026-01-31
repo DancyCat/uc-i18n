@@ -36,23 +36,23 @@ async def main(request: SonolusRequest):
         ServerInfoItemButton(
             type="post",
             title="Announcements", # TODO: localize,
-            icon="announcement",
-            infoType="announcements"
+            icon="announcement"
         ), 
+        *([
+            ServerInfoItemButton(
+                type="user",
+                title=locale.notification.NOTIFICATION,
+                icon="comment"
+            )
+        ] if logged_in else ()),
         ServerInfoItemButton(type="level"), 
         ServerInfoItemButton(type="replay"),
         ServerInfoItemButton(type="configuration")
     ]
+    
     if logged_in:
         button_list.append(ServerInfoItemButton(type="playlist"))
-        button_list.append(
-            ServerInfoItemButton(
-                type="post",
-                title=locale.notification.NOTIFICATION,
-                icon="comment",
-                infoType="notifications"
-            )
-        )
+
     if request.state.showresourcebuttons == "1":
         button_list.extend(
             [
@@ -212,11 +212,10 @@ async def main(request: SonolusRequest):
             if notifications > 0:
                 button_list = [
                     ServerInfoItemButton(
-                        type="post",
+                        type="user",
                         title=locale.notification.NOTIFICATION,
                         icon="comment",
                         badgeCount=notifications,
-                        infoType="notifications"
                     )
                 ]
 

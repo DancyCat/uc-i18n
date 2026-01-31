@@ -1,6 +1,6 @@
 import gzip, json, os
 from io import BytesIO
-from typing import Any
+from typing import Any, TypeVar
 
 from helpers.models.sonolus.item import (
     EngineItem, 
@@ -92,8 +92,13 @@ def compile_playlists_list(
     cached[f"playlists_{locale}"] = compiled_data_list
     return compiled_data_list
 
+class ExtendedPostItem(PostItem):
+    description: str
 
-def compile_static_posts_list(source: str = None) -> list[PostItem]:
+    def to_post_item(self) -> PostItem:
+        return PostItem.model_validate(self.model_dump())
+
+def compile_static_posts_list(source: str = None) -> list[ExtendedPostItem]:
     if cached["static_posts"]:
         return cached["static_posts"]
     
@@ -114,7 +119,7 @@ def compile_static_posts_list(source: str = None) -> list[PostItem]:
         if hash:
             thumbnail = repo.get_srl(hash)
 
-        compiled_data = PostItem(
+        compiled_data = ExtendedPostItem(
             name=post,
             source=source,
             version=post_data["version"],
@@ -122,15 +127,15 @@ def compile_static_posts_list(source: str = None) -> list[PostItem]:
             time=post_data["time"],
             author=post_data["author"],
             tags=[],
-            thumbnail=thumbnail
+            thumbnail=thumbnail,
+            description=post_data["description"]
         )
         compiled_data_list.append(compiled_data)
 
     cached["static_posts"] = compiled_data_list
     return compiled_data_list
 
-
-def sort_posts_by_newest(posts: list[PostItem]) -> list[PostItem]:
+def sort_posts_by_newest(posts: list[ExtendedPostItem]) -> list[ExtendedPostItem]:
     return sorted(posts, key=lambda post: post.time, reverse=True)
 
 

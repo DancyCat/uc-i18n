@@ -1,15 +1,22 @@
+"""
+Serves notifications.
+
+Before 1.1.0, posts handled both announcements and notifications
+Since buttons now support item type, it was logical to split them
+However, Sonolus only passes the type for /info requests, not /list
+Considering this (and that it looks better split up), moving notifications here was probably the best decision
+
+NOTE: /users/{user_id} is reserved for user profiles
+"""
+
 from fastapi import APIRouter, Query
 from fastapi import HTTPException, status
 
 from core import SonolusRequest
-from helpers.data_compilers import compile_static_posts_list, sort_posts_by_newest
 from helpers.paginate import list_to_pages
 from helpers.models.sonolus.response import ServerItemList
 
 router = APIRouter()
-
-from helpers.owoify import handle_item_uwu
-
 
 @router.get("/", response_model=ServerItemList)
 async def main(
@@ -17,20 +24,22 @@ async def main(
     page: int = Query(0, ge=0),
 ):
     locale = request.state.loc
-    uwu_level = request.state.uwu
+    auth = request.headers.get("Sonolus-Session")
 
-    data = await request.app.run_blocking(
-        compile_static_posts_list, request.app.base_url
-    )
-
-    data = sort_posts_by_newest(data)
-    data = handle_item_uwu(data, request.state.localization, uwu_level)
+    if auth:
+        response = await request.app.api.get_notifications(only_unread=False).send(auth)
+        data = response.data.to_posts(request)
+    if not (auth and data):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=locale.notification.none_past,
+        )
 
     pages = list_to_pages(data, request.app.get_items_per_page("posts"))
     if len(pages) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=locale.items_not_found("announcements")
+            detail=locale.items_not_found("notifications")
         )
     
     try:
@@ -43,5 +52,5 @@ async def main(
 
     return ServerItemList(
         pageCount=len(pages),
-        items=[item.to_post_item() for item in items]
+        items=items
     )

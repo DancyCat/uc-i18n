@@ -649,19 +649,7 @@ def handle_uwu(source: str, locale: str, uwu_level: str, symbols: bool = True) -
         
     return source
 
-T = TypeVar("T",     
-    PostItem,
-    RoomItem,
-    SkinItem,
-    BackgroundItem,
-    ParticleItem,
-    EffectItem,
-    RoomItem,
-    PlaylistItem,
-    ReplayItem,
-    LevelItem,
-    EngineItem
-)
+T = TypeVar("T")
 
 def handle_item_uwu(source_items: list[T], locale: str, uwu_level: str) -> list[T]:
     returned = []

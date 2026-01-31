@@ -1,5 +1,4 @@
-from typing import Literal
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter
 from core import SonolusRequest
 from helpers.models.sonolus.item_section import PostItemSection
 from helpers.models.sonolus.response import ServerItemInfo
@@ -15,50 +14,26 @@ from helpers.owoify import handle_item_uwu
 
 
 @router.get("/", response_model=ServerItemInfo)
-async def main(request: SonolusRequest, type: Literal["announcements", "notifications"] | str):
-    locale = request.state.loc
+async def main(request: SonolusRequest):
     uwu_level = request.state.uwu
     banner_srl = await request.app.run_blocking(compile_banner)
-    auth = request.headers.get("Sonolus-Session")
 
-    match type:
-        case "announcements":
-            data = await request.app.run_blocking(
-                compile_static_posts_list, request.app.base_url
-            )
+    data = await request.app.run_blocking(
+        compile_static_posts_list, request.app.base_url
+    )
 
-            data = sort_posts_by_newest(data)
-            sections = [
-                PostItemSection(
-                    title="#NEWEST",
-                    icon="post",
-                    items=handle_item_uwu(data[:5], request.state.localization, uwu_level)
-                ),
+    data = sort_posts_by_newest(data)
+    sections = [
+        PostItemSection(
+            title="#NEWEST",
+            icon="post",
+            items=[
+                post.to_post_item()
+                for post in
+                handle_item_uwu(data[:5], request.state.localization, uwu_level)
             ]
-        case "notifications":
-            response = await request.app.api.get_notifications(only_unread=True).send(auth)
-
-            notifs = response.data.to_posts(request)
-            if notifs:
-                sections = [
-                    PostItemSection(
-                        title=locale.notification.UNREAD,
-                        icon="bell",
-                        description=locale.notification.NOTIFICATION_DESC_UNREAD,
-                        items=notifs
-                    )
-                ]
-            else:
-                sections = [
-                    PostItemSection(
-                        title=locale.notification.NOTIFICATION,
-                        icon="bell",
-                        description=locale.notification.NOTIFICATION_DESC,
-                        items=[]
-                    )
-                ]
-        case _:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=locale.item_type_not_found(type))
+        ),
+    ]
     
     return ServerItemInfo(
         sections=sections,
