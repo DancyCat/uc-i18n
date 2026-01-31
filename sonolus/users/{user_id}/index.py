@@ -31,7 +31,7 @@ async def main(request: SonolusRequest, user_id: str):
         item=UserItem(
             name=profile.data.account.sonolus_id,
             title=profile.data.account.sonolus_username,
-            handle=profile.data.account.sonolus_handle,
+            handle=str(profile.data.account.sonolus_handle),
             tags=tags
         ),
         hasCommunity=False,

@@ -40,7 +40,7 @@ class PublicAccount(BaseModel):
         return UserItem(
             name=self.sonolus_id,
             title=self.sonolus_username,
-            handle=self.sonolus_handle,
+            handle=str(self.sonolus_handle),
             tags=tags
         ),
 
