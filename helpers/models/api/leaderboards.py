@@ -82,7 +82,7 @@ class LeaderboardInfo(BaseModel):
     def to_record_list(
         self, 
         context: leaderboard_type, 
-        page: int = 1
+        page: int = 0
     ) -> list[ServerItemLeaderboardRecord]:
         leaderboards = []
 
