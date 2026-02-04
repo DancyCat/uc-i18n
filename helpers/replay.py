@@ -9,7 +9,6 @@ import time
 import hashlib
 import json
 from os import listdir, path
-from io import BytesIO
 from typing import Callable
 from pydantic import BaseModel
 import gzip
@@ -64,9 +63,9 @@ for engine in listdir("files/engines"):
 
     engine_settings[engine] = settings
 
-def validate_replay_config(compressed_replay_config: bytes, engine_name: str) -> AdditionalReplayInfo:
+def validate_replay_config(compressed_replay_config: bytes, engine_name: str, request: SonolusRequest) -> AdditionalReplayInfo:
     if not engine_settings[engine_name]:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Replays with engine {engine_name} can't be uploaded") # TODO localize
+        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail=request.state.loc.leaderboards.BAD_ENGINE(engine_name))
 
     replay_config = ReplayConfiguration.model_validate_json(
         gzip.decompress(compressed_replay_config).decode()

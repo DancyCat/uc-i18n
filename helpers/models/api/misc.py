@@ -12,6 +12,7 @@ class Account(BaseModel):
     created_at: datetime
     mod: bool | None = None
     admin: bool | None = None # XXX (backend): make these non-optional
+    banned: bool | None = None
     unread_notifications: int
 
 class AuthenticationData(BaseModel):

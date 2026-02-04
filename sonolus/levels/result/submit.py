@@ -21,6 +21,9 @@ async def main(request: SonolusRequest, data: ServerSubmitLevelResultRequest):
 
     response = await request.app.api.get_account().send(auth)
 
+    if response.data.banned:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=locale.leaderboards.YOU_ARE_BANNED)
+
     return ServerSubmitLevelResultResponse(
         key=replay.generate_upload_key(
             response.data.sonolus_id,

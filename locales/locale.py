@@ -1,6 +1,78 @@
 import json
 
 class Loc:
+    class Leaderboards:                
+        def __init__(self, parent: "Loc") -> None:
+            self._parent = parent
+
+        def _get(self, key: str) -> str:
+            try:
+                return self._parent._data["leaderboard"][key]
+            except KeyError:
+                return self._parent._default["leaderboard"][key]
+            
+        @property
+        def YOU_ARE_BANNED(self) -> str:
+            """
+            You are banned
+            """
+            return self._get("YOU_ARE_BANNED")
+        
+        @property
+        def ARCADE_SCORE_SPEED(self) -> str:
+            """
+            Arcade Score
+            """
+            return self._get("ARCADE_SCORE_SPEED")
+        
+        @property
+        def ACCURACY_SCORE(self) -> str:
+            """
+            Accuracy Score
+            """
+            return self._get("ACCURACY_SCORE")
+        
+        @property
+        def ARCADE_SCORE_NO_SPEED(self) -> str:
+            """
+            Arcade Score (no speed bonus)
+            """
+            return self._get("ARCADE_SCORE_NO_SPEED")
+        
+        @property
+        def RANK_MATCH(self) -> str:
+            """
+            Rank Match
+            """
+            return self._get("RANK_MATCH")
+        
+        @property
+        def LEAST_COMBO_BREAKS(self) -> str:
+            """
+            Least Combo breaks
+            """
+            return self._get("LEAST_COMBO_BREAKS")
+        
+        @property
+        def LEAST_MISSES(self) -> str:
+            """
+            Least Misses
+            """
+            return self._get("LEAST_MISSES")
+
+        @property
+        def PERFECT(self) -> str:
+            """
+            Perfect count
+            """
+            return self._get("PERFECT")
+
+        def BAD_ENGINE(self, engine_name: str) -> str:
+            """
+            Score submission is not supported for engine {engine_name}
+            """
+            return self._get("BAD_ENGINE").format(engine_name=engine_name)
+            
     class Playlist:
         def __init__(self, parent: "Loc"):
             self._parent = parent
@@ -424,6 +496,12 @@ class Loc:
                 Your chart \"{chart_name}\" was deleted for violating our upload rules. Please take a moment to review our chart upload guidelines for more information.
                 """
                 return self._get("CHART_DELETED").format(chart_name=chart_name)
+            
+            def LEADERBOARD_SCORE_DELETED(self, chart_name: str) -> str:
+                """
+                Your score on the chart \"{chart_name}\" was deleted for violating our rules. Please take a moment to review our guidelines for more information.
+                """
+                return self._get("LEADERBOARD_SCORE_DELETED").format(chart_name=chart_name)
 
         def __init__(self, parent: "Loc"):
             self._parent = parent
@@ -498,6 +576,7 @@ class Loc:
         self.playlist = self.Playlist(self)
         self.background = self.Background(self)
         self.notification = self.Notification(self)
+        self.leaderboards = self.Leaderboards(self)
 
     def _get(self, value: str) -> str:
         try:
@@ -583,6 +662,18 @@ class Loc:
         On
         """
         return self._get("on")
+
+    def like(self, num: int) -> str: 
+        """
+        Like ({num})
+        """
+        return self._get("like").format(num=f"{num:,}")
+    
+    def unlike(self, num: int) -> str: 
+        """
+        Unlike ({num})
+        """
+        return self._get("unlike").format(num=f"{num:,}")
 
     def notifications_singular(self, num: int) -> str:
         """
@@ -849,7 +940,17 @@ class Loc:
 
     @property
     def show_resource_buttons(self) -> str:
+        """
+        Show Server Resource Buttons 
+        """
         return self._get("show_resource_buttons")
+    
+    @property
+    def announcements(self) -> str:
+        """
+        Announcements
+        """
+        return self._get("announcements")
 
     def time_ago(self, time_str: str) -> str:
         """

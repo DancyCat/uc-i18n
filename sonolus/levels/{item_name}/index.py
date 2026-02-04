@@ -36,7 +36,7 @@ async def main(request: SonolusRequest, item_name: str):
             actions.append(
                 ServerForm(
                     type="unlike",
-                    title=f"Unlike ({like_count:,})", # TODO localize
+                    title=locale.unlike(like_count),
                     icon="heart",
                     requireConfirmation=False,
                     options=[]
@@ -46,7 +46,7 @@ async def main(request: SonolusRequest, item_name: str):
             actions.append(
                 ServerForm(
                     type="like",
-                    title=f"Like ({like_count:,})",
+                    title=locale.like(like_count),
                     icon="heartHollow",
                     requireConfirmation=False,
                     options=[]
@@ -157,34 +157,34 @@ async def main(request: SonolusRequest, item_name: str):
         description=desc,
         actions=actions,
         hasCommunity=True,
-        leaderboards=[ # TODO: localize
+        leaderboards=[
             ServerItemLeaderboard(
                 name="arcade_score_speed",
-                title=handle_uwu("Arcade Score", request.state.localization, request.state.uwu)
+                title=handle_uwu(locale.leaderboards.ARCADE_SCORE_SPEED, request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
                 name="accuracy_score",
-                title=handle_uwu("Accuracy Score", request.state.localization, request.state.uwu)
+                title=handle_uwu(locale.leaderboards.ACCURACY_SCORE, request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
                 name="arcade_score_no_speed",
-                title=handle_uwu("Arcade Score w/o speed bonus", request.state.localization, request.state.uwu)
+                title=handle_uwu(locale.leaderboards.ARCADE_SCORE_NO_SPEED, request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
                 name="rank_match",
-                title=handle_uwu("Rank Match", request.state.localization, request.state.uwu)
+                title=handle_uwu(locale.leaderboards.RANK_MATCH, request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
                 name="least_combo_breaks",
-                title=handle_uwu("Least combo breaks", request.state.localization, request.state.uwu)
+                title=handle_uwu(locale.leaderboards.LEAST_COMBO_BREAKS, request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
                 name="least_misses",
-                title=handle_uwu("Least misses", request.state.localization, request.state.uwu)
+                title=handle_uwu(locale.leaderboards.LEAST_MISSES, request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
-                name="perfect",
-                title=handle_uwu("Perfect count", request.state.localization, request.state.uwu)
+                name="PERFECT",
+                title=handle_uwu(locale.leaderboards.PERFECT, request.state.localization, request.state.uwu)
             )
         ],
         sections=[]

@@ -31,7 +31,7 @@ async def submit(
         send_notification_response = await request.app.api.send_notification(
             title="Leaderboard Score Deleted", 
             user_id=delete_response.data.commenter,
-            content=f"#LEADERBOARD_SCORE_DELETED\n{delete_response.data.chart_title}" # TODO: localize
+            content=f"#LEADERBOARD_SCORE_DELETED\n{delete_response.data.chart_title}"
         ).send(auth)
 
         if send_notification_response.status != 200:

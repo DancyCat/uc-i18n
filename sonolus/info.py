@@ -35,7 +35,7 @@ async def main(request: SonolusRequest):
         ServerInfoItemButton(type="authentication"), 
         ServerInfoItemButton(
             type="post",
-            title="Announcements", # TODO: localize,
+            title=locale.announcements,
             icon="announcement"
         ), 
         *([
@@ -49,7 +49,7 @@ async def main(request: SonolusRequest):
         ServerInfoItemButton(type="replay"),
         ServerInfoItemButton(type="configuration")
     ]
-    
+
     if logged_in:
         button_list.append(ServerInfoItemButton(type="playlist"))
 

@@ -77,7 +77,7 @@ class LeaderboardInfo(BaseModel):
         if tier < 1:
             return tier - 0.4
         else:
-            return 1.0 + ((tier - 1.0) * 0.2)
+            return 1.0 + ((tier - 1.0) * 0.075)
 
     def to_record_list(
         self, 

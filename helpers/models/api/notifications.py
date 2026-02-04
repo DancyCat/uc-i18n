@@ -64,6 +64,10 @@ class Notification(_BaseNotification):
                     content = loc.notification.templates.COMMENT_DELETED(
                         comment_content="\n".join(content_parts)
                     )
+                case "#LEADERBOARD_SCORE_DELETED":
+                    content = loc.notification.templates.LEADERBOARD_SCORE_DELETED(
+                        chart_name="\n".join(content_parts)
+                    )
                 case _:
                     content = self.content
 
