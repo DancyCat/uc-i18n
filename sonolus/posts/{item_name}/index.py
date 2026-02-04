@@ -9,7 +9,7 @@ from helpers.models.sonolus.response import ServerItemDetails
 router = APIRouter()
 
 @router.get("/", response_model=ServerItemDetails)
-async def main(request: SonolusRequest, item_name: str, type: Literal["announcements", "notifications"] | str):
+async def main(request: SonolusRequest, item_name: str):
     locale = request.state.loc
     item_data = None
     auth = request.headers.get("Sonolus-Session")
