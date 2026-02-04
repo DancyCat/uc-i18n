@@ -183,7 +183,7 @@ async def main(request: SonolusRequest, item_name: str):
                 title=handle_uwu(locale.leaderboards.LEAST_MISSES, request.state.localization, request.state.uwu)
             ),
             ServerItemLeaderboard(
-                name="PERFECT",
+                name="perfect",
                 title=handle_uwu(locale.leaderboards.PERFECT, request.state.localization, request.state.uwu)
             )
         ],
