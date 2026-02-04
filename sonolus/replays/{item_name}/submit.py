@@ -30,7 +30,7 @@ async def submit(
     if delete_response.data.mod and not delete_response.data.owner:
         send_notification_response = await request.app.api.send_notification(
             title="Leaderboard Score Deleted", 
-            user_id=delete_response.data.commenter,
+            user_id=delete_response.data.submitter,
             content=f"#LEADERBOARD_SCORE_DELETED\n{delete_response.data.chart_title}"
         ).send(auth)
 
