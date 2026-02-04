@@ -17,7 +17,7 @@ async def submit(
 
     parsed_data = data.parse()
 
-    chart_name, record_id = item_name.removesuffix("UnCh-").split("-")
+    _, chart_name, record_id = item_name.removesuffix("UnCh-").split("-")
 
     if parsed_data.type not in ["delete"]:
         raise HTTPException(
