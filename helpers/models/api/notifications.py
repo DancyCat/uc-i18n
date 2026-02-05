@@ -43,11 +43,12 @@ class Notification(_BaseNotification):
     content: str
 
 
-    def to_post(self, request: "SonolusRequest") -> tuple[PostItem, str]:
+    def to_post(self, request: "SonolusRequest") -> tuple[PostItem, str]: # FIXME TODO
         post = super().to_post(request)
         loc = request.state.loc
 
         content_parts = self.content.splitlines()
+        print(content_parts, self.content)
         if content_parts[0].startswith("#"):
             del content_parts[0]
 
