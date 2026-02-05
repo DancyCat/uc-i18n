@@ -48,25 +48,26 @@ class Notification(_BaseNotification):
         loc = request.state.loc
 
         content_parts = self.content.splitlines()
-        print(content_parts, self.content)
-        if content_parts[0].startswith("#"):
-            del content_parts[0]
 
+        if content_parts[0].startswith("#"):
             match content_parts[0]:
                 case "#CHART_DELETED":
+                    del content_parts[0]
                     content = loc.notification.templates.CHART_DELETED(
                         chart_name="\n".join(content_parts)
                     )
                 case "#CHART_VISIBILITY_CHANGED":
+                    del content_parts[0]
                     content = loc.notification.templates.CHART_VISIBILITY_CHANGED(
                         visibility_status=content_parts.pop(0), chart_name="\n".join(content_parts)
                     )
                 case "#COMMENT_DELETED":
-                    print("comment-deleted")
+                    del content_parts[0]
                     content = loc.notification.templates.COMMENT_DELETED(
                         comment_content="\n".join(content_parts)
                     )
                 case "#LEADERBOARD_SCORE_DELETED":
+                    del content_parts[0]
                     content = loc.notification.templates.LEADERBOARD_SCORE_DELETED(
                         chart_name="\n".join(content_parts)
                     )
