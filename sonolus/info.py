@@ -36,7 +36,8 @@ async def main(request: SonolusRequest):
         ServerInfoItemButton(
             type="post",
             title=locale.announcements,
-            icon="announcement"
+            icon="announcement",
+            infoType="announcements"
         ), 
         *([
             ServerInfoItemButton(
@@ -212,10 +213,11 @@ async def main(request: SonolusRequest):
             if notifications > 0:
                 button_list = [
                     ServerInfoItemButton(
-                        type="user",
+                        type="post",
                         title=locale.notification.NOTIFICATION,
                         icon="comment",
                         badgeCount=notifications,
+                        infoType="noticiations"
                     )
                 ]
 

@@ -537,14 +537,14 @@ class Loc:
         @property
         def NOTIFICATION_DESC_UNREAD(self) -> str:
             """
-            You can find all your past notifications by clicking \"More\". You have unread notifications that need to be read.
+            You can find all your past notifications and announcements by clicking \"More\". You have unread notifications that need to be read.
             """
             return self._get("NOTIFICATION_DESC_UNREAD")
 
         @property
         def NOTIFICATION_DESC(self) -> str:
             """
-            You can find all your past notifications by clicking \"More\". You do not currently have any unread notifications.
+            You can find all your past notifications and announcements by clicking \"More\". You do not currently have any unread notifications.
             """
             return self._get("NOTIFICATION_DESC")
 
@@ -678,7 +678,6 @@ class Loc:
     def notifications_singular(self, num: int) -> str:
         """
         You have {num} new notification!
-        System notifications can be found in \"Posts\".
         Please read them to continue to the server.
         """
         return self._get("notifications_singular").format(num=f"{num:,}")
@@ -686,7 +685,6 @@ class Loc:
     def notifications_plural(self, num: int) -> str:
         """
         You have {num} new notifications!
-        System notifications can be found in \"Posts\".
         Please read them to continue to the server.
         """
         return self._get("notifications_plural").format(num=f"{num:,}")

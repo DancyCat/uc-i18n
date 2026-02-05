@@ -1,3 +1,4 @@
+from typing import Literal
 from fastapi import APIRouter, Query
 from fastapi import HTTPException, status
 
@@ -15,13 +16,28 @@ from helpers.owoify import handle_item_uwu
 async def main(
     request: SonolusRequest,
     page: int = Query(0, ge=0),
+    post_type: Literal["all", "announcements", "notifications", None] = Query(None)
 ):
     locale = request.state.loc
     uwu_level = request.state.uwu
+    auth = request.headers.get("Sonolus-Session")
 
-    data = await request.app.run_blocking(
-        compile_static_posts_list, request.app.base_url
-    )
+    data = []
+
+    if post_type in ("all", "announcements", None):
+        data.extend(
+            await request.app.run_blocking(
+                compile_static_posts_list, request.app.base_url
+            )
+        )
+
+    if post_type in ("all", "notifications", None):
+        if not auth and post_type == "notifications":
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+        if auth:
+            response = await request.app.api.get_notifications(only_unread=False).send(auth)
+            data.extend(response.data.to_posts(request))
 
     data = sort_posts_by_newest(data)
     data = handle_item_uwu(data, request.state.localization, uwu_level)
