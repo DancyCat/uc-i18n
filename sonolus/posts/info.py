@@ -71,6 +71,7 @@ async def main(request: SonolusRequest, type: Literal["announcements", "notifica
                 type="advanced",
                 title="#ADVANCED",
                 icon="advanced",
+                requireConfirmation=False,
                 options=[
                     ServerSelectOption(
                         query="post_type",
