@@ -43,7 +43,7 @@ class Notification(_BaseNotification):
     content: str
 
 
-    def to_post(self, request: "SonolusRequest") -> tuple[PostItem, str]: # FIXME TODO
+    def to_post(self, request: "SonolusRequest") -> tuple[PostItem, str]:
         post = super().to_post(request)
         loc = request.state.loc
 
