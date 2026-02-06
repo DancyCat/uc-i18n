@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from fastapi import HTTPException, status
 from core import SonolusRequest
 from helpers.sonolus_typings import ItemType
-from helpers.models.sonolus.item_section import GenericItemSection
+from helpers.models.sonolus.item_section import get_item_section
 from helpers.models.sonolus.response import ServerItemInfo
 from helpers.data_compilers import (
     compile_banner,
@@ -71,7 +71,7 @@ async def main(request: SonolusRequest, item_type: ItemType):
 
     return ServerItemInfo(
         sections=[
-            GenericItemSection(
+            get_item_section(item_type)(
                 title="#" + item_type[:-1].upper(),
                 icon=item_type[:-1],
                 description=handle_uwu(
@@ -79,7 +79,6 @@ async def main(request: SonolusRequest, item_type: ItemType):
                     request.state.localization,
                     uwu_level,
                 ),
-                itemType=item_type[:-1],
                 items=handle_item_uwu(
                     data[:5], request.state.localization, request.state.uwu
                 ),

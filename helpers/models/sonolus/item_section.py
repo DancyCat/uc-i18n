@@ -16,11 +16,6 @@ class ServerItemSectionTyped(BaseModel):
     searchValues: str | None = None
 
 
-class GenericItemSection(ServerItemSectionTyped):
-    itemType: str
-    items: list[ServerItem]
-
-
 class PostItemSection(ServerItemSectionTyped):
     itemType: Literal["post"] = "post"
     items: list[PostItem]
@@ -71,6 +66,11 @@ class RoomItemSection(ServerItemSectionTyped):
     items: list[RoomItem]
 
 
+class UserItemSection(ServerItemSectionTyped):
+    itemType: Literal["user"] = "user"
+    items: list[UserItem]
+
+
 ServerItemSection: TypeAlias = (
     PostItemSection
     | PlaylistItemSection
@@ -82,4 +82,31 @@ ServerItemSection: TypeAlias = (
     | EngineItemSection
     | ReplayItemSection
     | RoomItemSection
+    | UserItemSection
 )
+
+
+def get_item_section(item_type: ItemType) -> ServerItemSection:
+    match item_type:
+        case "backgrounds":
+            return BackgroundItemSection
+        case "effects":
+            return EffectItemSection
+        case "engines":
+            return EngineItemSection
+        case "levels":
+            return LevelItemSection
+        case "particles":
+            return ParticleItemSection
+        case "playlists":
+            return PlaylistItemSection
+        case "posts":
+            return PostItemSection
+        case "replays":
+            return ReplayItemSection
+        case "rooms":
+            return RoomItemSection
+        case "skins":
+            return SkinItemSection
+        case "users":
+            return UserItemSection

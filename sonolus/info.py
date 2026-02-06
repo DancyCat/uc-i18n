@@ -226,7 +226,7 @@ async def main(request: SonolusRequest):
                         title=locale.notification.NOTIFICATION,
                         icon="comment",
                         badgeCount=notifications,
-                        infoType="noticiations",
+                        infoType="notifications",
                     )
                 ]
 
