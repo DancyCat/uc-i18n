@@ -465,7 +465,7 @@ class API:
         return Request(
             self._client_session,
             "GET",
-            f"/api/charts/{item_name.removeprefix('UnCh-')}/leaderboards/{id}",
+            f"/api/charts/{item_name.removeprefix('UnCh-')}/leaderboards/{id}/",
             LeaderboardRecordInfo,
         )
 
@@ -475,7 +475,7 @@ class API:
         return Request(
             self._client_session,
             "DELETE",
-            f"/api/charts/{item_name.removeprefix('UnCh-')}/leaderboards/{id}",
+            f"/api/charts/{item_name.removeprefix('UnCh-')}/leaderboards/{id}/",
             DeleteLeaderboardRecord,
         )
 
