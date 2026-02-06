@@ -88,7 +88,13 @@ def validate_replay_config(
     for option_name, option_value in zip(
         replay_config.optionNames, replay_config.options
     ):
-        option_validator = engine_settings[engine_name][option_name]
+        try:
+            option_validator = engine_settings[engine_name][option_name]
+        except KeyError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"invalid config option {option_name} for engine {engine_name}",
+            )
 
         if not option_validator(option_value):
             raise HTTPException(
