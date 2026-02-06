@@ -36,6 +36,6 @@ while True:
     text += input_
 
 result = re.findall(r"'[^']+'", text)
-result = [item.strip("'") for item in result]   
+result = [item.strip("'") for item in result]
 
 print("Literal" + json.dumps(result))

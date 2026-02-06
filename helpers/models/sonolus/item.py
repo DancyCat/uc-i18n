@@ -3,6 +3,7 @@ from typing import Generic, Literal, Text, TypeAlias, TypeVar
 from helpers.models.sonolus.misc import Tag, SRL
 from helpers.models.sonolus.options import ServerForm
 
+
 class UserItem(BaseModel):
     name: str
     source: str | None = None
@@ -104,7 +105,9 @@ class PostItem(BaseModel):
     thumbnail: SRL | None = None
     authorUser: UserItem | None = None
 
+
 T = TypeVar("T", SkinItem, BackgroundItem, EffectItem, ParticleItem)
+
 
 class UseItem(BaseModel, Generic[T]):
     useDefault: bool
@@ -115,7 +118,7 @@ class LevelItem(BaseModel):
     name: str
     source: str | None = None
     version: Literal[1] = 1
-    rating: int
+    rating: int | float
     title: str
     artists: str
     author: str

@@ -2,6 +2,7 @@ import collections.abc, random, re
 from helpers.models.sonolus.item import *
 from typing import TypeVar
 
+
 def flatten(arr: collections.abc.Iterable):
     """
     Flatten the iterable collection. Modified from: https://note.nkmk.me/en/python-list-flatten/
@@ -646,10 +647,12 @@ def handle_uwu(source: str, locale: str, uwu_level: str, symbols: bool = True) -
             return owoify(source, level=1, locale=locale, symbols=symbols)
         case "uvu":
             return owoify(source, level=2, locale=locale, symbols=symbols)
-        
+
     return source
 
+
 T = TypeVar("T")
+
 
 def handle_item_uwu(source_items: list[T], locale: str, uwu_level: str) -> list[T]:
     returned = []
@@ -664,14 +667,14 @@ def handle_item_uwu(source_items: list[T], locale: str, uwu_level: str) -> list[
         for key in ["title", "author", "subtitle", "description"]:
             if hasattr(item, key) and getattr(item, key):
                 setattr(
-                    item, 
-                    key, 
+                    item,
+                    key,
                     handle_uwu(
                         getattr(item, key),
                         locale if locale not in always_assume_en else "en",
                         uwu_level,
                         symbols=key in include_symbols,
-                    )
+                    ),
                 )
         returned.append(item)
     return returned

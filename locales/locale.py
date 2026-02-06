@@ -1,7 +1,8 @@
 import json
 
+
 class Loc:
-    class Leaderboards:                
+    class Leaderboards:
         def __init__(self, parent: "Loc") -> None:
             self._parent = parent
 
@@ -10,49 +11,49 @@ class Loc:
                 return self._parent._data["leaderboard"][key]
             except KeyError:
                 return self._parent._default["leaderboard"][key]
-            
+
         @property
         def YOU_ARE_BANNED(self) -> str:
             """
             You are banned
             """
             return self._get("YOU_ARE_BANNED")
-        
+
         @property
         def ARCADE_SCORE_SPEED(self) -> str:
             """
             Arcade Score
             """
             return self._get("ARCADE_SCORE_SPEED")
-        
+
         @property
         def ACCURACY_SCORE(self) -> str:
             """
             Accuracy Score
             """
             return self._get("ACCURACY_SCORE")
-        
+
         @property
         def ARCADE_SCORE_NO_SPEED(self) -> str:
             """
             Arcade Score (no speed bonus)
             """
             return self._get("ARCADE_SCORE_NO_SPEED")
-        
+
         @property
         def RANK_MATCH(self) -> str:
             """
             Rank Match
             """
             return self._get("RANK_MATCH")
-        
+
         @property
         def LEAST_COMBO_BREAKS(self) -> str:
             """
             Least Combo breaks
             """
             return self._get("LEAST_COMBO_BREAKS")
-        
+
         @property
         def LEAST_MISSES(self) -> str:
             """
@@ -72,7 +73,7 @@ class Loc:
             Score submission is not supported for engine {engine_name}
             """
             return self._get("BAD_ENGINE").format(engine_name=engine_name)
-            
+
     class Playlist:
         def __init__(self, parent: "Loc"):
             self._parent = parent
@@ -304,7 +305,7 @@ class Loc:
         def STAFF_PICK_CONFIG_DESC(self) -> str:
             """
             Filter by staff picks? By default, every chart is shown.
-            
+
             NOTE: We will always show you one opposite of whatever you pick in Levels, for some variety. For example, turning off Staff Picks will always show one in Levels, while turning on Staff Picks will always show you a non-staff pick in Levels.
             """
             return self._get("STAFF_PICK_CONFIG_DESC")
@@ -481,10 +482,10 @@ class Loc:
             def COMMENT_DELETED(self, comment_content: str) -> str:
                 """
                 Your comment was deleted because it violated our comment policy. Please make sure all comments adhere to our community guidelines.
-                
+
                 ----------------------
                 COMMENT:
-                
+
                 {comment_content}
                 """
                 return self._get("COMMENT_DELETED").format(
@@ -496,12 +497,14 @@ class Loc:
                 Your chart \"{chart_name}\" was deleted for violating our upload rules. Please take a moment to review our chart upload guidelines for more information.
                 """
                 return self._get("CHART_DELETED").format(chart_name=chart_name)
-            
+
             def LEADERBOARD_SCORE_DELETED(self, chart_name: str) -> str:
                 """
                 Your score on the chart \"{chart_name}\" was deleted for violating our rules. Please take a moment to review our guidelines for more information.
                 """
-                return self._get("LEADERBOARD_SCORE_DELETED").format(chart_name=chart_name)
+                return self._get("LEADERBOARD_SCORE_DELETED").format(
+                    chart_name=chart_name
+                )
 
         def __init__(self, parent: "Loc"):
             self._parent = parent
@@ -663,13 +666,13 @@ class Loc:
         """
         return self._get("on")
 
-    def like(self, num: int) -> str: 
+    def like(self, num: int) -> str:
         """
         Like ({num})
         """
         return self._get("like").format(num=f"{num:,}")
-    
-    def unlike(self, num: int) -> str: 
+
+    def unlike(self, num: int) -> str:
         """
         Unlike ({num})
         """
@@ -875,7 +878,7 @@ class Loc:
     def default_skin_desc(self) -> str:
         """
         Choose the default skin type to use! The skin will be different depending on the engine (eg. V1 skin is slightly different on Rush compared to Next), but will apply to all engines.
-        
+
         NOTE: if an engine does not have the supported skin, it'll use the engine default.
         """
         return self._get("default_skin_desc")
@@ -939,10 +942,10 @@ class Loc:
     @property
     def show_resource_buttons(self) -> str:
         """
-        Show Server Resource Buttons 
+        Show Server Resource Buttons
         """
         return self._get("show_resource_buttons")
-    
+
     @property
     def announcements(self) -> str:
         """
@@ -966,7 +969,7 @@ class Loc:
         """
         Please login on our website to upload a new level.
         We do not support uploading levels in-game.
-        
+
         {url}
         """
         return self._get("use_website_to_upload").format(url=website)

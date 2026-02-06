@@ -4,6 +4,7 @@ from core import SonolusRequest
 
 router = APIRouter()
 
+
 @router.post("/")
 async def main(request: SonolusRequest):
     raise HTTPException(

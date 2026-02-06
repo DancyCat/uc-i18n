@@ -23,6 +23,7 @@ config = get_config()
 R = TypeVar("R")
 P = ParamSpec("P")
 
+
 class SonolusFastAPI(FastAPI):
     sono_pub_key: VerifyingKey
 
@@ -56,10 +57,7 @@ class SonolusFastAPI(FastAPI):
         self.api: API
 
     async def run_blocking(
-        self, 
-        func: Callable[P, R], 
-        *args: P.args, 
-        **kwargs: P.kwargs
+        self, func: Callable[P, R], *args: P.args, **kwargs: P.kwargs
     ) -> R:
         return await asyncio.get_event_loop().run_in_executor(
             self.executor, lambda: func(*args, **kwargs)
@@ -82,14 +80,15 @@ class SonolusFastAPI(FastAPI):
                 + "-" * 1000
             )
             return JSONResponse(content={}, status_code=exc.status_code)
-        
+
     def include_router(self, router, *args, **kwargs):
         for route in router.routes:
             if isinstance(route, APIRoute):
                 route.response_model_exclude_none = True
-        
+
         return super().include_router(router, *args, **kwargs)
-        
+
+
 class _RequestState(State):
     localization: str
     uwu: Literal["off", "uwu", "owo", "uvu"]
@@ -106,6 +105,7 @@ class _RequestState(State):
 class SonolusRequest(Request):
     state: _RequestState
     app: SonolusFastAPI
+
 
 class SonolusMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: SonolusRequest, call_next):

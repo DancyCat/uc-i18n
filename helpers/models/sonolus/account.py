@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Literal
 
+
 class ServiceUserProfile(BaseModel):
     id: str  # ServiceUserId... is just a string.
     handle: str
@@ -14,17 +15,20 @@ class ServiceUserProfile(BaseModel):
     aboutMe: str
     favorites: list[str]
 
+
 class ServerAuthenticateRequest(BaseModel):
     type: str
     address: str
     time: int
     userProfile: ServiceUserProfile
 
+
 class ServerAuthenticateExternalRequest(BaseModel):
     type: str
     url: str
     time: int
     userProfile: ServiceUserProfile
+
 
 class ServiceUserProfileWithType(ServiceUserProfile):
     type: Literal["game", "external"]

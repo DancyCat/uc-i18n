@@ -4,7 +4,14 @@ from fastapi import APIRouter
 from core import SonolusRequest
 from helpers.models.sonolus.item_section import LevelItemSection
 from helpers.models.sonolus.response import ServerItemInfo
-from helpers.models.sonolus.options import ServerForm, ServerTextOption, ServerSelectOption, ServerOption_Value, ServerSliderOption, ServerToggleOption
+from helpers.models.sonolus.options import (
+    ServerForm,
+    ServerTextOption,
+    ServerSelectOption,
+    ServerOption_Value,
+    ServerSliderOption,
+    ServerToggleOption,
+)
 
 from helpers.data_compilers import compile_banner
 
@@ -26,25 +33,33 @@ async def main(request: SonolusRequest):
             icon="level",
             requireConfirmation=True,
             options=[],
-            description=locale.use_website_to_upload("https://untitledcharts.com")
+            description=locale.use_website_to_upload("https://untitledcharts.com"),
         )
     ]
     staff_pick = request.state.staff_pick
 
-    random_response, newest_response, staffpick_req, popular_response = await asyncio.gather(
-        request.app.api.get_random_charts(staff_pick).send(auth),
-        request.app.api.get_newest_charts(staff_pick).send(auth),
-        request.app.api.get_random_staff_picks(staff_pick in ("off", "false")).send(auth),
-        request.app.api.get_popular_charts(staff_pick).send(auth)
+    random_response, newest_response, staffpick_req, popular_response = (
+        await asyncio.gather(
+            request.app.api.get_random_charts(staff_pick).send(auth),
+            request.app.api.get_newest_charts(staff_pick).send(auth),
+            request.app.api.get_random_staff_picks(staff_pick in ("off", "false")).send(
+                auth
+            ),
+            request.app.api.get_popular_charts(staff_pick).send(auth),
+        )
     )
 
     asset_base_url = random_response.data.asset_base_url.removesuffix("/")
-    random_staff_pick = await request.app.run_blocking(
-        staffpick_req.data.data[0].to_level_item,
-        request,
-        asset_base_url,
-        request.state.levelbg
-    ) if staffpick_req.data.data else None
+    random_staff_pick = (
+        await request.app.run_blocking(
+            staffpick_req.data.data[0].to_level_item,
+            request,
+            asset_base_url,
+            request.state.levelbg,
+        )
+        if staffpick_req.data.data
+        else None
+    )
 
     random = await asyncio.gather(
         *[
@@ -95,27 +110,29 @@ async def main(request: SonolusRequest):
                     else locale.non_staff_pick_desc
                 ),
                 request.state.localization,
-                uwu_level
+                uwu_level,
             ),
             items=handle_item_uwu(
-                [random_staff_pick] if random_staff_pick else [], request.state.localization, uwu_level
-            )
+                [random_staff_pick] if random_staff_pick else [],
+                request.state.localization,
+                uwu_level,
+            ),
         ),
         LevelItemSection(
             title="#NEWEST",
             icon="level",
-            items=handle_item_uwu(newest, request.state.localization, uwu_level)
+            items=handle_item_uwu(newest, request.state.localization, uwu_level),
         ),
         LevelItemSection(
             title="#RANDOM",
             icon="level",
-            items=handle_item_uwu(random, request.state.localization, uwu_level)
+            items=handle_item_uwu(random, request.state.localization, uwu_level),
         ),
         LevelItemSection(
             title="#POPULAR",
             icon="level",
-            items=handle_item_uwu(popular, request.state.localization, uwu_level)
-        )
+            items=handle_item_uwu(popular, request.state.localization, uwu_level),
+        ),
     ]
 
     options = [
@@ -126,7 +143,7 @@ async def main(request: SonolusRequest):
             default="",
             placeholder=locale.search.ENTER_TEXT,
             limit=100,
-            shortcuts=[]
+            shortcuts=[],
         ),
         ServerSelectOption(
             query="staff_pick",
@@ -140,8 +157,8 @@ async def main(request: SonolusRequest):
                 ServerOption_Value(name="default", title="#DEFAULT"),
                 ServerOption_Value(name="off", title=locale.search.STAFF_PICK_OFF),
                 ServerOption_Value(name="true", title=locale.search.STAFF_PICK_TRUE),
-                ServerOption_Value(name="false", title=locale.search.STAFF_PICK_FALSE)
-            ]
+                ServerOption_Value(name="false", title=locale.search.STAFF_PICK_FALSE),
+            ],
         ),
         ServerSliderOption(
             query="min_rating",
@@ -150,7 +167,7 @@ async def main(request: SonolusRequest):
             default=-999,
             min=-999,
             max=999,
-            step=1
+            step=1,
         ),
         ServerSliderOption(
             query="max_rating",
@@ -159,7 +176,7 @@ async def main(request: SonolusRequest):
             default=999,
             min=-999,
             max=999,
-            step=1
+            step=1,
         ),
         ServerTextOption(
             query="title_includes",
@@ -168,7 +185,7 @@ async def main(request: SonolusRequest):
             default="",
             placeholder=locale.search.ENTER_TEXT,
             limit=100,
-            shortcuts=[]
+            shortcuts=[],
         ),
         ServerTextOption(
             query="author_includes",
@@ -177,7 +194,7 @@ async def main(request: SonolusRequest):
             default="",
             placeholder=locale.search.ENTER_TEXT,
             limit=60,
-            shortcuts=[]
+            shortcuts=[],
         ),
         ServerTextOption(
             query="description_includes",
@@ -186,7 +203,7 @@ async def main(request: SonolusRequest):
             default="",
             placeholder=locale.search.ENTER_TEXT,
             limit=200,
-            shortcuts=[]
+            shortcuts=[],
         ),
         ServerTextOption(
             query="artists_includes",
@@ -196,7 +213,7 @@ async def main(request: SonolusRequest):
             placeholder=locale.search.ENTER_TEXT,
             limit=100,
             shortcuts=[],
-        )
+        ),
     ]
 
     if auth:
@@ -205,7 +222,7 @@ async def main(request: SonolusRequest):
                 query="liked_by",
                 name=locale.search.ONLY_LEVELS_I_LIKED,
                 required=False,
-                default=False
+                default=False,
             )
         )
         options.append(
@@ -284,13 +301,17 @@ async def main(request: SonolusRequest):
             required=False,
             default="published_at",
             values=[
-                ServerOption_Value(name="published_at", title=locale.search.DATE_PUBLISHED),
+                ServerOption_Value(
+                    name="published_at", title=locale.search.DATE_PUBLISHED
+                ),
                 ServerOption_Value(name="created_at", title=locale.search.DATE_CREATED),
                 ServerOption_Value(name="random", title="#RANDOM"),
                 ServerOption_Value(name="rating", title=locale.search.RATING),
                 ServerOption_Value(name="likes", title=locale.search.LIKES),
                 ServerOption_Value(name="comments", title=locale.search.COMMENTS),
-                ServerOption_Value(name="decaying_likes", title=locale.search.DECAYING_LIKES),
+                ServerOption_Value(
+                    name="decaying_likes", title=locale.search.DECAYING_LIKES
+                ),
                 ServerOption_Value(name="abc", title=locale.search.TITLE_A_Z),
             ],
         )
@@ -315,9 +336,9 @@ async def main(request: SonolusRequest):
                 type="advanced",
                 title=locale.search.ADVANCED_SEARCH,
                 requireConfirmation=False,
-                options=options
+                options=options,
             )
         ],
         sections=sections,
-        banner=await request.app.run_blocking(compile_banner)
+        banner=await request.app.run_blocking(compile_banner),
     )

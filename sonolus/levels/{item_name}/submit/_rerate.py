@@ -4,6 +4,7 @@ from fastapi import HTTPException, status
 from locales.locale import Loc
 import decimal
 
+
 def is_valid_constant(c: str):
     try:
         if not isinstance(c, str):
@@ -20,21 +21,18 @@ def is_valid_constant(c: str):
     except (decimal.InvalidOperation, ValueError):
         return False
 
-async def rerate(auth: str, request: SonolusRequest, item_name: str, constant: str, locale: Loc) -> ServerSubmitItemActionResponse:
+
+async def rerate(
+    auth: str, request: SonolusRequest, item_name: str, constant: str, locale: Loc
+) -> ServerSubmitItemActionResponse:
     if not is_valid_constant(constant):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=locale.invalid_constant,
         )
-    
+
     response = await request.app.api.rerate_chart(item_name, constant).send(auth)
     if response.status != 200:
-        raise HTTPException(
-            status_code=response.status, detail=locale.not_mod_or_owner
-        )
-            
-    return ServerSubmitItemActionResponse(
-        key="",
-        hashes=[],
-        shouldUpdateItem=True
-    )
+        raise HTTPException(status_code=response.status, detail=locale.not_mod_or_owner)
+
+    return ServerSubmitItemActionResponse(key="", hashes=[], shouldUpdateItem=True)

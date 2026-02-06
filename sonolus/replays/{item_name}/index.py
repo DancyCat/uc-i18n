@@ -7,35 +7,44 @@ from helpers.owoify import handle_item_uwu
 
 router = APIRouter()
 
+
 @router.get("/", response_model=ServerItemDetails)
 async def get(request: SonolusRequest, item_name: str):
     _, chart_name, record_id = item_name.removesuffix("UnCh-").split("-")
     auth = request.headers.get("Sonolus-Session")
 
-    leaderboard_record_response = await request.app.api.get_leaderboard_record(chart_name, int(record_id)).send(auth)
+    leaderboard_record_response = await request.app.api.get_leaderboard_record(
+        chart_name, int(record_id)
+    ).send(auth)
 
     if leaderboard_record_response.status != 200:
         raise HTTPException(status_code=leaderboard_record_response.status)
 
     replay_item = await request.app.run_blocking(
-        leaderboard_record_response.data.to_replay_item,
-        request
+        leaderboard_record_response.data.to_replay_item, request
     )
 
-    actions = [
-        ServerForm(
-            type="delete",
-            title="#DELETE",
-            icon="delete",
-            requireConfirmation=True,
-            options=[]
-        )
-    ] if leaderboard_record_response.data.data.owner or leaderboard_record_response.data.data.mod else []
+    actions = (
+        [
+            ServerForm(
+                type="delete",
+                title="#DELETE",
+                icon="delete",
+                requireConfirmation=True,
+                options=[],
+            )
+        ]
+        if leaderboard_record_response.data.data.owner
+        or leaderboard_record_response.data.data.mod
+        else []
+    )
 
     return ServerItemDetails(
-        item=handle_item_uwu([replay_item], request.state.localization, request.state.uwu)[0],
+        item=handle_item_uwu(
+            [replay_item], request.state.localization, request.state.uwu
+        )[0],
         actions=actions,
         hasCommunity=False,
         leaderboards=[],
-        sections=[]
+        sections=[],
     )

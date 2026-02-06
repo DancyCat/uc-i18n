@@ -5,19 +5,22 @@ from helpers.models.api.charts import Chart
 from helpers.models.sonolus.item import UserItem
 from helpers.models.sonolus.misc import Tag
 
+
 class Account(BaseModel):
     sonolus_id: str
     sonolus_handle: int
     sonolus_username: str
     created_at: datetime
     mod: bool | None = None
-    admin: bool | None = None # XXX (backend): make these non-optional
+    admin: bool | None = None  # XXX (backend): make these non-optional
     banned: bool | None = None
     unread_notifications: int
+
 
 class AuthenticationData(BaseModel):
     session: str
     expiry: int
+
 
 class PublicAccount(BaseModel):
     sonolus_id: str
@@ -42,8 +45,9 @@ class PublicAccount(BaseModel):
             name=self.sonolus_id,
             title=self.sonolus_username,
             handle=str(self.sonolus_handle),
-            tags=tags
+            tags=tags,
         )
+
 
 class UserProfile(BaseModel):
     account: PublicAccount

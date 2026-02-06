@@ -13,6 +13,7 @@ class ServerCollectionItemOption(BaseModel):
     type: Literal["collectionItem"] = "collectionItem"
     itemType: ItemType
 
+
 class ServerTextOption(BaseModel):
     query: str
     name: Text | str
@@ -25,8 +26,9 @@ class ServerTextOption(BaseModel):
     shortcuts: list[str]
 
     model_config = ConfigDict(
-        by_alias=True, 
+        by_alias=True,
     )
+
 
 class ServerTextAreaOption(BaseModel):
     query: str
@@ -40,8 +42,9 @@ class ServerTextAreaOption(BaseModel):
     shortcuts: list[str]
 
     model_config = ConfigDict(
-        by_alias=True, 
+        by_alias=True,
     )
+
 
 class ServerSliderOption(BaseModel):
     query: str
@@ -56,8 +59,9 @@ class ServerSliderOption(BaseModel):
     unit: Text | str | None = None
 
     model_config = ConfigDict(
-        by_alias=True, 
+        by_alias=True,
     )
+
 
 class ServerToggleOption(BaseModel):
     query: str
@@ -68,12 +72,14 @@ class ServerToggleOption(BaseModel):
     default: bool = Field(serialization_alias="def")
 
     model_config = ConfigDict(
-        by_alias=True, 
+        by_alias=True,
     )
+
 
 class ServerOption_Value(BaseModel):
     name: str
     title: Text | str
+
 
 class ServerSelectOption(BaseModel):
     query: str
@@ -85,8 +91,9 @@ class ServerSelectOption(BaseModel):
     values: list[ServerOption_Value]
 
     model_config = ConfigDict(
-        by_alias=True,  
+        by_alias=True,
     )
+
 
 class ServerMultiOption(BaseModel):
     query: str
@@ -98,8 +105,9 @@ class ServerMultiOption(BaseModel):
     values: list[ServerOption_Value]
 
     model_config = ConfigDict(
-        by_alias=True, 
+        by_alias=True,
     )
+
 
 class ServerServerItemOption(BaseModel):
     query: str
@@ -113,8 +121,9 @@ class ServerServerItemOption(BaseModel):
     allowOtherServers: bool
 
     model_config = ConfigDict(
-        by_alias=True, 
+        by_alias=True,
     )
+
 
 class ServerServerItemsOption(BaseModel):
     query: str
@@ -129,8 +138,9 @@ class ServerServerItemsOption(BaseModel):
     limit: int
 
     model_config = ConfigDict(
-        by_alias=True, 
+        by_alias=True,
     )
+
 
 class ServerCollectionItemOption(BaseModel):
     query: str
@@ -139,6 +149,7 @@ class ServerCollectionItemOption(BaseModel):
     required: bool
     type: Literal["collectionItem"] = "collectionItem"
     itemType: ItemType
+
 
 class ServerFileOption(BaseModel):
     query: str
@@ -156,8 +167,9 @@ class ServerFileOption(BaseModel):
     ) | None = None
 
     model_config = ConfigDict(
-        by_alias=True,  
+        by_alias=True,
     )
+
 
 ServerOption = (
     ServerTextOption
@@ -171,6 +183,7 @@ ServerOption = (
     | ServerCollectionItemOption
     | ServerFileOption
 )
+
 
 class ServerForm(BaseModel):
     type: str

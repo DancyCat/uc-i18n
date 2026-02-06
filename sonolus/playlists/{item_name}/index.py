@@ -5,7 +5,14 @@ from fastapi import HTTPException, status
 
 from core import SonolusRequest
 from helpers.data_compilers import compile_playlists_list
-from helpers.models.sonolus.options import ServerForm, ServerOption_Value, ServerSelectOption, ServerSliderOption, ServerTextOption, ServerToggleOption
+from helpers.models.sonolus.options import (
+    ServerForm,
+    ServerOption_Value,
+    ServerSelectOption,
+    ServerSliderOption,
+    ServerTextOption,
+    ServerToggleOption,
+)
 from helpers.models.sonolus.submit import ServerSubmitPlaylistActionRequest
 from helpers.models.sonolus.response import ServerItemDetails
 
@@ -53,7 +60,7 @@ async def main(request: SonolusRequest, item_name: str):
         artists_includes=params.artists_includes,
         sort_by=params.sort_by,
         sort_order=params.sort_order,
-        meta_includes=params.keywords
+        meta_includes=params.keywords,
     ).send(auth)
 
     asset_base_url = response.data.asset_base_url.removesuffix("/")
@@ -94,9 +101,7 @@ async def main(request: SonolusRequest, item_name: str):
             request.state.localization,
         )
     )[0].model_copy()
-    item_data.name = (
-        f"uploaded_{base64.urlsafe_b64encode(parts[1].encode()).decode()}"
-    )
+    item_data.name = f"uploaded_{base64.urlsafe_b64encode(parts[1].encode()).decode()}"
     item_data.levels = levels
     options = [
         ServerSelectOption(
@@ -106,9 +111,15 @@ async def main(request: SonolusRequest, item_name: str):
             default=params.level_status,
             values=[
                 ServerOption_Value(name="ALL", title=locale.search.VISIBILITY_ALL),
-                ServerOption_Value(name="PUBLIC_MINE", title=locale.search.VISIBILITY_PUBLIC),
-                ServerOption_Value(name="UNLISTED", title=locale.search.VISIBILITY_UNLISTED),
-                ServerOption_Value(name="PRIVATE", title=locale.search.VISIBILITY_PRIVATE),
+                ServerOption_Value(
+                    name="PUBLIC_MINE", title=locale.search.VISIBILITY_PUBLIC
+                ),
+                ServerOption_Value(
+                    name="UNLISTED", title=locale.search.VISIBILITY_UNLISTED
+                ),
+                ServerOption_Value(
+                    name="PRIVATE", title=locale.search.VISIBILITY_PRIVATE
+                ),
             ],
         ),
         ServerSelectOption(
@@ -160,7 +171,7 @@ async def main(request: SonolusRequest, item_name: str):
             default=params.title_includes or "",
             placeholder=locale.search.ENTER_TEXT,
             limit=100,
-            shortcuts=[],            
+            shortcuts=[],
         ),
         ServerTextOption(
             query="author_includes",
@@ -188,7 +199,7 @@ async def main(request: SonolusRequest, item_name: str):
             placeholder=locale.search.ENTER_TEXT,
             limit=100,
             shortcuts=[],
-        )
+        ),
     ]
 
     if auth:
@@ -206,7 +217,7 @@ async def main(request: SonolusRequest, item_name: str):
                 query="commented_on",
                 name=locale.search.ONLY_LEVELS_I_COMMENTED_ON,
                 required=False,
-                default=params.commented_on,    
+                default=params.commented_on,
             )
         )
 
@@ -282,7 +293,9 @@ async def main(request: SonolusRequest, item_name: str):
                 ServerOption_Value(name="rating", title=locale.search.RATING),
                 ServerOption_Value(name="likes", title=locale.search.LIKES),
                 ServerOption_Value(name="comments", title=locale.search.COMMENTS),
-                ServerOption_Value(name="decaying_likes", title=locale.search.DECAYING_LIKES),
+                ServerOption_Value(
+                    name="decaying_likes", title=locale.search.DECAYING_LIKES
+                ),
                 ServerOption_Value(name="abc", title=locale.search.TITLE_A_Z),
             ],
         )
@@ -324,5 +337,5 @@ async def main(request: SonolusRequest, item_name: str):
         actions=actions,
         hasCommunity=False,
         leaderboards=[],
-        sections=[]
+        sections=[],
     )

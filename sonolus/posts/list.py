@@ -16,7 +16,7 @@ from helpers.owoify import handle_item_uwu
 async def main(
     request: SonolusRequest,
     page: int = Query(0, ge=0),
-    post_type: Literal["all", "announcements", "notifications", None] = Query(None)
+    post_type: Literal["all", "announcements", "notifications", None] = Query(None),
 ):
     locale = request.state.loc
     uwu_level = request.state.uwu
@@ -26,9 +26,12 @@ async def main(
 
     if post_type in ("all", "announcements", None):
         data.extend(
-            [item.to_post_item() for item in await request.app.run_blocking(
-                compile_static_posts_list, request.app.base_url
-            )]
+            [
+                item.to_post_item()
+                for item in await request.app.run_blocking(
+                    compile_static_posts_list, request.app.base_url
+                )
+            ]
         )
 
     if post_type in ("all", "notifications", None):
@@ -36,7 +39,9 @@ async def main(
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
         if auth:
-            response = await request.app.api.get_notifications(only_unread=False).send(auth)
+            response = await request.app.api.get_notifications(only_unread=False).send(
+                auth
+            )
             data.extend(response.data.to_posts(request))
 
     data = sort_posts_by_newest(data)
@@ -46,9 +51,9 @@ async def main(
     if len(pages) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=locale.items_not_found("announcements")
+            detail=locale.items_not_found("announcements"),
         )
-    
+
     try:
         items = pages[page]
     except KeyError:
@@ -57,7 +62,4 @@ async def main(
             detail="hi stop hitting our api thanks",
         )
 
-    return ServerItemList(
-        pageCount=len(pages),
-        items=items
-    )
+    return ServerItemList(pageCount=len(pages), items=items)

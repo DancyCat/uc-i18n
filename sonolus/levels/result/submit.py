@@ -7,10 +7,11 @@ import helpers.replay as replay
 
 router = APIRouter()
 
+
 @router.post("/", response_model=ServerSubmitLevelResultResponse)
 async def main(request: SonolusRequest, data: ServerSubmitLevelResultRequest):
     locale = request.state.loc
-    
+
     auth = request.headers.get("Sonolus-Session")
 
     if not auth:
@@ -22,7 +23,10 @@ async def main(request: SonolusRequest, data: ServerSubmitLevelResultRequest):
     response = await request.app.api.get_account().send(auth)
 
     if response.data.banned:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=locale.leaderboards.YOU_ARE_BANNED)
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=locale.leaderboards.YOU_ARE_BANNED,
+        )
 
     return ServerSubmitLevelResultResponse(
         key=replay.generate_upload_key(
@@ -32,9 +36,7 @@ async def main(request: SonolusRequest, data: ServerSubmitLevelResultRequest):
             data.replay.configuration.hash,
             request.state.engine,
             f"{response.data.sonolus_username}#{response.data.sonolus_handle}",
-            request
+            request,
         ),
-        hashes=[
-            data.replay.data.hash, data.replay.configuration.hash
-        ]
+        hashes=[data.replay.data.hash, data.replay.configuration.hash],
     )

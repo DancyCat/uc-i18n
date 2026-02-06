@@ -6,18 +6,19 @@ from helpers.owoify import handle_item_uwu
 
 router = APIRouter()
 
+
 @router.get("/", response_model=ServerItemList)
 async def list(
     request: SonolusRequest,
     page: int = Query(0, ge=0),
-    random: bool | None = Query(False)
+    random: bool | None = Query(False),
 ):
     locale = request.state.loc
 
     response = await (
         request.app.api.get_random_leaderboard_records(limit=10)
-        if random else
-        request.app.api.get_public_leaderboard_records(page=page)
+        if random
+        else request.app.api.get_public_leaderboard_records(page=page)
     ).send()
 
     page_count = response.data.pageCount
@@ -43,15 +44,12 @@ async def list(
         raise HTTPException(
             status_code=400, detail=locale.items_not_found_search("replay")
         )
-    
+
     return ServerItemList(
         pageCount=page_count,
         items=handle_item_uwu(
-            await request.app.run_blocking(
-                response.data.to_replay_items,
-                request
-            ),
+            await request.app.run_blocking(response.data.to_replay_items, request),
             request.state.localization,
-            request.state.uwu
-        )
+            request.state.uwu,
+        ),
     )

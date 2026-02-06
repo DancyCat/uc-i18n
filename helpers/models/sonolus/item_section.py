@@ -5,6 +5,7 @@ from helpers.models.sonolus.item import *
 from helpers.models.sonolus.options import ServerForm
 from helpers.sonolus_typings import Icon, ItemType, Text
 
+
 class ServerItemSectionTyped(BaseModel):
     title: str | Text
     icon: Icon | str | None = None
@@ -14,9 +15,11 @@ class ServerItemSectionTyped(BaseModel):
     search: ServerForm | None = None
     searchValues: str | None = None
 
+
 class GenericItemSection(ServerItemSectionTyped):
     itemType: str
     items: list[ServerItem]
+
 
 class PostItemSection(ServerItemSectionTyped):
     itemType: Literal["post"] = "post"

@@ -9,7 +9,11 @@ from helpers.data_compilers import (
     compile_skins_list,
 )
 from helpers.models.sonolus.misc import ServerInfoItemButton
-from helpers.models.sonolus.options import ServerSelectOption, ServerOption_Value, ServerToggleOption
+from helpers.models.sonolus.options import (
+    ServerSelectOption,
+    ServerOption_Value,
+    ServerToggleOption,
+)
 from helpers.models.sonolus.response import ServerInfo, ServerConfiguration
 
 from helpers.owoify import handle_uwu
@@ -32,24 +36,28 @@ async def main(request: SonolusRequest):
 
     banner_srl = await request.app.run_blocking(compile_banner)
     button_list = [
-        ServerInfoItemButton(type="authentication"), 
+        ServerInfoItemButton(type="authentication"),
         ServerInfoItemButton(
             type="post",
             title=locale.announcements,
             icon="announcement",
-            infoType="announcements"
-        ), 
-        *([
-            ServerInfoItemButton(
-                type="post",
-                title=locale.notification.NOTIFICATION,
-                icon="comment",
-                infoType="notifications"
-            )
-        ] if logged_in else ()),
-        ServerInfoItemButton(type="level"), 
+            infoType="announcements",
+        ),
+        *(
+            [
+                ServerInfoItemButton(
+                    type="post",
+                    title=locale.notification.NOTIFICATION,
+                    icon="comment",
+                    infoType="notifications",
+                )
+            ]
+            if logged_in
+            else ()
+        ),
+        ServerInfoItemButton(type="level"),
         ServerInfoItemButton(type="replay"),
-        ServerInfoItemButton(type="configuration")
+        ServerInfoItemButton(type="configuration"),
     ]
 
     if logged_in:
@@ -67,21 +75,23 @@ async def main(request: SonolusRequest):
         )
     options = []
     if request.state.localization in uwu_supported:
-        options.append(ServerSelectOption(
-            query="uwu",
-            name=locale.uwu,
-            description=handle_uwu(
-                locale.uwu_desc, request.state.localization, request.state.uwu
-            ),
-            required=False,
-            default="off",
-            values=[
-                ServerOption_Value(name="off", title=locale.off),
-                ServerOption_Value(name="owo", title=locale.slightly),
-                ServerOption_Value(name="uwu", title=locale.a_lot),
-                ServerOption_Value(name="uvu", title=locale.extreme),
-            ],
-        ))
+        options.append(
+            ServerSelectOption(
+                query="uwu",
+                name=locale.uwu,
+                description=handle_uwu(
+                    locale.uwu_desc, request.state.localization, request.state.uwu
+                ),
+                required=False,
+                default="off",
+                values=[
+                    ServerOption_Value(name="off", title=locale.off),
+                    ServerOption_Value(name="owo", title=locale.slightly),
+                    ServerOption_Value(name="uwu", title=locale.a_lot),
+                    ServerOption_Value(name="uvu", title=locale.extreme),
+                ],
+            )
+        )
     options.append(
         ServerSelectOption(
             query="levelbg",
@@ -94,9 +104,13 @@ async def main(request: SonolusRequest):
             required=False,
             default="default_or_v3",
             values=[
-                ServerOption_Value(name="default_or_v3", title=locale.background.DEF_OR_V3),
+                ServerOption_Value(
+                    name="default_or_v3", title=locale.background.DEF_OR_V3
+                ),
                 ServerOption_Value(name="v3", title=locale.background.V3),
-                ServerOption_Value(name="default_or_v1", title=locale.background.DEF_OR_V1),
+                ServerOption_Value(
+                    name="default_or_v1", title=locale.background.DEF_OR_V1
+                ),
                 ServerOption_Value(name="v1", title=locale.background.V1),
             ],
         ),
@@ -114,17 +128,15 @@ async def main(request: SonolusRequest):
             ),
             required=False,
             default=engines[0].name,
-            values=[ServerOption_Value(name=item.name, title=item.title) for item in engines]
+            values=[
+                ServerOption_Value(name=item.name, title=item.title) for item in engines
+            ],
         )
     )
 
     skins = await request.app.run_blocking(compile_skins_list, request.app.base_url)
 
-    unique_themes = sorted(
-        set(chain.from_iterable(
-            [item.themes for item in skins]
-        ))
-    )
+    unique_themes = sorted(set(chain.from_iterable([item.themes for item in skins])))
 
     options.append(
         ServerSelectOption(
@@ -136,10 +148,7 @@ async def main(request: SonolusRequest):
             required=False,
             default="engine_default",
             values=[ServerOption_Value(name="engine_default", title="#DEFAULT")]
-            + [
-                ServerOption_Value(name=theme, title=theme)
-                for theme in unique_themes
-            ]
+            + [ServerOption_Value(name=theme, title=theme) for theme in unique_themes],
         )
     )
 
@@ -160,8 +169,7 @@ async def main(request: SonolusRequest):
                 ServerOption_Value(name=item.name, title=item.title)
                 for item in particles
                 if not item.engine_specific
-            ]
-
+            ],
         )
     )
 
@@ -180,7 +188,7 @@ async def main(request: SonolusRequest):
                 ServerOption_Value(name="off", title=locale.search.STAFF_PICK_OFF),
                 ServerOption_Value(name="true", title=locale.search.STAFF_PICK_TRUE),
                 ServerOption_Value(name="false", title=locale.search.STAFF_PICK_FALSE),
-            ],        
+            ],
         )
     )
     options.append(
@@ -218,7 +226,7 @@ async def main(request: SonolusRequest):
                         title=locale.notification.NOTIFICATION,
                         icon="comment",
                         badgeCount=notifications,
-                        infoType="noticiations"
+                        infoType="noticiations",
                     )
                 ]
 
@@ -246,8 +254,6 @@ async def main(request: SonolusRequest):
             uwu_level,
         ),
         buttons=button_list,
-        configuration=ServerConfiguration(
-            options=options
-        ),
-        banner=banner_srl if banner_srl else None
+        configuration=ServerConfiguration(options=options),
+        banner=banner_srl if banner_srl else None,
     )

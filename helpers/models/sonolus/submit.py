@@ -7,6 +7,7 @@ from fastapi import HTTPException, status
 from core import SonolusRequest
 from helpers.models.sonolus.item import ReplayItem
 
+
 class ServerSubmitItemActionRequest(BaseModel):
     values: str
 
@@ -14,29 +15,38 @@ class ServerSubmitItemActionRequest(BaseModel):
 class _ParsedGenericActionRequest(BaseModel):
     type: str
 
+
 class GenericActionRequest(ServerSubmitItemActionRequest):
     def parse(self) -> _ParsedGenericActionRequest:
-        return _ParsedGenericActionRequest.model_validate({k: v[0] for k, v in parse_qs(self.values).items()})
+        return _ParsedGenericActionRequest.model_validate(
+            {k: v[0] for k, v in parse_qs(self.values).items()}
+        )
 
 
 class _ParsedServerSubmitCommentActionRequest(BaseModel):
     type: str
     content: str
 
+
 class ServerSubmitCommentActionRequest(ServerSubmitItemActionRequest):
     def parse(self) -> _ParsedServerSubmitCommentActionRequest:
-        return _ParsedServerSubmitCommentActionRequest.model_validate({k: v[0] for k, v in parse_qs(self.values).items()})
+        return _ParsedServerSubmitCommentActionRequest.model_validate(
+            {k: v[0] for k, v in parse_qs(self.values).items()}
+        )
 
-    
+
 class _ParsedServerSubmitLevelActionRequest(BaseModel):
     type: str
     visibility: Literal["UNLISTED", "PRIVATE", "PUBLIC", None] = None
     constant: str | None = None
 
+
 class ServerSubmitLevelActionRequest(ServerSubmitItemActionRequest):
     def parse(self) -> _ParsedServerSubmitLevelActionRequest:
-        return _ParsedServerSubmitLevelActionRequest.model_validate({k: v[0] for k, v in parse_qs(self.values).items()})
-    
+        return _ParsedServerSubmitLevelActionRequest.model_validate(
+            {k: v[0] for k, v in parse_qs(self.values).items()}
+        )
+
 
 class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
     sort_by: Literal[
@@ -119,7 +129,7 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
                 status_code=400,
                 detail=f"Invalid value for sort_by. Allowed values are: {', '.join(allowed_sort_by)}.",
             )
-        
+
         page = flattened_data.get("page") if sort_by != "random" else 1
         if page is not None:
             if page.isdigit():
@@ -139,7 +149,7 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
                 if staff_pick not in ["default", None]
                 else request.state.staff_pick
             )
-        ]            
+        ]
 
         min_rating = flattened_data.get("min_rating")
         max_rating = flattened_data.get("max_rating")
@@ -166,15 +176,16 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
                 status_code=400,
                 detail="min_rating cannot be greater than max_rating.",
             )
-        
+
         tags = flattened_data.get("tags")
         if tags is not None:
             if not isinstance(tags, str):
                 raise HTTPException(
-                    status_code=400, detail="tags must be a strings, having comma-separated elements."
+                    status_code=400,
+                    detail="tags must be a strings, having comma-separated elements.",
                 )
             tags = [tag.strip() for tag in tags.split(",")]
-                
+
         min_likes = flattened_data.get("min_likes")
         max_likes = flattened_data.get("max_likes")
         if min_likes is not None:
@@ -196,7 +207,7 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
                 status_code=400,
                 detail="min_likes cannot be greater than max_likes.",
             )
-        
+
         min_comments = flattened_data.get("min_comments")
         max_comments = flattened_data.get("max_comments")
         if min_comments is not None:
@@ -204,14 +215,16 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
                 min_comments = int(min_comments)
             if not isinstance(min_comments, int) or min_comments < 0:
                 raise HTTPException(
-                    status_code=400, detail="min_comments must be a non-negative integer."
+                    status_code=400,
+                    detail="min_comments must be a non-negative integer.",
                 )
         if max_comments is not None:
             if max_comments.isdigit():
                 max_comments = int(max_comments)
             if not isinstance(max_comments, int) or max_comments < 0:
                 raise HTTPException(
-                    status_code=400, detail="max_comments must be a non-negative integer."
+                    status_code=400,
+                    detail="max_comments must be a non-negative integer.",
                 )
         if (
             min_comments is not None
@@ -222,16 +235,16 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
                 status_code=400,
                 detail="min_comments cannot be greater than max_comments.",
             )
-        
+
         liked_by = flattened_data.get("liked_by", False)
         if type(liked_by) == str and liked_by.isdigit():
             liked_by = liked_by != "0"
         if not isinstance(liked_by, bool):
             raise HTTPException(status_code=400, detail="liked_by must be a boolean.")
-        
+
         commented_on = flattened_data.get("commented_on", False)
         if type(commented_on) == str and commented_on.isdigit():
-            commented_on = commented_on != "0" 
+            commented_on = commented_on != "0"
         if not isinstance(commented_on, bool):
             raise HTTPException(
                 status_code=400, detail="commented_on must be a boolean."
@@ -243,21 +256,21 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
                 raise HTTPException(
                     status_code=400, detail="title_includes must be a string."
                 )
-            
+
         description_includes = flattened_data.get("description_includes")
         if description_includes is not None:
             if not isinstance(description_includes, str):
                 raise HTTPException(
                     status_code=400, detail="description_includes must be a string."
                 )
-            
+
         author_includes = flattened_data.get("author_includes")
         if author_includes is not None:
             if not isinstance(author_includes, str):
                 raise HTTPException(
                     status_code=400, detail="author_includes must be a string."
                 )
-            
+
         artists_includes = flattened_data.get("artists_includes")
         if artists_includes is not None:
             if not isinstance(artists_includes, str):
@@ -303,18 +316,22 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
             artists_includes=artists_includes,
             sort_order=sort_order,
             level_status=level_status,
-            keywords=keywords
+            keywords=keywords,
         )
 
+
 class ServerSubmitPlaylistActionRequest(ServerSubmitItemActionRequest):
-    def parse(self, request: SonolusRequest) -> _ParsedServerSubmitPlaylistActionRequest:
+    def parse(
+        self, request: SonolusRequest
+    ) -> _ParsedServerSubmitPlaylistActionRequest:
         if len(self.values) > 500:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST, detail="why so long"
             )
-        
+
         return _ParsedServerSubmitPlaylistActionRequest.parse(self.values, request)
-    
+
+
 class ServerSubmitLevelResultRequest(BaseModel):
     replay: ReplayItem
     values: str

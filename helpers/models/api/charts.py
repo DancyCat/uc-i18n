@@ -16,6 +16,7 @@ if TYPE_CHECKING:
 
 M = TypeVar("M", bound=BaseModel)
 
+
 class Chart(BaseModel):
     id: str
     rating: int | Decimal
@@ -51,7 +52,7 @@ class Chart(BaseModel):
             particle for particle in particles if particle.name == particle_name
         )
         return particle_data.to_particle_item()
-    
+
     @staticmethod
     @lru_cache(maxsize=None)
     def _get_cached_skin(
@@ -62,7 +63,9 @@ class Chart(BaseModel):
         candidates = [
             skin
             for skin in skins
-            if skin.themes and skin.name in skin.themes and (not skin.engines or engine_name in skin.engines)
+            if skin.themes
+            and skin.name in skin.themes
+            and (not skin.engines or engine_name in skin.engines)
         ]
 
         if not candidates:
@@ -90,9 +93,7 @@ class Chart(BaseModel):
     @lru_cache(maxsize=None)
     def _get_cached_engine(base_url: str, engine_name: str, locale: str):
         engines = compile_engines_list(base_url, locale)
-        engine_data = next(
-            engine for engine in engines if engine.name == engine_name
-        )
+        engine_data = next(engine for engine in engines if engine.name == engine_name)
         return engine_data.to_engine_item()
 
     def _make_url(self, asset_base_url: str, file_hash: str) -> str:
@@ -100,37 +101,37 @@ class Chart(BaseModel):
 
     @overload
     def to_level_item(
-        self, 
-        request: "SonolusRequest", 
-        asset_base_url: str, 
-        bgtype: str, 
-        include_description: Literal[False] = False, 
+        self,
+        request: "SonolusRequest",
+        asset_base_url: str,
+        bgtype: str,
+        include_description: Literal[False] = False,
         disable_replace_missing_preview: bool = False,
         context: Literal["list", "level"] = "list",
-        use_engine: str | None = None
+        use_engine: str | None = None,
     ) -> LevelItem: ...
 
     @overload
     def to_level_item(
-        self, 
-        request: "SonolusRequest", 
-        asset_base_url: str, 
-        bgtype: str, 
-        include_description: Literal[True], 
+        self,
+        request: "SonolusRequest",
+        asset_base_url: str,
+        bgtype: str,
+        include_description: Literal[True],
         disable_replace_missing_preview: bool = False,
         context: Literal["list", "level"] = "list",
-        use_engine: str | None = None
+        use_engine: str | None = None,
     ) -> tuple[LevelItem, str]: ...
 
     def to_level_item(
-        self, 
-        request: "SonolusRequest", 
-        asset_base_url: str, 
-        bgtype: str, 
-        include_description: Literal[False] = False, 
+        self,
+        request: "SonolusRequest",
+        asset_base_url: str,
+        bgtype: str,
+        include_description: Literal[False] = False,
         disable_replace_missing_preview: bool = False,
         context: Literal["list", "level"] = "list",
-        use_engine: str | None = None
+        use_engine: str | None = None,
     ):
         loc = request.state.loc
 
@@ -146,14 +147,15 @@ class Chart(BaseModel):
             default = False
             background_hash: str = getattr(self, f"background_{bgtype}_file_hash")
 
-        bg_item = self._get_cached_background(request.app.base_url, request.state.localization)
+        bg_item = self._get_cached_background(
+            request.app.base_url, request.state.localization
+        )
         bg_item.image = SRL(
-            hash=background_hash,
-            url=self._make_url(asset_base_url, background_hash)
+            hash=background_hash, url=self._make_url(asset_base_url, background_hash)
         )
         bg_item.thumbnail = SRL(
             hash=self.jacket_file_hash,
-            url=self._make_url(asset_base_url, self.jacket_file_hash)
+            url=self._make_url(asset_base_url, self.jacket_file_hash),
         )
         bg_item.name = "configured"
 
@@ -164,7 +166,7 @@ class Chart(BaseModel):
         else:
             title = loc.background.UPLOADED
             bg_item.configuration = cached["BACKGROUND_NO_SCOPE_SRL"]
-        
+
         bg_item.title = handle_uwu(title, request.state.localization, request.state.uwu)
 
         if request.state.skin == "engine_default":
@@ -177,10 +179,12 @@ class Chart(BaseModel):
                         request.app.base_url,
                         request.state.skin,
                         use_engine if use_engine else request.state.engine,
-                        request.state.localization
-                    )
+                        request.state.localization,
+                    ),
                 )
-            except KeyError: # handles if an engine does not have a correctly-themed skin
+            except (
+                KeyError
+            ):  # handles if an engine does not have a correctly-themed skin
                 skin_option = UseItem(useDefault=True)
 
         if request.state.particle == "engine_default":
@@ -189,58 +193,82 @@ class Chart(BaseModel):
             try:
                 particle_option = UseItem(
                     useDefault=False,
-                    item=self._get_cached_particle(request.app.base_url, request.state.particle)
+                    item=self._get_cached_particle(
+                        request.app.base_url, request.state.particle
+                    ),
                 )
             except KeyError:
                 particle_option = UseItem(useDefault=True)
 
         time_str = datetime_to_str(self.published_at or self.created_at)
         date_str = handle_uwu(
-            loc.time_ago(time_str) if self.published_at else loc.time_ago_not_published(time_str),
+            (
+                loc.time_ago(time_str)
+                if self.published_at
+                else loc.time_ago_not_published(time_str)
+            ),
             request.state.localization,
-            request.state.uwu
+            request.state.uwu,
         )
 
         if context == "list":
             additional = []
             tags = [
-                Tag(title=handle_uwu(tag, request.state.localization, request.state.uwu)) for tag in self.tags
+                Tag(
+                    title=handle_uwu(tag, request.state.localization, request.state.uwu)
+                )
+                for tag in self.tags
             ]
         else:
             visibilities = {
                 "PUBLIC": Tag(title="#PUBLIC", icon="globe"),
                 "PRIVATE": Tag(title="#PRIVATE", icon="lock"),
-                "UNLISTED": Tag(title=loc.search.VISIBILITY_UNLISTED, icon="unlock")
+                "UNLISTED": Tag(title=loc.search.VISIBILITY_UNLISTED, icon="unlock"),
             }
 
             additional = [visibilities[self.status]]
-            tags = [Tag(title=handle_uwu(tag, request.state.localization, request.state.uwu), icon="tag") for tag in self.tags]
+            tags = [
+                Tag(
+                    title=handle_uwu(
+                        tag, request.state.localization, request.state.uwu
+                    ),
+                    icon="tag",
+                )
+                for tag in self.tags
+            ]
 
         metadata = [
             Tag(title=date_str, icon="clock"),
-            Tag(title=str(self.like_count), icon=("heart" if self.liked else "heartHollow")),
-            Tag(title=str(self.comment_count), icon="comment")
+            Tag(
+                title=str(self.like_count),
+                icon=("heart" if self.liked else "heartHollow"),
+            ),
+            Tag(title=str(self.comment_count), icon="comment"),
         ]
 
         level_tags = additional + metadata + tags
         if self.staff_pick:
-            level_tags.insert(0, Tag(
-                title=loc.staff_pick if context == "level" else None,
-                icon="trophy"
-            ))
+            level_tags.insert(
+                0,
+                Tag(
+                    title=loc.staff_pick if context == "level" else None, icon="trophy"
+                ),
+            )
 
         item = LevelItem(
             name=f"UnCh-{self.id}",
             source=request.app.base_url,
             rating=self.rating,
             title=handle_uwu(self.title, request.state.localization, request.state.uwu),
-            artists=handle_uwu(self.artists, request.state.localization, request.state.uwu),
+            artists=handle_uwu(
+                self.artists, request.state.localization, request.state.uwu
+            ),
             author=self.author_full,
             tags=level_tags,
             engine=self._get_cached_engine(
-                request.app.base_url, 
-                use_engine if use_engine else request.state.engine, 
-                request.state.localization
+                request.app.base_url,
+                use_engine if use_engine else request.state.engine,
+                request.state.localization,
             ),
             useSkin=skin_option,
             useBackground=UseItem(useDefault=False, item=bg_item),
@@ -248,40 +276,41 @@ class Chart(BaseModel):
             useParticle=particle_option,
             cover=SRL(
                 hash=self.jacket_file_hash,
-                url=self._make_url(asset_base_url, self.jacket_file_hash)
+                url=self._make_url(asset_base_url, self.jacket_file_hash),
             ),
             bgm=SRL(
                 hash=self.music_file_hash,
-                url=self._make_url(asset_base_url, self.music_file_hash)
+                url=self._make_url(asset_base_url, self.music_file_hash),
             ),
             preview=(
                 SRL(
-                    hash=self.preview_file_hash, 
-                    url=self._make_url(asset_base_url, self.preview_file_hash)
+                    hash=self.preview_file_hash,
+                    url=self._make_url(asset_base_url, self.preview_file_hash),
                 )
-                if self.preview_file_hash else
-                (
-                    None if disable_replace_missing_preview else
-                    SRL(
+                if self.preview_file_hash
+                else (
+                    None
+                    if disable_replace_missing_preview
+                    else SRL(
                         hash=self.music_file_hash,
-                        url=self._make_url(asset_base_url, self.music_file_hash)
+                        url=self._make_url(asset_base_url, self.music_file_hash),
                     )
                 )
             ),
             data=SRL(
                 hash=self.chart_file_hash,
-                url=self._make_url(asset_base_url, self.chart_file_hash)
+                url=self._make_url(asset_base_url, self.chart_file_hash),
             ),
             authorUser=UserItem(
                 name=self.author,
                 title=self.author_full.rsplit("#", maxsplit=1)[0],
-                tags=[]
-            )
+                tags=[],
+            ),
         )
 
         if include_description:
             return item, self.description
-        
+
         return item
 
 
@@ -289,22 +318,27 @@ class GetChartResponse(BaseModel):
     data: Chart
     asset_base_url: str
     mod: bool | None = None
-    admin: bool | None = None # XXX (backend): Make optional fields non-optional
+    admin: bool | None = None  # XXX (backend): Make optional fields non-optional
     owner: bool
+
 
 class DeleteChartResponse(Chart):
     admin: bool | None = None
     owner: bool | None = None
 
+
 class VisibilityChangeResponse(Chart):
     mod: bool | None = None
     owner: bool | None = None
+
 
 class _BaseChartList(BaseModel):
     data: list[Chart]
     asset_base_url: str
 
+
 class RandomChartList(_BaseChartList): ...
 
+
 class ChartList(_BaseChartList):
-    pageCount: int 
+    pageCount: int

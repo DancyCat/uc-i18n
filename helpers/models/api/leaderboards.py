@@ -23,8 +23,9 @@ leaderboard_type: TypeAlias = Literal[
     "rank_match",
     "least_combo_breaks",
     "least_misses",
-    "perfect"
+    "perfect",
 ]
+
 
 class ReplayUploadData(BaseModel):
     engine: str
@@ -39,12 +40,10 @@ class ReplayUploadData(BaseModel):
 
     @property
     def shortened_grade(self) -> str:
-        return {
-            "allPerfect": "AP",
-            "fullCombo": "FC",
-            "pass": "P",
-            "fail": "X"
-        }[self.grade]
+        return {"allPerfect": "AP", "fullCombo": "FC", "pass": "P", "fail": "X"}[
+            self.grade
+        ]
+
 
 class LeaderboardRecord(ReplayUploadData):
     submitter: str
@@ -53,7 +52,8 @@ class LeaderboardRecord(ReplayUploadData):
     chart_id: str
     public_chart: bool
 
-class LeaderboardRecordDBResponse(LeaderboardRecord): # XXX: remove optional fields
+
+class LeaderboardRecordDBResponse(LeaderboardRecord):  # XXX: remove optional fields
     display_name: str
     id: int
     created_at: datetime
@@ -61,8 +61,10 @@ class LeaderboardRecordDBResponse(LeaderboardRecord): # XXX: remove optional fie
     owner: bool | None
     mod: bool | None = None
 
+
 class LeaderboardRecordWithAccount(LeaderboardRecordDBResponse):
     account: PublicAccount | None = None
+
 
 class LeaderboardInfo(BaseModel):
     pageCount: int | None = None
@@ -80,22 +82,24 @@ class LeaderboardInfo(BaseModel):
             return 1.0 + ((tier - 1.0) * 0.075)
 
     def to_record_list(
-        self, 
-        context: leaderboard_type, 
-        page: int = 0
+        self, context: leaderboard_type, page: int = 0
     ) -> list[ServerItemLeaderboardRecord]:
         leaderboards = []
 
         for i, record in enumerate(self.data):
             match context:
                 case "arcade_score_speed":
-                    value = int(record.arcade_score * self._speed_multiplier(record.speed))
+                    value = int(
+                        record.arcade_score * self._speed_multiplier(record.speed)
+                    )
                 case "accuracy_score":
                     value = record.accuracy_score
                 case "arcade_score_no_speed":
                     value = record.arcade_score
                 case "rank_match":
-                    value = (3 * record.nperfect) + (2 * record.ngreat) + (1 * record.ngood)
+                    value = (
+                        (3 * record.nperfect) + (2 * record.ngreat) + (1 * record.ngood)
+                    )
                 case "least_combo_breaks":
                     value = record.ngood + record.nmiss
                 case "least_misses":
@@ -114,11 +118,14 @@ class LeaderboardInfo(BaseModel):
                     rank=f"#{i + (page * 10) + 1}",
                     player=record.display_name,
                     value=f"{record.shortened_grade} | {value}{speed_text}",
-                    playerUser=record.account.to_user_item() if record.account else None
+                    playerUser=(
+                        record.account.to_user_item() if record.account else None
+                    ),
                 )
             )
 
         return leaderboards
+
 
 class LeaderboardRecordInfo(BaseModel):
     data: LeaderboardRecordDBResponse
@@ -133,9 +140,11 @@ class LeaderboardRecordInfo(BaseModel):
         if self.data.speed != 1:
             string += f" | {round(self.data.speed, 2)}x"
 
-        return string 
+        return string
 
-    def _make_url(self, asset_base_url: str, chart_prefix: str, user_id: str, hash: str) -> str:
+    def _make_url(
+        self, asset_base_url: str, chart_prefix: str, user_id: str, hash: str
+    ) -> str:
         return f"{asset_base_url}/{chart_prefix}/replays/{user_id}/{hash}"
 
     def to_replay_item(self, request: "SonolusRequest") -> ReplayItem:
@@ -146,14 +155,12 @@ class LeaderboardRecordInfo(BaseModel):
             request,
             self.asset_base_url,
             request.state.levelbg,
-            use_engine=self.data.engine
+            use_engine=self.data.engine,
         )
 
         time_str = datetime_to_str(self.data.created_at)
         date_str = handle_uwu(
-            loc.time_ago(time_str),
-            request.state.localization,
-            request.state.uwu
+            loc.time_ago(time_str), request.state.localization, request.state.uwu
         )
 
         return ReplayItem(
@@ -166,17 +173,29 @@ class LeaderboardRecordInfo(BaseModel):
             level=level,
             data=SRL(
                 hash=self.data.replay_data_hash,
-                url=self._make_url(asset_base_url, self.data.chart_prefix, self.data.submitter, self.data.replay_data_hash)
+                url=self._make_url(
+                    asset_base_url,
+                    self.data.chart_prefix,
+                    self.data.submitter,
+                    self.data.replay_data_hash,
+                ),
             ),
             configuration=SRL(
                 hash=self.data.replay_config_hash,
-                url=self._make_url(asset_base_url, self.data.chart_prefix, self.data.submitter, self.data.replay_config_hash)
+                url=self._make_url(
+                    asset_base_url,
+                    self.data.chart_prefix,
+                    self.data.submitter,
+                    self.data.replay_config_hash,
+                ),
             ),
-            authorUser=self.submitter.to_user_item() if self.submitter else None
+            authorUser=self.submitter.to_user_item() if self.submitter else None,
         )
-    
+
+
 class DeleteLeaderboardRecord(LeaderboardRecordDBResponse):
     chart_title: str | None = None
+
 
 class PublicLeaderboardRecordList(BaseModel):
     data: list[LeaderboardRecordInfo]

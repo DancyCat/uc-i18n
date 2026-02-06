@@ -8,6 +8,7 @@ from helpers.models.sonolus.response import ServerItemDetails
 
 router = APIRouter()
 
+
 @router.get("/", response_model=ServerItemDetails)
 async def main(request: SonolusRequest, item_name: str):
     locale = request.state.loc
@@ -20,13 +21,11 @@ async def main(request: SonolusRequest, item_name: str):
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=locale.not_logged_in,
             )
-    
+
         response = await request.app.api.get_notification(item_name).send(auth)
 
         if response.status != 200:
-            raise HTTPException(
-                status_code=response.status, detail=locale.not_found
-            )
+            raise HTTPException(status_code=response.status, detail=locale.not_found)
 
         item_data, desc = response.data.to_post(request)
     else:
@@ -45,5 +44,5 @@ async def main(request: SonolusRequest, item_name: str):
         actions=[],
         hasCommunity=False,
         leaderboards=[],
-        sections=[]
+        sections=[],
     )

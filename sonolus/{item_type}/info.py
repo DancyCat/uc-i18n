@@ -18,6 +18,7 @@ router = APIRouter()
 
 from helpers.owoify import handle_item_uwu, handle_uwu
 
+
 @router.get("/", response_model=ServerItemInfo)
 async def main(request: SonolusRequest, item_type: ItemType):
     locale = request.state.loc
@@ -26,16 +27,22 @@ async def main(request: SonolusRequest, item_type: ItemType):
 
     match item_type:
         case "engines":
-            data = [item.to_engine_item() for item in await request.app.run_blocking(
-                compile_engines_list, request.app.base_url, request.state.localization
-            )]
+            data = [
+                item.to_engine_item()
+                for item in await request.app.run_blocking(
+                    compile_engines_list,
+                    request.app.base_url,
+                    request.state.localization,
+                )
+            ]
         case "skins":
-            data = await request.app.run_blocking(compile_skins_list, request.app.base_url)
+            data = await request.app.run_blocking(
+                compile_skins_list, request.app.base_url
+            )
             data = [
                 item.to_skin_item()
                 for item in data
-                if (not item.engines)
-                or (request.state.engine in item.engines)
+                if (not item.engines) or (request.state.engine in item.engines)
             ]
         case "backgrounds":
             data = await request.app.run_blocking(
@@ -48,9 +55,12 @@ async def main(request: SonolusRequest, item_type: ItemType):
                 compile_effects_list, request.app.base_url
             )
         case "particles":
-            data = [item.to_particle_item() for item in await request.app.run_blocking(
-                compile_particles_list, request.app.base_url
-            )]
+            data = [
+                item.to_particle_item()
+                for item in await request.app.run_blocking(
+                    compile_particles_list, request.app.base_url
+                )
+            ]
         # case "rooms":
         #     data = await request.app.run_blocking(compile_rooms_list, request.app.base_url)
         case _:
@@ -69,7 +79,9 @@ async def main(request: SonolusRequest, item_type: ItemType):
                 uwu_level,
             ),
             itemType=item_type,
-            items=handle_item_uwu(data[:5], request.state.localization, request.state.uwu)
+            items=handle_item_uwu(
+                data[:5], request.state.localization, request.state.uwu
+            ),
         ),
-        banner=banner_srl if banner_srl else None
+        banner=banner_srl if banner_srl else None,
     )

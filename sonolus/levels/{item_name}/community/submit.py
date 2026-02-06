@@ -4,7 +4,9 @@ from fastapi import HTTPException, status
 from core import SonolusRequest
 
 from helpers.models.sonolus.submit import ServerSubmitCommentActionRequest
-from helpers.models.sonolus.response import ServerSubmitItemCommunityCommentActionResponse
+from helpers.models.sonolus.response import (
+    ServerSubmitItemCommunityCommentActionResponse,
+)
 
 router = APIRouter()
 
@@ -33,16 +35,14 @@ async def main(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=locale.not_found
         )
-    
-    response = await request.app.api.send_comment(item_name, parsed_data.content).send(auth)
+
+    response = await request.app.api.send_comment(item_name, parsed_data.content).send(
+        auth
+    )
 
     if response.status != 200:
-        raise HTTPException(
-            status_code=response.status, detail=locale.unknown_error
-        )
+        raise HTTPException(status_code=response.status, detail=locale.unknown_error)
 
     return ServerSubmitItemCommunityCommentActionResponse(
-        key="",
-        hashes=[],
-        shouldUpdateComments=True
+        key="", hashes=[], shouldUpdateComments=True
     )

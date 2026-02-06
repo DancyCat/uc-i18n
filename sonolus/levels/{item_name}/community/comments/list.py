@@ -8,12 +8,9 @@ from helpers.models.sonolus.options import ServerForm
 
 router = APIRouter()
 
+
 @router.get("/", response_model=ServerItemCommunityCommentList)
-async def main(
-    request: SonolusRequest, 
-    item_name: str,
-    page: int = Query(0, ge=0)
-):
+async def main(request: SonolusRequest, item_name: str, page: int = Query(0, ge=0)):
     locale = request.state.loc
     auth = request.headers.get("Sonolus-Session")
 
@@ -34,7 +31,6 @@ async def main(
     return ServerItemCommunityCommentList(
         pageCount=page_count,
         comments=await request.app.run_blocking(
-            response.data.to_server_item_community_comments,
-            request
-        )
+            response.data.to_server_item_community_comments, request
+        ),
     )

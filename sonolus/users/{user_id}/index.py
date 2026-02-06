@@ -32,7 +32,7 @@ async def main(request: SonolusRequest, user_id: str):
             name=profile.data.account.sonolus_id,
             title=profile.data.account.sonolus_username,
             handle=str(profile.data.account.sonolus_handle),
-            tags=tags
+            tags=tags,
         ),
         actions=[],
         hasCommunity=False,
@@ -47,13 +47,13 @@ async def main(request: SonolusRequest, user_id: str):
                             chart.to_level_item,
                             request,
                             profile.data.asset_base_url,
-                            request.state.levelbg
+                            request.state.levelbg,
                         )
                         for chart in profile.data.charts
                     ],
                     request.state.localization,
-                    request.state.uwu
-                )
+                    request.state.uwu,
+                ),
             )
-        ]
+        ],
     )

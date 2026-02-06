@@ -28,20 +28,25 @@ async def no_unhandled_exceptions(request: Request, call_next):
     except Exception:
         traceback.print_exc()
         return Response(
-            content="Unhandled error. Report to discord.gg/UntitledCharts", 
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+            content="Unhandled error. Report to discord.gg/UntitledCharts",
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
-    
+
+
 if debug:
+
     @app.exception_handler(RequestValidationError)
-    async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    async def validation_exception_handler(
+        request: Request, exc: RequestValidationError
+    ):
         print("Validation Error:")
         print(json.dumps(exc.errors(), indent=2))
 
         return JSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            content={"detail": exc.errors()}
+            content={"detail": exc.errors()},
         )
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -87,7 +92,11 @@ def load_routes(folder, cleanup: bool = True):
     def traverse_directory(directory):
         for root, dirs, files in os.walk(directory, topdown=False):
             for file in files:
-                if not "__pycache__" in root and file.endswith(".py") and not file.startswith("_"):
+                if (
+                    not "__pycache__" in root
+                    and file.endswith(".py")
+                    and not file.startswith("_")
+                ):
                     route_name: str = (
                         os.path.join(root, file)
                         .removesuffix(".py")
@@ -139,7 +148,6 @@ def load_routes(folder, cleanup: bool = True):
                 pycache_path = os.path.join(root, "__pycache__")
                 shutil.rmtree(pycache_path, ignore_errors=True)
                 print(f"[API] Removed __pycache__ at {pycache_path}")
-
 
 
 async def startup_event():

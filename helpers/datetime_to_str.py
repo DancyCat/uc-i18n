@@ -1,5 +1,6 @@
 from datetime import datetime, timezone, timedelta
 
+
 def datetime_to_str(datetime_: datetime) -> str:
     delta = datetime.now(timezone.utc) - datetime_
 
@@ -11,5 +12,5 @@ def datetime_to_str(datetime_: datetime) -> str:
         return f"{delta.seconds // 60}m"
     elif delta >= timedelta(seconds=1):
         return f"{delta.seconds}s"
-    
+
     return "0s"

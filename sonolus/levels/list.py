@@ -65,7 +65,7 @@ async def main(
                     if staff_pick not in ["default", None]
                     else request.state.staff_pick
                 )
-            ]
+            ],
         ).send(auth)
     else:
         response = await request.app.api.charts_advanced_search(
@@ -93,7 +93,7 @@ async def main(
             artists_includes=artists_includes,
             sort_by=sort_by,
             sort_order=sort_order,
-            meta_includes=keywords
+            meta_includes=keywords,
         ).send(auth)
 
     pageCount = response.data.pageCount
@@ -135,7 +135,4 @@ async def main(
         )
     page_data = handle_item_uwu(data, request.state.localization, uwu_level)
 
-    return ServerItemList(
-        pageCount=num_pages,
-        items=page_data
-    )
+    return ServerItemList(pageCount=num_pages, items=page_data)

@@ -8,6 +8,7 @@ from helpers.owoify import handle_item_uwu, handle_uwu
 
 router = APIRouter()
 
+
 @router.get("/", response_model=ServerItemInfo)
 async def main(request: SonolusRequest):
     locale = request.state.loc
@@ -28,8 +29,10 @@ async def main(request: SonolusRequest):
                     request.state.localization,
                     uwu_level,
                 ),
-                items=handle_item_uwu(data[:5], request.state.localization, request.state.uwu)
+                items=handle_item_uwu(
+                    data[:5], request.state.localization, request.state.uwu
+                ),
             )
         ],
-        banner=banner_srl if banner_srl else None
+        banner=banner_srl if banner_srl else None,
     )

@@ -25,11 +25,21 @@ async def main(request: SonolusRequest, item_type: ItemType, item_name: str):
 
     match item_type:
         case "engines":
-            data = [item.to_engine_item() for item in await request.app.run_blocking(
-                compile_engines_list, request.app.base_url, request.state.localization
-            )]
+            data = [
+                item.to_engine_item()
+                for item in await request.app.run_blocking(
+                    compile_engines_list,
+                    request.app.base_url,
+                    request.state.localization,
+                )
+            ]
         case "skins":
-            data = [item.to_skin_item() for item in await request.app.run_blocking(compile_skins_list, request.app.base_url)]
+            data = [
+                item.to_skin_item()
+                for item in await request.app.run_blocking(
+                    compile_skins_list, request.app.base_url
+                )
+            ]
         case "backgrounds":
             item_data = (
                 await request.app.run_blocking(
@@ -47,11 +57,14 @@ async def main(request: SonolusRequest, item_type: ItemType, item_name: str):
         case "effects":
             data = await request.app.run_blocking(
                 compile_effects_list, request.app.base_url
-            )     
+            )
         case "particles":
-            data = [item.to_particle_item() for item in await request.app.run_blocking(
-                compile_particles_list, request.app.base_url
-            )]
+            data = [
+                item.to_particle_item()
+                for item in await request.app.run_blocking(
+                    compile_particles_list, request.app.base_url
+                )
+            ]
         # case "rooms":
         #     data = await request.app.run_blocking(compile_rooms_list, request.app.base_url)
         case _:
@@ -59,7 +72,7 @@ async def main(request: SonolusRequest, item_type: ItemType, item_name: str):
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=locale.item_not_found(item_type, item_name),
             )
-        
+
     if not item_data:
         item_data = next((i for i in data if i.name == item_name), None)
         if not item_data:
@@ -70,13 +83,19 @@ async def main(request: SonolusRequest, item_type: ItemType, item_name: str):
                 ),
             )
 
-    item_data = handle_item_uwu([item_data], request.state.localization, request.state.uwu)[0]
+    item_data = handle_item_uwu(
+        [item_data], request.state.localization, request.state.uwu
+    )[0]
 
     return ServerItemDetails(
         item=item_data,
-        description=item_data.description if hasattr(item_data, "description") and item_data.description else None,
+        description=(
+            item_data.description
+            if hasattr(item_data, "description") and item_data.description
+            else None
+        ),
         actions=[],
         hasCommunity=False,
         leaderboards=[],
-        sections=[]
+        sections=[],
     )

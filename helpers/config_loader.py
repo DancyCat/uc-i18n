@@ -3,21 +3,10 @@ import yaml
 
 ConfigTypeServer = TypedDict(
     "ConfigTypeServer",
-    {
-        "port": int,
-        "base-url": str,
-        "force-https": bool,
-        "debug": bool
-    }
+    {"port": int, "base-url": str, "force-https": bool, "debug": bool},
 )
 
-ItemsPerPage = TypedDict(
-    "ItemsPerPage",
-    {
-        "default": int,
-        "engines": int
-    }
-)
+ItemsPerPage = TypedDict("ItemsPerPage", {"default": int, "engines": int})
 
 ConfigTypeSonolus = TypedDict(
     "ConfigTypeSonolus",
@@ -26,27 +15,19 @@ ConfigTypeSonolus = TypedDict(
         "items-per-page": ItemsPerPage,
         "name": str,
         "description": str,
-        "upload-token-sig-key": str
-    }
+        "upload-token-sig-key": str,
+    },
 )
 
 ConfigTypeAPI = TypedDict(
-    "ConfigTypeAPI",
-    {
-        "url": str,
-        "auth": str,
-        "auth-header": str
-    }
+    "ConfigTypeAPI", {"url": str, "auth": str, "auth-header": str}
 )
 
 ConfigType = TypedDict(
     "ConfigType",
-    {
-        "server": ConfigTypeServer,
-        "sonolus": ConfigTypeSonolus,
-        "api": ConfigTypeAPI
-    }
+    {"server": ConfigTypeServer, "sonolus": ConfigTypeSonolus, "api": ConfigTypeAPI},
 )
+
 
 def get_config() -> ConfigType:
     with open("config.yml", "r") as f:

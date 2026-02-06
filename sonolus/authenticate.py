@@ -91,13 +91,12 @@ async def main(request: SonolusRequest, data: ServerAuthenticateRequest):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid time. Please click 'Cancel' and try again.",
         )
-    
+
     try:
         response = await request.app.api.authenticate(data.userProfile).send()
 
         return ServerAuthenticateResponse(
-            session=response.data.session,
-            expiration=response.data.expiry
+            session=response.data.session, expiration=response.data.expiry
         )
     except:
         raise HTTPException(status_code=400, detail="We're not sure what went wrong!")

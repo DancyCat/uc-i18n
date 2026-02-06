@@ -9,6 +9,7 @@ from helpers.owoify import handle_item_uwu
 
 router = APIRouter()
 
+
 @router.get("/", response_model=ServerItemInfo)
 async def info(request: SonolusRequest):
     random = await request.app.api.get_random_leaderboard_records(limit=3).send()
@@ -22,12 +23,9 @@ async def info(request: SonolusRequest):
                 requireConfirmation=False,
                 options=[
                     ServerToggleOption(
-                        query="random",
-                        name="#RANDOM",
-                        required=False,
-                        default=False
+                        query="random", name="#RANDOM", required=False, default=False
                     )
-                ]
+                ],
             )
         ],
         sections=[
@@ -36,11 +34,10 @@ async def info(request: SonolusRequest):
                 icon="replay",
                 items=handle_item_uwu(
                     await request.app.run_blocking(
-                        random.data.to_replay_items,
-                        request
+                        random.data.to_replay_items, request
                     ),
                     request.state.localization,
-                    request.state.uwu
+                    request.state.uwu,
                 ),
             ),
             ReplayItemSection(
@@ -48,13 +45,12 @@ async def info(request: SonolusRequest):
                 icon="replay",
                 items=handle_item_uwu(
                     await request.app.run_blocking(
-                        newest.data.to_replay_items,
-                        request
+                        newest.data.to_replay_items, request
                     ),
                     request.state.localization,
-                    request.state.uwu
-                )
-            )
+                    request.state.uwu,
+                ),
+            ),
         ],
-        banner=await request.app.run_blocking(compile_banner)
+        banner=await request.app.run_blocking(compile_banner),
     )

@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from helpers.sonolus_typings import Icon, ServerInfoButtonType, Text
 
+
 class Tag(BaseModel):
     title: Text | str | None = None
     icon: Icon | str | None = None
@@ -15,6 +16,7 @@ class SIL(BaseModel):
     address: str
     name: str
 
+
 class ServerInfoItemButton(BaseModel):
     type: ServerInfoButtonType
     title: Text | str | None = None
@@ -23,8 +25,10 @@ class ServerInfoItemButton(BaseModel):
     infoType: str | None = None
     itemName: str | None = None
 
+
 class ServerMessage(BaseModel):
     message: str
+
 
 class ReplayConfiguration(BaseModel):
     options: list[int | float]

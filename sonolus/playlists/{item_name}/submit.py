@@ -29,7 +29,7 @@ async def main(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="why so long"
         )
-    
+
     old_values_list = item_name.split("_", maxsplit=1)
     old_values = old_values_list[1] if len(old_values_list) == 2 else ""
 
@@ -43,5 +43,5 @@ async def main(
     return ServerSubmitItemActionResponse(
         key="",
         hashes=[],
-        shouldNavigateToItem=f"uploaded_{base64.urlsafe_b64encode(updated_old_values.encode()).decode()}"
+        shouldNavigateToItem=f"uploaded_{base64.urlsafe_b64encode(updated_old_values.encode()).decode()}",
     )

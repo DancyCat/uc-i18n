@@ -32,16 +32,22 @@ async def main(
 
     match item_type:
         case "engines":
-            data = [item.to_engine_item() for item in await request.app.run_blocking(
-                compile_engines_list, request.app.base_url, request.state.localization
-            )]
+            data = [
+                item.to_engine_item()
+                for item in await request.app.run_blocking(
+                    compile_engines_list,
+                    request.app.base_url,
+                    request.state.localization,
+                )
+            ]
         case "skins":
-            data = await request.app.run_blocking(compile_skins_list, request.app.base_url)
+            data = await request.app.run_blocking(
+                compile_skins_list, request.app.base_url
+            )
             data = [
                 item.to_skin_item()
                 for item in data
-                if (not item.engines)
-                or (request.state.engine in item.engines)
+                if (not item.engines) or (request.state.engine in item.engines)
             ]
 
         case "backgrounds":
@@ -55,22 +61,25 @@ async def main(
                 compile_effects_list, request.app.base_url
             )
         case "particles":
-            data = [item.to_particle_item() for item in await request.app.run_blocking(
-                compile_particles_list, request.app.base_url
-            )]
+            data = [
+                item.to_particle_item()
+                for item in await request.app.run_blocking(
+                    compile_particles_list, request.app.base_url
+                )
+            ]
         case _:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=locale.item_type_not_found(item_type),
             )
-        
+
     pages = list_to_pages(data, request.app.get_items_per_page(item_type))
     if len(pages) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=locale.items_not_found(item_type),
         )
-    
+
     try:
         page_data = pages[page]
     except KeyError:
@@ -78,9 +87,6 @@ async def main(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="hi stop hitting our api thanks",
         )
-    
+
     page_data = handle_item_uwu(page_data, request.state.localization, uwu_level)
-    return ServerItemList(
-        pageCount=len(pages),
-        items=page_data
-    )
+    return ServerItemList(pageCount=len(pages), items=page_data)
