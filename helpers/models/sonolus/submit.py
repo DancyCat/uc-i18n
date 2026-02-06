@@ -59,7 +59,8 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
         "random",
     ]
     page: int | None
-    staff_pick: Literal["off", "default", "true", "false", None]
+    staff_pick: Literal[True, False, None]
+    is_default_staff_pick: bool
     min_rating: int | None
     max_rating: int | None
     tags: list[str] | None
@@ -141,6 +142,7 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
             page -= 1
 
         staff_pick = flattened_data.get("staff_pick", "off")
+        is_default_staff_pick = staff_pick == "default"
         if staff_pick not in ["off", "default", "true", "false"]:
             raise HTTPException(status_code=400, detail="Invalid staff_pick.")
         staff_pick = {"off": None, "true": True, "false": False}[
@@ -301,6 +303,7 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
             sort_by=sort_by,
             page=page,
             staff_pick=staff_pick,
+            is_default_staff_pick=is_default_staff_pick,
             min_rating=min_rating,
             max_rating=max_rating,
             tags=tags,

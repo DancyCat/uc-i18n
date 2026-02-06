@@ -129,7 +129,11 @@ async def main(request: SonolusRequest, item_name: str):
                 locale.search.STAFF_PICK_DESC, request.state.localization, uwu_level
             ),
             required=False,
-            default=params.staff_pick,
+            default=(
+                {None: "off", True: "true", False: "false"}[params.staff_pick]
+                if not params.is_default_staff_pick
+                else "default"
+            ),
             values=[
                 ServerOption_Value(name="default", title="#DEFAULT"),
                 ServerOption_Value(name="off", title=locale.search.STAFF_PICK_OFF),
