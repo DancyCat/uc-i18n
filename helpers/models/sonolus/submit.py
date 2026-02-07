@@ -123,7 +123,7 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
         )
 
         if plain_json:
-            flattened_data = {k: v for k, v in parsed_qs.items()}
+            flattened_data = {k: v[0] for k, v in parsed_qs.items()}
         else:
             flattened_data = {k.decode(): v[0].decode() for k, v in parsed_qs.items()}
 
