@@ -46,7 +46,7 @@ async def main(request: SonolusRequest, item_name: str):
         staff_pick=params.staff_pick,
         min_rating=params.min_rating,
         max_rating=params.max_rating,
-        status=params.level_status or "PUBLIC_MINE",
+        status=params.level_status or "ALL",
         tags=params.tags,
         min_likes=params.min_likes,
         max_likes=params.max_likes,
@@ -108,7 +108,7 @@ async def main(request: SonolusRequest, item_name: str):
             query="level_status",
             name=locale.search.VISIBILITY,
             required=False,
-            default=params.level_status or "PUBLIC_MINE",
+            default=params.level_status or "ALL",
             values=[
                 ServerOption_Value(name="ALL", title=locale.search.VISIBILITY_ALL),
                 ServerOption_Value(
