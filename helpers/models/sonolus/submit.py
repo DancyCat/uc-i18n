@@ -76,7 +76,7 @@ class _ParsedServerSubmitPlaylistActionRequest(BaseModel):
     author_includes: str | None
     artists_includes: str | None
     sort_order: Literal["desc", "asc", None]
-    level_status: Literal["ALL", "PUBLIC_MINE", "UNLISTED", "PRIVATE"]
+    level_status: Literal["ALL", "PUBLIC_MINE", "UNLISTED", "PRIVATE", None]
     keywords: str | None
 
     @staticmethod
