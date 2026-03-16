@@ -63,7 +63,7 @@ async def main(
                 staff_pick
                 if staff_pick not in ["default", None]
                 else request.state.staff_pick
-            )
+            ),
         ).send(auth)
     else:
         response = await request.app.api.charts_advanced_search(
