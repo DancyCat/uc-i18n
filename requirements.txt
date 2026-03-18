@@ -4,6 +4,7 @@ pyyaml
 git+https://github.com/YumYummity/pjsekai-background-gen-pillow-upd
 aiohttp
 python-multipart
+redis
 
 # VULNERABILITY - this vulnerability can be dismissed
 # We only use ecdsa to VERIFY a sonolus key

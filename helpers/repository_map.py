@@ -3,18 +3,30 @@ from helpers.sha1 import calculate_sha1
 from typing import Union, IO
 from helpers.models.sonolus.misc import SRL
 
-from pathlib import Path
 from io import BytesIO
 from zipfile import ZipFile
 import os
-import functools
+import redis
+
+from helpers.config_loader import get_config
+
+config = get_config()
+redis_config = config.get("redis", {})
+_redis = redis.Redis(
+    host=redis_config.get("host", "127.0.0.1"),
+    port=redis_config.get("port", 6379),
+    db=redis_config.get("db", 0),
+    password=redis_config.get("password", None),
+)
+
+REPO_DATA_PREFIX = "repo:data:"
+REPO_PATH_PREFIX = "repo:path:"
 
 
 class Repository:
     def __init__(self):
-        self._map = {}
+        pass
 
-    @functools.lru_cache(maxsize=None)
     def _read_from_zip_chain(self, parts: list[str]) -> bytes:
         """
         Recursively reads a file through a chain of ZIPs.
@@ -24,11 +36,9 @@ class Repository:
 
         for i, part in enumerate(parts):
             if i == 0:
-                # First part is always a real file on disk
                 with open(part, "rb") as f:
                     current_bytes = f.read()
             else:
-                # Open previous bytes as ZIP
                 with ZipFile(BytesIO(current_bytes)) as zip_file:
                     try:
                         current_bytes = zip_file.read(zip_file.getinfo(part))
@@ -36,38 +46,57 @@ class Repository:
                         raise FileNotFoundError(f"{part} not found in zip chain")
         return current_bytes
 
+    def _read_file_bytes(self, file: str) -> bytes:
+        """Read file bytes, handling zip chains."""
+        if "|" in file:
+            return self._read_from_zip_chain(file.split("|"))
+        else:
+            with open(file, "rb") as f:
+                return f.read()
+
     def add_file(
         self, file: os.PathLike, error_on_file_nonexistent: bool = True
     ) -> str | None:
         if not error_on_file_nonexistent:
-            if not os.path.exists(file):
+            if not os.path.exists(str(file).split("|")[0]):
                 return None
-        hash = self.get_hash_from_file_path(file)
-        if hash:
-            self._map.pop(hash, 0)
-        if "|" in str(file):
-            file_data = self._read_from_zip_chain(str(file).split("|"))
-            sha1 = calculate_sha1(file_data)
-        else:
-            sha1 = calculate_sha1(file)
+
         file_path = str(file)
-        if sha1 not in self._map.keys():
-            self._map[sha1] = {"hash": sha1, "file": file_path}
+        file_data = self._read_file_bytes(file_path)
+        sha1 = calculate_sha1(file_data)
+
+        # Remove old hash for this file path if it changed
+        old_hash = _redis.get(REPO_PATH_PREFIX + file_path)
+        if old_hash:
+            old_hash = old_hash.decode()
+            if old_hash != sha1:
+                _redis.delete(REPO_DATA_PREFIX + old_hash)
+
+        _redis.set(REPO_DATA_PREFIX + sha1, file_data)
+        _redis.set(REPO_PATH_PREFIX + file_path, sha1)
         return sha1
 
     def add_bytes(self, data: Union[IO[bytes], bytes]) -> str:
         """
         Warning: cannot be updated!
         """
-        sha1 = calculate_sha1(data)
-        if not sha1 in self._map.keys():
-            self._map[sha1] = {"hash": sha1, "file": data}
+        if isinstance(data, BytesIO):
+            data.seek(0)
+            raw = data.read()
+        elif isinstance(data, bytes):
+            raw = data
+        else:
+            raise ValueError("data must be bytes or BytesIO")
+
+        sha1 = calculate_sha1(raw)
+        if not _redis.exists(REPO_DATA_PREFIX + sha1):
+            _redis.set(REPO_DATA_PREFIX + sha1, raw)
         return sha1
 
     def pop_hash(self, hash: str) -> bytes | None:
         file_data = self.get_file(hash)
         if file_data:
-            del self._map[hash]
+            _redis.delete(REPO_DATA_PREFIX + hash)
         return file_data
 
     def update_file(self, file: os.PathLike):
@@ -77,40 +106,17 @@ class Repository:
         self.add_file(file)
 
     def get_hash_from_file_path(self, file: os.PathLike) -> str | None:
-        input_path = os.path.abspath(file)
-        for sha1, data in self._map.copy().items():
-            if type(data["file"]) != str:
-                continue
-            stored_path = os.path.abspath(data["file"])
-            if input_path == stored_path:
-                return sha1
+        result = _redis.get(REPO_PATH_PREFIX + str(file))
+        if result:
+            return result.decode()
         return None
 
     def get_file(self, hash: str) -> bytes | None:
-        item = self._map.get(hash, None)
-        if not item:
-            return None
-        file = item["file"]
-        file_data: bytes | None = None
-        if isinstance(file, (str, Path)):
-            file_path = Path(file)
-            if "|" in str(file_path):
-                # Handle files in ZIP (this is chainable)
-                parts = str(file_path).split("|")
-                file_data = self._read_from_zip_chain(parts)
-            else:
-                with open(file_path, "rb") as f:
-                    file_data = f.read()
-        elif isinstance(file, BytesIO):
-            file.seek(0)
-            file_data = file.read()
-        elif isinstance(file, bytes):
-            file_data = file
-        return file_data
+        data = _redis.get(REPO_DATA_PREFIX + hash)
+        return data
 
-    @functools.lru_cache(maxsize=None)
     def get_srl(self, hash: str) -> SRL | None:
-        if hash in self._map.keys():
+        if hash and _redis.exists(REPO_DATA_PREFIX + hash):
             return {"hash": hash, "url": f"/sonolus/repository/{hash}"}
         return None
 

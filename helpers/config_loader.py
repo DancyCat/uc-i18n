@@ -23,9 +23,21 @@ ConfigTypeAPI = TypedDict(
     "ConfigTypeAPI", {"url": str, "auth": str, "auth-header": str}
 )
 
+ConfigTypeRedis = TypedDict(
+    "ConfigTypeRedis",
+    {"host": str, "port": int, "db": int, "password": str | None},
+    total=False,
+)
+
 ConfigType = TypedDict(
     "ConfigType",
-    {"server": ConfigTypeServer, "sonolus": ConfigTypeSonolus, "api": ConfigTypeAPI},
+    {
+        "server": ConfigTypeServer,
+        "sonolus": ConfigTypeSonolus,
+        "api": ConfigTypeAPI,
+        "redis": ConfigTypeRedis,
+    },
+    total=False,
 )
 
 
