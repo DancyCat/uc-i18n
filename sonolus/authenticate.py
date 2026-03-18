@@ -80,7 +80,7 @@ async def main(request: SonolusRequest, data: ServerAuthenticateRequest):
     TIME_WINDOW = timedelta(minutes=5)
     if data.type != "authenticateServer":
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
-    if data.address != request.app.base_url and not request.app.debug:
+    if data.address.lower() != request.app.base_url.lower() and not request.app.debug:
         raise HTTPException(
             status_code=status.HTTP_418_IM_A_TEAPOT,
             detail="Are you connecting to the right server?",
