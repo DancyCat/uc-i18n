@@ -86,9 +86,8 @@ class Chart(BaseModel):
         return candidates[0].to_skin_item()
 
     @staticmethod
-    @lru_cache(maxsize=None)
     def _get_cached_background(base_url: str, localization: str):
-        return compile_backgrounds_list(base_url, localization)[0].model_copy()
+        return compile_backgrounds_list(base_url, localization)[0].model_copy(deep=True)
 
     @staticmethod
     @lru_cache(maxsize=None)
