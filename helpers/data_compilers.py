@@ -235,7 +235,9 @@ def compile_backgrounds_list(
             image=repo.get_srl(
                 repo.add_file(f"files/backgrounds/{background}/image.png")
             ),
-            configuration=repo.get_srl(
+            configuration=cached["BACKGROUND_NO_SCOPE_SRL"]
+            if background == "PLEASE-SELECT"
+            else repo.get_srl(
                 repo.add_file(f"files/backgrounds/{background}/configuration.json.gz")
             ),
         )
