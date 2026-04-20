@@ -101,7 +101,7 @@
   "background": {
     "BACKGROUNDSELECT": "Hình nền mặc định",
     "BACKGROUNDSELECTSUB": "Hãy chọn hình nền trong Cấu hình.",
-    "USEBACKGROUNDDESC": "Chọn hình nền để dùng! \"Theo chart\" nghĩa là hình ảnh do người tạo chart tải lên, nếu có. \n\Lưu ý: Nếu hình ảnh chart bị lỗi hoặc không tải được, mặc định sẽ về hình nền cũ 'Mặc định PJSK V1' hoặc 'Mặc định PJSK V3'",
+    "USEBACKGROUNDDESC": "Chọn hình nền để dùng! \"Theo chart\" nghĩa là hình ảnh do người tạo chart tải lên, nếu có. \nLưu ý: Nếu hình ảnh chart bị lỗi hoặc không tải được, mặc định sẽ về hình nền cũ 'Mặc định PJSK V1' hoặc 'Mặc định PJSK V3'",
     "USEBACKGROUND": "Chọn hình nền (trong màn chơi)",
     "V1": "Mặc định PJSK V1",
     "V3": "Mặc định PJSK V3",
