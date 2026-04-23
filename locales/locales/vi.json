@@ -7,7 +7,7 @@
   "items_not_found_search": "Không tìm thấy bất kỳ {item} nào khớp với tìm kiếm của bạn.",
   "invalid_page_plural": "Trang {page} không tồn tại! Có {max_page} trang.",
   "invalid_page_singular": "Trang {page} không tồn tại! Có {max_page} trang.",
-  "not_logged_in": "Chào mừng bạn đến với UntitledCharts!\nĐăng nhập để trải nghiệm những tính năng mới!",
+  "not_logged_in": "Chào mừng bạn đến với UntitledCharts!\nĐăng nhập để trải nghiệm các tính năng mới!",
   "not_found": "Không tìm thấy.",
   "unknown_error": "Lỗi không xác định!",
   "welcome": "Chào mừng {username} đến với UntitledCharts!",
@@ -20,15 +20,15 @@
   "not_admin_or_owner": "Bạn không phải là người quản lý hoặc chủ sở hữu!",
   "mod_powers": [
     "Xóa các bình luận vi phạm quy tắc",
-    "Xem lại biểu đồ để biết lựa chọn của nhân viên!",
-    "Thay đổi khả năng hiển thị của các biểu đồ vi phạm quy tắc"
+    "Xem lại chart để biết lựa chọn của đội ngũ!",
+    "Thay đổi khả năng hiển thị của các chart vi phạm quy tắc"
   ],
   "admin_powers": [
-    "Xóa các biểu đồ vi phạm quy tắc"
+    "Xóa các chart vi phạm quy tắc"
   ],
   "staff_pick": "Chart được chọn bởi đội ngũ",
   "staff_pick_desc": "Những chart này được đội ngũ bình chọn là những chart thú vị nhất, có thể chơi được đối với đa số người chơi có trình độ phù hợp!",
-  "non_staff_pick_desc": "Những chart này không được đội ngũ bình chọn là chart không thú vị, có đôi phần khó hơn, chỉ dành cho người chơi nâng cao.",
+  "non_staff_pick_desc": "Những chart này không được đội ngũ bình chọn là chart không thú vị, có đôi phần khó hơn hoặc chưa được hoàn thiện, bạn có thể trải nghiệm nếu muốn.",
   "staff_pick_notice": "Đừng có cầu xin đội ngũ chúng tôi thêm bài của bạn vào danh sách chọn lọc của đội ngũ. Cùng lắm thì bạn có thể hỏi chúng tôi đánh giá chart của bạn",
   "staff_pick_confirm": "Xác nhận chart này vui, được chấm điểm chuẩn (±1) và chơi ổn.",
   "staff_pick_add": "Thêm vào danh sách được chọn",
@@ -44,8 +44,8 @@
   "time_ago_not_published": "{time_ago} trước (đã tải lên, chưa công khai)",
   "default_particle": "Hiệu ứng bấm Note",
   "default_particle_desc": "Chọn hiệu ứng xuất hiện khi bạn bấm Note!",
-  "default_engine": "Server Chính",
-  "default_engine_desc": "Chọn server chính bạn muốn dùng!",
+  "default_engine": "Engine",
+  "default_engine_desc": "Chọn Engine bạn muốn dùng!",
   "default_skin": "Skin Note của server",
   "default_skin_desc": "Chọn loại skin mặc định bạn muốn dùng! Skin sẽ khác nhau tùy vào engine (ví dụ: skin V1 trên Rush hơi khác so với Next), nhưng sẽ áp dụng cho tất cả engine.\n\nLƯU Ý: nếu engine không có skin này, nó sẽ tự động dùng skin mặc định của engine đó.\n\nLƯU Ý: nếu engine không có skin được hỗ trợ, nó sẽ sử dụng skin mặc định của engine.",
   "notifications_plural": "Bạn có {num} thông báo mới!\nThông báo hệ thống có trong mục \"Bài đăng\".\nVui lòng đọc để tiếp tục vào server.",
@@ -58,7 +58,7 @@
   "search": {
     "FILTERS": "Bộ lọc (Trang {page}/{pageCount})",
     "ADVANCED_SEARCH": "Tìm kiếm nâng cao",
-    "STAFF_PICK_SEARCH_DESC": "Lọc các chart được chọn bởi đội ngũ? (Mặc định sẽ được tùy chọn theo 'Cấu hình' nến có)",
+    "STAFF_PICK_SEARCH_DESC": "Lọc các chart được chọn bởi đội ngũ? (Mặc định sẽ được tùy chọn theo 'Cấu hình' nếu có)",
     "STAFF_PICK_CONFIG_DESC": "Lọc các chart được đội ngũ chọn? Mặc định thì mọi chart đều được hiển thị.\n\nLƯU Ý: Luôn có ít nhất một lựa chọn đối lập để đa dạng hơn. (Ví dụ: 'tắt chế độ Đội ngũ chọn thì vẫn sẽ hiện một chart có nhãn này, còn bật chế độ Đội ngũ chọn thì vẫn sẽ hiện một chart không có nhãn').",
     "STAFF_PICK_OFF": "Mặc định",
     "STAFF_PICK_TRUE": "Chỉ chart được đội ngũ chọn",
