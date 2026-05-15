@@ -55,6 +55,7 @@
   "slightly": "Hơi hơi",
   "a_lot": "Rất nhiều",
   "extreme": "Cực độ",
+  "max_uwu": "Tối đa",
   "search": {
     "FILTERS": "Bộ lọc (Trang {page}/{pageCount})",
     "ADVANCED_SEARCH": "Tìm kiếm nâng cao",
@@ -63,6 +64,10 @@
     "STAFF_PICK_OFF": "Lọc tất cả",
     "STAFF_PICK_TRUE": "Chỉ lọc chart được chọn",
     "STAFF_PICK_FALSE": "Chỉ lọc chart không được chọn",
+    "STAFF_PICK_CONFIG_DESC": "Tùy chỉnh bộ lọc chart được chọn bởi đội ngũ. Mặc định mọi chart sẽ được hiện thị\n\nLƯU Ý: Nếu bạn chọn một trong hai ('có bình chọn' hay 'không bình chọn') thì các chart khác sẽ bị loại trừ khỏi danh sách (Trừ mục Chart ngẫu nhiên 'được bình chọn' hay 'không bình chọn' ra).",
+    "STAFF_PICK_OFF": "Mặc định",
+    "STAFF_PICK_TRUE": "Chỉ chart được chọn",
+    "STAFF_PICK_FALSE": "Chỉ chart không được chọn",
     "MIN_RATING": "Cấp độ tối thiểu",
     "MAX_RATING": "Cấp độ tối đa",
     "TITLE_CONTAINS": "Tiêu đề",

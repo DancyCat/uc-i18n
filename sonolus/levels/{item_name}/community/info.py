@@ -28,13 +28,8 @@ async def main(request: SonolusRequest, item_name: str):
                             required=True,
                             default="",
                             placeholder="#COMMENT_PLACEHOLDER",
-                            limit=200,
-                            shortcuts=[  # XXX maybe delete these? They are misused. If someone wants to say that the chart is fun, they can type it out
-                                "Awesome!",
-                                "This was fun.",
-                                "Great chart!",
-                                "UwU :3",
-                            ],
+                            limit=1500,
+                            shortcuts=[],
                         )
                     ],
                 )
