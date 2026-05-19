@@ -56,6 +56,7 @@
   "a_lot": "Rất nhiều",
   "extreme": "Cực độ",
   "max_uwu": "Tối đa",
+  "announcements": "Tin tức",
   "search": {
     "FILTERS": "Bộ lọc (Trang {page}/{pageCount})",
     "ADVANCED_SEARCH": "Tìm kiếm nâng cao",
@@ -121,8 +122,8 @@
     "UNREAD": "Thông báo chưa đọc",
     "UNREAD_STATUS": "Chưa đọc",
     "READ_STATUS": "Đã đọc",
-    "NOTIFICATION_DESC_UNREAD": "Bạn có thể xem lại thông báo cũ bằng cách nhấn \"Thêm\". Hiện có thông báo chưa đọc cần xử lý.",
-    "NOTIFICATION_DESC": "Bạn có thể xem lại thông báo cũ bằng cách nhấn \"Thêm\". Hiện tại không có thông báo chưa đọc.",
+    "NOTIFICATION_DESC_UNREAD": "Bạn có thể xem lại thông báo và tin tức cũ bằng cách nhấn \"Thêm\". Hiện có thông báo chưa đọc cần xử lý.",
+    "NOTIFICATION_DESC": "Bạn có thể xem lại thông báo và tin tức cũ bằng cách nhấn \"Thêm\". Hiện tại không có thông báo chưa đọc.",
     "templates": {
       "CHART_VISIBILITY_CHANGED": "Chế độ hiển thị của chart \"{chart_name}\" đã được đổi thành {visibility_status}. Vui lòng xem lại chính sách tải lên để biết lý do. Nếu chỉnh sửa để phù hợp, bạn có thể đặt lại thành Công khai. Nếu không, hãy giữ nguyên, nếu không có thể bị xóa.",
       "COMMENT_DELETED": "Bình luận của bạn đã bị xóa vì vi phạm quy tắc. Hãy đảm bảo bình luận tuân thủ nguyên tắc cộng đồng.\n\n----------------------\nBình luận:\n\n{comment_content}",
