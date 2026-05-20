@@ -39,7 +39,7 @@
   "sponsored_hide": "Ủng hộ chúng tôi qua Patreon để ẩn quảng cáo!",
   "on": "Bật",
   "off": "Tắt",
-  "find_in_playlists": "Bạn có thể tìm các chart mình đã tải lên trong phần 'Danh sách phát'.",
+  "find_in_playlists": "Bạn có thể tìm các chart mình đã tải lên trong phần \"Danh sách phát\".",
   "time_ago": "{time_ago} trước",
   "time_ago_not_published": "{time_ago} trước (đã tải lên, chưa công khai)",
   "default_particle": "Hiệu ứng bấm Note",
@@ -50,18 +50,25 @@
   "default_skin_desc": "Chọn loại skin mặc định bạn muốn dùng! Skin sẽ khác nhau tùy vào engine (ví dụ: skin V1 trên Rush hơi khác so với Next), nhưng sẽ áp dụng cho tất cả engine.\n\nLƯU Ý: nếu engine không có skin này, nó sẽ tự động dùng skin mặc định của engine đó.\n\nLƯU Ý: nếu engine không có skin được hỗ trợ, nó sẽ sử dụng skin mặc định của engine.",
   "notifications_plural": "Bạn có {num} thông báo mới!\nThông báo hệ thống có trong mục \"Bài đăng\".\nVui lòng đọc để tiếp tục vào server.",
   "notifications_singular": "Bạn có {num} thông báo mới!\nThông báo hệ thống có trong mục \"Bài đăng\".\nVui lòng đọc để tiếp tục vào server.",
-  "uwu": "UwU >.<",
-  "uwu_desc": "UwUify menu của bạn (CHỈ HỖ TRỢ Ở NGÔN NGỮ EN/TR)",
+  "uwu": "UwU >.< (Tính năng đặt biệt)",
+  "uwu_desc": "Thay đổi phong cách nội dung Server thành chủ đề UwUify (LƯU Ý: TÍNH NĂNG NÀY CHỈ HỖ TRỢ Ở NGÔN NGỮ EN/TR)",
   "slightly": "Hơi hơi",
   "a_lot": "Rất nhiều",
   "extreme": "Cực độ",
   "max_uwu": "Tối đa",
+  "invalid_constant": "Hằng số không hợp lệ! Phải có tối đa 4 chữ số thập phân trong khoảng từ -999 đến 999",
+  "rerate": "Đánh giá lại",
+  "rerate_desc": "Đánh giá lại chart, có thể thêm hằng số (constant) tùy chọn.",
+  "rerate_desc_not_mod": "Đánh giá lại chart.",
+  "show_resource_buttons": "Hiển thị tài nguyên của Server trong menu",
+  "like": "Thích ({num})",
+  "unlike": "Bỏ thích ({num})",
   "announcements": "Tin tức",
   "search": {
     "FILTERS": "Bộ lọc (Trang {page}/{pageCount})",
     "ADVANCED_SEARCH": "Tìm kiếm nâng cao",
-    "STAFF_PICK_SEARCH_DESC": "Tùy chỉnh bộ lọc chart được chọn bởi đội ngũ. (Mặc định sẽ được tùy chọn theo 'Cấu hình' nếu có)",
-    "STAFF_PICK_CONFIG_DESC": "Tùy chỉnh bộ lọc chart được chọn bởi đội ngũ. Mặc định mọi chart sẽ được hiện thị\n\nLƯU Ý: Nếu bạn chọn một trong hai ('có bình chọn' hay 'không bình chọn') thì các chart khác sẽ bị loại trừ khỏi danh sách (Trừ mục Chart ngẫu nhiên 'được bình chọn' hay 'không bình chọn' ra)",
+    "STAFF_PICK_SEARCH_DESC": "Tùy chỉnh bộ lọc chart được chọn bởi đội ngũ. (Mặc định sẽ được tùy chọn theo \"Cấu hình\" nếu có)",
+    "STAFF_PICK_CONFIG_DESC": "Tùy chỉnh bộ lọc chart được chọn bởi đội ngũ. Mặc định mọi chart sẽ được hiện thị\n\nLƯU Ý: Nếu bạn chọn một trong hai (\"có bình chọn\" hay \"không bình chọn\") thì các chart khác sẽ bị loại trừ khỏi danh sách (Trừ mục Chart ngẫu nhiên \"được bình chọn\" hay \"không bình chọn\" ra)",
     "STAFF_PICK_OFF": "Lọc tất cả",
     "STAFF_PICK_TRUE": "Chỉ lọc chart được chọn",
     "STAFF_PICK_FALSE": "Chỉ lọc chart không được chọn",
@@ -99,17 +106,26 @@
     "VISIBILITY_PRIVATE": "Riêng tư"
   },
   "leaderboard": {
+    "YOU_ARE_BANNED": "Bạn đã bị cấm!",
+    "ARCADE_SCORE_SPEED": "Điểm số",
+    "ACCURACY_SCORE": "Độ chính xác",
+    "ARCADE_SCORE_NO_SPEED": "Điểm số (không tính thưởng tốc độ nhạc ≤ 1.5)",
+    "RANK_MATCH": "Đấu hạng",
+    "LEAST_COMBO_BREAKS": "Đạt Combo nhiều nhất",
+    "LEAST_MISSES": "Đạt ít Miss nhất",
+    "PERFECT": "Đạt nhiều Perfect nhất",
+    "BAD_ENGINE": "Server không hỗ trợ gửi kết quả điểm đến engine {engine_name} này"
   },
   "background": {
     "BACKGROUNDSELECT": "Hình nền mặc định",
     "BACKGROUNDSELECTSUB": "Hãy chọn hình nền trong Cấu hình.",
-    "USEBACKGROUNDDESC": "Chọn hình nền để dùng! \"Theo chart\" nghĩa là ảnh bìa do người tạo chart tải lên, nếu có. \nLưu ý: Nếu ảnh bìa chart bị lỗi hoặc không tải được, mặc định sẽ về hình nền cũ 'Mặc định PJSK V1' hoặc 'Mặc định PJSK V3'",
+    "USEBACKGROUNDDESC": "Chọn hình nền để dùng! \"Ảnh Chart\" là ảnh theo đĩa nhạc có nền PJSK, còn \"Ảnh nền\" là ảnh ở bên ngoài không có nền PJSK",
     "USEBACKGROUND": "Hình nền (trong màn chơi)",
-    "V1": "Mặc định PJSK V1",
-    "V3": "Mặc định PJSK V3",
-    "DEF_OR_V1": "Theo chart (PJSK V1)",
-    "DEF_OR_V3": "Theo chart (PJSK V3)",
-    "UPLOADED": "Hình nền do người dùng tải lên"
+    "V1": "Ảnh Chart (PJSK V1)",
+    "V3": "Ảnh Chart (PJSK V3)",
+    "DEF_OR_V1": "Ảnh nền (PJSK V1)",
+    "DEF_OR_V3": "Ảnh nền (PJSK V3)",
+    "UPLOADED": "Ảnh nền do người dùng tải lên"
   },
   "playlist": {
     "UPLOADED": "Chart của bạn",
@@ -127,7 +143,8 @@
     "templates": {
       "CHART_VISIBILITY_CHANGED": "Chế độ hiển thị của chart \"{chart_name}\" đã được đổi thành {visibility_status}. Vui lòng xem lại chính sách tải lên để biết lý do. Nếu chỉnh sửa để phù hợp, bạn có thể đặt lại thành Công khai. Nếu không, hãy giữ nguyên, nếu không có thể bị xóa.",
       "COMMENT_DELETED": "Bình luận của bạn đã bị xóa vì vi phạm quy tắc. Hãy đảm bảo bình luận tuân thủ nguyên tắc cộng đồng.\n\n----------------------\nBình luận:\n\n{comment_content}",
-      "CHART_DELETED": "Chart \"{chart_name}\" của bạn đã bị gỡ bỏ vì vi phạm quy tắc tải lên. Vui lòng xem lại hướng dẫn tải lên để biết thêm chi tiết."
+      "CHART_DELETED": "Chart \"{chart_name}\" của bạn đã bị gỡ bỏ vì vi phạm quy tắc tải lên. Vui lòng xem lại hướng dẫn tải lên để biết thêm chi tiết.",
+      "LEADERBOARD_SCORE_DELETED": "Điểm trên bảng xếp hạng của bạn ở chart \"{chart_name}\" đã bị xóa vì vi phạm quy tắc của chúng tôi. Vui lòng dành chút thời gian xem lại các nguyên tắc cộng đồng để biết thêm thông tin."
     }
   }
 }
