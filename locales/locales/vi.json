@@ -50,7 +50,7 @@
   "default_skin_desc": "Chọn loại skin mặc định bạn muốn dùng! Skin sẽ khác nhau tùy vào engine (ví dụ: skin V1 trên Rush hơi khác so với Next), nhưng sẽ áp dụng cho tất cả engine.\n\nLƯU Ý: nếu engine không có skin này, nó sẽ tự động dùng skin mặc định của engine đó.\n\nLƯU Ý: nếu engine không có skin được hỗ trợ, nó sẽ sử dụng skin mặc định của engine.",
   "notifications_plural": "Bạn có {num} thông báo mới!\nThông báo hệ thống có trong mục \"Bài đăng\".\nVui lòng đọc để tiếp tục vào server.",
   "notifications_singular": "Bạn có {num} thông báo mới!\nThông báo hệ thống có trong mục \"Bài đăng\".\nVui lòng đọc để tiếp tục vào server.",
-  "uwu": "UwU >.< (Tính năng đặt biệt)",
+  "uwu": "UwU >.< (Tính năng đặc biệt)",
   "uwu_desc": "Thay đổi phong cách nội dung Server thành chủ đề UwUify (LƯU Ý: TÍNH NĂNG NÀY CHỈ HỖ TRỢ Ở NGÔN NGỮ EN/TR)",
   "slightly": "Hơi hơi",
   "a_lot": "Rất nhiều",
