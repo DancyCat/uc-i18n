@@ -109,7 +109,7 @@
     "YOU_ARE_BANNED": "Bạn đã bị cấm!",
     "ARCADE_SCORE_SPEED": "Điểm số",
     "ACCURACY_SCORE": "Độ chính xác",
-    "ARCADE_SCORE_NO_SPEED": "Điểm số (không tính thưởng tốc độ nhạc ≤ 1.5)",
+    "ARCADE_SCORE_NO_SPEED": "Điểm số (không tính thêm điểm tốc độ nhạc ≤ 1.5x)",
     "RANK_MATCH": "Đấu hạng",
     "LEAST_COMBO_BREAKS": "Đạt Combo nhiều nhất",
     "LEAST_MISSES": "Đạt ít Miss nhất",
