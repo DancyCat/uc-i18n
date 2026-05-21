@@ -69,7 +69,7 @@
     "ADVANCED_SEARCH": "Tìm kiếm nâng cao",
     "STAFF_PICK_SEARCH_DESC": "Tùy chỉnh bộ lọc chart được chọn bởi đội ngũ. (Mặc định sẽ được tùy chọn theo \"Cấu hình\" nếu có)",
     "STAFF_PICK_CONFIG_DESC": "Tùy chỉnh bộ lọc chart được chọn bởi đội ngũ. Mặc định mọi chart sẽ được hiện thị\n\nLƯU Ý: Nếu bạn chọn một trong hai (\"có bình chọn\" hay \"không bình chọn\") thì các chart khác sẽ bị loại trừ khỏi danh sách (Trừ mục Chart ngẫu nhiên \"được bình chọn\" hay \"không bình chọn\" ra)",
-    "STAFF_PICK_OFF": "Lọc tất cả",
+    "STAFF_PICK_OFF": "Hiển thị tất cả",
     "STAFF_PICK_TRUE": "Chỉ lọc chart được chọn",
     "STAFF_PICK_FALSE": "Chỉ lọc chart không được chọn",
     "MIN_RATING": "Cấp độ tối thiểu",
@@ -119,7 +119,7 @@
   "background": {
     "BACKGROUNDSELECT": "Hình nền mặc định",
     "BACKGROUNDSELECTSUB": "Hãy chọn hình nền trong Cấu hình.",
-    "USEBACKGROUNDDESC": "Chọn hình nền để dùng! \"Ảnh Chart\" là ảnh theo đĩa nhạc có nền PJSK, còn \"Ảnh nền\" là ảnh ở bên ngoài không có nền PJSK",
+    "USEBACKGROUNDDESC": "Chọn hình nền để dùng! \"Ảnh Chart\" là ảnh theo đĩa nhạc có nền PJSK, còn \"Ảnh nền\" là ảnh ở bên ngoài do người làm chart tải lên, không có nền PJSK",
     "USEBACKGROUND": "Hình nền (trong màn chơi)",
     "V1": "Ảnh Chart (PJSK V1)",
     "V3": "Ảnh Chart (PJSK V3)",
