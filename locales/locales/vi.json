@@ -30,7 +30,7 @@
   "staff_pick_desc": "Những chart này được đội ngũ bình chọn là những chart thú vị nhất, có thể chơi được đối với đa số người chơi có trình độ phù hợp!",
   "non_staff_pick_desc": "Những chart này không được đội ngũ bình chọn là chart thú vị, có đôi phần khó hơn hoặc chưa được hoàn thiện, bạn có thể trải nghiệm nếu muốn.",
   "staff_pick_notice": "Đừng có cầu xin đội ngũ chúng tôi thêm chart của bạn vào danh sách bình chọn. Cùng lắm thì bạn có thể hỏi chúng tôi đánh giá chart của bạn",
-  "staff_pick_confirm": "Xác nhận chart này vui, hãy chấm điểm là (±1) hoặc có thể ghi là chơi ổn.",
+  "staff_pick_confirm": "Xác nhận chart này vui, hãy chấm điểm là (±1) hoặc có thể ghi là \"chơi ổn\".",
   "staff_pick_add": "Thêm vào danh sách được chọn",
   "staff_pick_remove": "Gỡ khỏi danh sách được chọn",
   "random_staff_pick": "Chart ngẫu nhiên được bình chọn",
@@ -47,7 +47,7 @@
   "default_engine": "Engine",
   "default_engine_desc": "Chọn Engine bạn muốn dùng!",
   "default_skin": "Skin Note của server",
-  "default_skin_desc": "Chọn loại skin mặc định bạn muốn dùng! Skin sẽ khác nhau tùy vào engine (ví dụ: skin V1 trên Rush hơi khác so với Next), nhưng sẽ áp dụng cho tất cả engine.\n\nLƯU Ý: nếu engine không có skin này, nó sẽ tự động dùng skin mặc định của engine đó.\n\nLƯU Ý: nếu engine không có skin được hỗ trợ, nó sẽ sử dụng skin mặc định của engine.",
+  "default_skin_desc": "Chọn loại skin mặc định bạn muốn dùng! \n\nLƯU Ý: nếu engine không có skin này, nó sẽ tự động dùng skin mặc định của engine đó.\n\nLƯU Ý: nếu engine không có skin được hỗ trợ, nó sẽ sử dụng skin mặc định của engine.",
   "notifications_plural": "Bạn có {num} thông báo mới!\nThông báo hệ thống có trong mục \"Bài đăng\".\nVui lòng đọc để tiếp tục vào server.",
   "notifications_singular": "Bạn có {num} thông báo mới!\nThông báo hệ thống có trong mục \"Bài đăng\".\nVui lòng đọc để tiếp tục vào server.",
   "uwu": "UwU >.< (Tính năng đặc biệt)",
@@ -141,7 +141,7 @@
     "NOTIFICATION_DESC_UNREAD": "Bạn có thể xem lại thông báo và tin tức cũ bằng cách nhấn \"Thêm\". Hiện có thông báo chưa đọc cần xử lý.",
     "NOTIFICATION_DESC": "Bạn có thể xem lại thông báo và tin tức cũ bằng cách nhấn \"Thêm\". Hiện tại không có thông báo chưa đọc.",
     "templates": {
-      "CHART_VISIBILITY_CHANGED": "Chế độ hiển thị của chart \"{chart_name}\" đã được đổi thành {visibility_status}. Vui lòng xem lại chính sách tải lên để biết lý do. Nếu chỉnh sửa để phù hợp, bạn có thể đặt lại thành Công khai. Nếu không, hãy giữ nguyên, nếu không có thể bị xóa.",
+      "CHART_VISIBILITY_CHANGED": "Chế độ hiển thị của chart \"{chart_name}\" đã được đổi thành {visibility_status}. Vui lòng xem lại chính sách tải lên để biết thêm lý do. Nếu chỉnh sửa để phù hợp, bạn có thể đặt lại thành Công khai. Nếu không, hãy giữ nguyên, nếu không có thể bị xóa.",
       "COMMENT_DELETED": "Bình luận của bạn đã bị xóa vì vi phạm quy tắc. Hãy đảm bảo bình luận tuân thủ nguyên tắc cộng đồng.\n\n----------------------\nBình luận:\n\n{comment_content}",
       "CHART_DELETED": "Chart \"{chart_name}\" của bạn đã bị gỡ bỏ vì vi phạm quy tắc tải lên. Vui lòng xem lại hướng dẫn tải lên để biết thêm chi tiết.",
       "LEADERBOARD_SCORE_DELETED": "Điểm trên bảng xếp hạng của bạn ở chart \"{chart_name}\" đã bị xóa vì vi phạm quy tắc của chúng tôi. Vui lòng dành chút thời gian xem lại các nguyên tắc cộng đồng để biết thêm thông tin."
