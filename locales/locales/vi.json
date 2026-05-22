@@ -46,8 +46,8 @@
   "default_particle_desc": "Chọn hiệu ứng xuất hiện khi bạn bấm Note!",
   "default_engine": "Engine",
   "default_engine_desc": "Chọn Engine bạn muốn dùng!",
-  "default_skin": "Skin Note của server",
-  "default_skin_desc": "Chọn loại skin mặc định bạn muốn dùng! \n\nLƯU Ý: Nếu engine không có skin này, nó sẽ tự động dùng skin mặc định của engine đó.\n\nLƯU Ý: nếu engine không có skin được hỗ trợ, nó sẽ sử dụng skin mặc định của engine.",
+  "default_skin": "Skin Note của Server",
+  "default_skin_desc": "Chọn loại skin bạn muốn dùng! \n\nLƯU Ý: Nếu engine không có skin này, nó sẽ tự động dùng skin mặc định của engine đó.\n\nLƯU Ý: nếu engine không có skin được hỗ trợ, nó sẽ sử dụng skin mặc định của engine.",
   "notifications_plural": "Bạn có {num} thông báo mới!\nThông báo hệ thống có trong mục \"Bài đăng\".\nVui lòng đọc để tiếp tục vào server.",
   "notifications_singular": "Bạn có {num} thông báo mới!\nThông báo hệ thống có trong mục \"Bài đăng\".\nVui lòng đọc để tiếp tục vào server.",
   "uwu": "UwU >.< (Tính năng đặc biệt)",
@@ -114,7 +114,7 @@
     "LEAST_COMBO_BREAKS": "Đạt Combo nhiều nhất",
     "LEAST_MISSES": "Đạt ít Miss nhất",
     "PERFECT": "Đạt nhiều Perfect nhất",
-    "BAD_ENGINE": "Server không hỗ trợ gửi kết quả điểm đến engine {engine_name} này"
+    "BAD_ENGINE": "Server không hỗ trợ gửi kết quả điểm đến engine {engine_name}"
   },
   "background": {
     "BACKGROUNDSELECT": "Hình nền mặc định",
